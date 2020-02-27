@@ -18,7 +18,7 @@ function Layout({ children }) {
         }
       `}
       render={data => (
-        <body className="leading-normal tracking-normal bg-white">
+        <body className="leading-normal tracking-normal text-white gradient">
           <Header siteTitle={data.site.siteMetadata.title} />
           <div>
             <main>{children}</main>

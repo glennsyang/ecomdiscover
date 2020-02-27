@@ -4,13 +4,82 @@ import { Link } from "gatsby"
 
 const Footer = ({ siteTitle }) => {
     return (
-        <footer>
-            <div>
-                <h1>
-                    <Link to="/">
-                        Copyright © {new Date().getFullYear()} - {` `} E-Seller Tools Inc.
-                    </Link>
-                </h1>
+        <footer className="bg-white">
+            <div className="container mx-auto px-8 pb-4">
+                <div class="w-full flex flex-col md:flex-row py-6">
+                    <div className="flex-1 mb-6 uppercase">
+                        <Link to="/" className="text-blue-600 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="/">
+                            <svg className="mb-2 h-8 fill-current inline" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 949.434 949.434" enable-background="new 0 0 949.434 949.434" space="preserve">
+                                <g>
+                                    <g>
+                                        <path className="plane-take-off" d="M949.434,224.27l-587.341,0.225l8.312-93.217H200.27v65h49.888h49.192l-2.699,30.287l-14.007,157.11H0v65h276.85 l-4.283,48.044H143.529v65h123.243l-2.67,29.946h553.891L949.434,224.27z M335.155,526.666l6.953-77.99h53.195v-65h-47.4 l8.396-94.179l500.834-0.191l-84.919,237.36H335.155z" />
+                                        <path className="plane-take-off" d="M626.999,786.956c16.736,19.827,42.046,31.199,69.442,31.199c53.688,0,102.879-41.885,111.985-95.355 c4.705-27.622-2.319-54.983-19.272-75.068c-16.736-19.827-42.046-31.199-69.442-31.199h-374.45 c-53.688,0-102.879,41.885-111.986,95.354c-4.705,27.623,2.32,54.985,19.273,75.07c16.736,19.827,42.046,31.199,69.441,31.199 c53.688,0,102.878-41.885,111.985-95.355c2.408-14.139,1.736-28.207-1.761-41.269h185.457c-4.72,9.498-8.132,19.695-9.948,30.354 C603.021,739.509,610.045,766.87,626.999,786.956z M365.033,689.656c4.643,5.501,6.372,13.396,4.867,22.229 c-3.745,21.984-26.133,41.271-47.909,41.271c-8.447,0-15.284-2.811-19.771-8.125c-4.644-5.501-6.372-13.396-4.867-22.23 c3.745-21.983,26.133-41.269,47.909-41.269C353.709,681.531,360.546,684.341,365.033,689.656z M739.483,689.656 c4.643,5.501,6.372,13.396,4.866,22.229c-3.744,21.984-26.132,41.271-47.908,41.271c-8.448,0-15.284-2.811-19.771-8.125 c-4.644-5.501-6.372-13.396-4.867-22.23c3.745-21.983,26.132-41.269,47.909-41.269 C728.159,681.531,734.996,684.341,739.483,689.656z" />
+                                        <rect x="78.951" y="274.902" width="174.728" height="65" />
+                                        <rect fill="#2a2a31" x="16.539" y="900.626" width="929.767" height="50.502" transform="matrix(1,0,0,1,0,0)" fill="rgb(0,0,0)" />
+                                    </g>
+                                </g>
+                            </svg> {siteTitle}
+                        </Link>
+                    </div>
+                    <div className="flex-1">
+                        <p class="uppercase text-black font-bold mb-6 md:mb-6">Links</p>
+                        <ul class="list-reset mb-4">
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">FAQ</Link>
+                            </li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Help</Link>
+                            </li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Support</Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="flex-1">
+                        <p class="uppercase text-black font-bold mb-6 md:mb-6">Legal</p>
+                        <ul className="list-reset mb-4">
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Terms</Link>
+                            </li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Privacy</Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="flex-1">
+                        <p className="uppercase text-black font-bold mb-6 md:mb-6">Social</p>
+                        <ul className="list-reset mb-6">
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Facebook</Link>
+                            </li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Linkedin</Link>
+                            </li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Twitter</Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="flex-1">
+                        <p className="uppercase text-black font-bold mb-6 md:mb-6">Company</p>
+                        <ul className="list-reset mb-6">
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Official Blog</Link>
+                            </li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">About Us</Link>
+                            </li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
+                                <Link to="/" href="#" className="no-underline hover:underline text-gray-600 hover:text-blue-500">Contact</Link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div className="bg-blue-600 text-center px-6 pt-2 pb-4">
+                <div className="text-gray-500 text-sm mt-3">
+                    Copyright © {new Date().getFullYear()} {` `} E-Seller Tools Inc. All rights reserved
+                </div>
             </div>
         </footer>
     )

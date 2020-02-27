@@ -1,4 +1,12 @@
 
 .gradient {
     background: linear-gradient(90deg,  #6190E8 0%, #A7BFE8 100%);
-}    
+}  
+.hero-image {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/apple-devices-books-business-coffee-572056.jpg");
+    height: 50%;
+    background-position: 50% 60%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}  
