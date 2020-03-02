@@ -4,6 +4,7 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 //import Image from "../components/image"
+import logo_shopkeeper from "../images/logo_sellics.png";
 
 function IndexPage() {
   return (
@@ -17,7 +18,7 @@ function IndexPage() {
         <div className="flex flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
           <h1 className="text-center text-3xl sm:text-4xl font-semibold text-white">
-            FIND TOP-RATED, CERTIFIED TOOLS FOR YOUR E-COMMERCE BUSINESS
+            FIND TOP-RATED TOOLS & SERVICES FOR YOUR E-COMMERCE BUSINESS
           </h1>
           <h4 className="text-center sm:text-xl font-light text-white mb-6">
             Search our curated collection of e-commerce resources
@@ -31,7 +32,7 @@ function IndexPage() {
 								c0.266,0.268,0.699,0.268,0.965,0C19.396,18.863,19.396,18.431,19.129,18.164z M8.567,15.028c-3.568,0-6.461-2.893-6.461-6.461 s2.893-6.461,6.461-6.461c3.568,0,6.46,2.893,6.46,6.461S12.135,15.028,8.567,15.028z" /></svg>
               </div>
               <div class="flex flex-1">
-                <input placeholder="I'm looking for..." class="w-full outline-none" />
+                <input placeholder="I'm looking for..." class="w-full text-black outline-none" />
               </div>
             </div>
             <button
@@ -59,27 +60,31 @@ function IndexPage() {
 
         <div className="container mx-auto flex flex-wrap pt-4 pb-12">
 
-          <h3 className="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">E-Commerce Tools</h3>
+          <h3 className="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">E-Commerce Tools & Services</h3>
           <div className="w-full mb-4">
             <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
-
-          <div className="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
-            <div className="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
-              <Link to="/" className="flex flex-wrap no-underline hover:no-underline">
-                <p className="w-full text-gray-600 text-xs md:text-sm px-6 pt-2">Order Management</p>
-                <div className="w-full font-bold text-xl text-gray-800 px-6">Shopkeeper</div>
-                <p className="text-gray-800 text-base px-6 mb-5">
-                  You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees.
+          
+          <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
+            <Link to="/" className="flex flex-wrap no-underline hover:no-underline">
+              <img class="bg-white mx-6 mt-3" src={logo_shopkeeper} alt="Shopkeeper Logo" />
+              <div class="px-6 py-4">
+                <div class="text-gray-800 font-bold text-xl mb-2">5 stars!</div>
+                <p class="text-gray-700 text-base">
+                  You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...
                 </p>
-                <p className="text-gray-800 text-base px-6 mb-5">
-                  The dashboard has additional features, which give a great overview of your Amazon business...
-                </p>
+                <p className="text-gray-400 text-sm mt-2">Category: Order Management, Repricing, Amazon PPC</p>
+                  
+              </div>
+              <div class="px-6 py-4">
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#management</span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#repricing</span>
+                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">#amazon</span>
+              </div>
               </Link>
-            </div>
             <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
               <div className="flex items-center justify-center">
-                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read</button>
+                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read More</button>
               </div>
             </div>
           </div>
@@ -99,7 +104,7 @@ function IndexPage() {
             </div>
             <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
               <div className="flex items-center justify-center">
-                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read</button>
+                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read More</button>
               </div>
             </div>
           </div>
@@ -119,7 +124,7 @@ function IndexPage() {
             </div>
             <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
               <div className="flex items-center justify-center">
-                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read</button>
+                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read More</button>
               </div>
             </div>
           </div>
@@ -157,7 +162,7 @@ function IndexPage() {
 
         <form action="data">
           <button type="submit"
-            className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg">Submit!</button>
+            className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg">Share</button>
         </form>
 
       </section>
