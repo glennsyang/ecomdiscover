@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "eseller-tools-app",
+  "private_key_id": "04b0716da0ff064e1218a6084125989a3ba91030",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCXF6UKD06JI7Dh\n8hNSknDX/J/FQ1DVNRjjX/cBB/L9g4/87pQ36rsqwyW/QUPA7WrTp6TshZKtAHQh\nGK6/VSzIwCJZiYiRTPO4b0kzkilCkCodyakVZlOv6fP5hGm9qCsa8UX5DF24DVhR\nhuEPo/Qoump+fi6Le73P9PpU13nxMsNMM83EfFgbr/pgJFP1DB7Y0mHU5RxvyxkZ\n5ZsYlw+teuSAVATrYFCLmQYi97O3SQ76ml13qwEjvgT2JkrjqBncpsVRPNU2CXFd\nKkkJp25fwLdws8oMO7Clomy7dISIDHPnS+jx+EjrhhVLZvkgUmNcXTiurDjYCLzp\nwbjxm4snAgMBAAECggEAA6fBSOSE6GFyKo0yNXmwfDEy5lFSF85gi0OrlJ1OHh78\nMUjOUin+HDM7awyXqIe14Wf5X/V9Tm0n4hMYSy2y1yp6ykK/CJDdhpU+pp4/HEqj\nkjPqQMfId4WH7v3qlvmGDXFP2Y4YiFbeT56dPEUhp4iXAfdohdxZA7pwAfRykUi5\nF7INP9yfMDdWoS1mcdkmCUxrHQt+tq1A7s+ark4ZFAwRwJX/M43d6x0jWh67eDWz\nkx7MQQVrolzzfMVC/+JvhFwPEuivNhWzylTXXAERFrbAh05+Jm/0Wvo0oMy9hrXt\nOhTbgF/trn7Pw8TVB6kTlNXV4I+icIOPprEoTOhkOQKBgQDFZi6Pbs7NSVL/R1km\nXMIoCmYC6RORjLjP0zw6l9JjLeJvy+8bep4nRk7lWB1HffNgsN23S/5uWuC2zNdx\nIwxifa7DEmJ6EeA6VTQK+BGPH6iAwrG7xOhT3pfEMXkN348BJkvMZJYfTX5zABas\nmrJj2Z0x9UWKVeuxF+ztsptQmQKBgQDD8kS1GthnFXJmTlBdlxAZIDY2zbAom98V\nrZamBw+H50/UbWQO5EY+GkAfdYGafhcmCrTB+LRMa+23zaMr6d9iosVmmaJjvG9P\naBeNxpkBb23UqXvOWbcuICjVv3KmyDmkzmNl5lxr6QfVi7jMUkMyyiFas6rRrute\nnAOel0pRvwKBgCGOllmxx5wkW+Sjt2cLG8J8ygyynK4AkyZZTYLUbmKH2VeR/orY\nVGxuyli4mvmdUrNcPcS8OXt/HXZV6kYEZEWWAhCNXopL4ado9pjqxOlkw1toPZij\nB6/CRmCG3IJcP849OWN8sfyOSvG30SL0hWDuDIgCnxi+NHv9ijx6QWb5AoGAYW1y\nsEH627aUPT4vQ3m7LWMQ0csQDgECuTqor0DPfhmLXepOWAE00+glff7lRDXxuJ6W\nJeRNcbowZrW+rjUJN3gLgupdDg5Bok/1di8LIOWQzK7AumdtZ2fiJfWdQkRINSPR\n1Hbn+VfS52Ejr6QveW97iifPhZbdvRsBybcb4u0CgYB5AKyxPWISNTjyeOm4YNII\neWg0Ki9IGOFHZyFeXIKj8xMVYGI/GMswpntMpwO9PxgbEZDxsGHtfMxcIMDVF037\nzt19a4nAZ9UKIy2Vcgxa80qHaliaO1Ca4QbN9hR+wS6AV5a5e0LTnwzNGPVNonis\nnDvaCr8DtUFMeYCmkqg8sQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-sxyyy@eseller-tools-app.iam.gserviceaccount.com",
+  "client_id": "109131006286620452712",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-sxyyy%40eseller-tools-app.iam.gserviceaccount.com"
+}
