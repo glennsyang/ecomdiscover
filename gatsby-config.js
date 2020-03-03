@@ -18,8 +18,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
+        name: `e-seller-tools`,
+        short_name: `e-seller-tools`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
@@ -34,7 +34,31 @@ module.exports = {
         tailwind: true,
         purgeOnly: ["src/css/style.css", "src/css/global.css"]
       }
-    }
+    },
+    {
+      resolve: 'gatsby-source-firestore',
+      options: {
+        credential: require("./firebase.json"),
+        types: [
+          {
+            type: 'Reviews',
+            collection: 'reviews',
+            map: doc => ({
+              categories: doc.categories,
+              company: doc.company,
+              content: doc.content,
+              date: doc.date,
+              marketplace: doc.marketplace,
+              rating: doc.rating,
+              tags: doc.tags,
+              title: doc.title,
+              username: doc.username,
+              website: doc.website,
+            }),
+          }
+        ],
+      },
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

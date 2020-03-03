@@ -1,48 +1,11 @@
 import React from "react"
-import { Link } from "gatsby"
-import { graphql } from "gatsby"
+import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Card from "../components/card"
 
 function IndexPage({ data }) {
   console.log(data);
-
-  const reviews = [
-    { 
-      logo: "../images/logo_sellics.png", 
-      reviewTitle: "First Review", 
-      categories: ["Order Management", "Repricing", "Amazon PPC"],
-      blurb: "You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...",
-      tags: ["#management", "#repricing", "#amazon"],
-      starRating: "2",
-      username: "Doug Short",
-      reviewDate: Date(Date.now()).toString(),
-      displayButton: true
-    },
-    {
-      logo: "../images/logo_shopkeeper.png",
-      reviewTitle: "Second Review",
-      categories: ["Profit Monitoring", "Photo Editing", "Prep Centers"],
-      blurb: "You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...",
-      tags: ["#training", "#marketing", "#walmart", "#walmart", "#graphics"],
-      starRating: "3",
-      username: "Doug Short",
-      reviewDate: Date(Date.now()).toString(),
-      displayButton: true
-    },
-    {
-      logo: "../images/logo_selleractive.png",
-      reviewTitle: "Thirs Review",
-      categories: ["Listing Optimization", "Freight Forwarders", "Label Manipulation", "Virtual Assistants"],
-      blurb: "You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...",
-      tags: ["#photo", "#keyword", "#walmart"],
-      starRating: "4",
-      username: "Doug Short",
-      reviewDate: Date(Date.now()).toString(),
-      displayButton: true
-    }
-  ];
 
   return (
     <Layout>
@@ -107,10 +70,9 @@ function IndexPage({ data }) {
           </div>
           
           {
-            reviews.map(
-              (review, i) => <Card key={i} review={review} />
-            )
-          }
+            data.allReviews.edges.map(({ node }) => (
+              <Card key={node.id} review={node} />
+          ))}
           
         </div>
       </section>
@@ -154,18 +116,28 @@ function IndexPage({ data }) {
 }
 
 export const query = graphql`
-  query {
-    allFile {
-      edges {
-        node {
-          relativePath
-          prettySize
-          extension
-          birthTime(fromNow: true)
+query {
+    allReviews(sort: { fields: [date], order: ASC }) {
+      totalCount
+        edges {
+            node {
+                categories
+                company
+                content
+                date(formatString: "DD MMMM, YYYY")
+                id
+                fields {
+                  slug
+                }
+                marketplace
+                rating
+                tags
+                title
+                username
+                website
+            }
         }
-      }
     }
-  }
+}
 `
-
 export default IndexPage
