@@ -18,13 +18,11 @@ function Layout({ children }) {
         }
       `}
       render={data => (
-        <body className="leading-normal tracking-normal text-white gradient">
+        <div className="leading-normal tracking-normal text-white gradient">
           <Header siteTitle={data.site.siteMetadata.title} />
-          <div>
-            <main>{children}</main>
-          </div>
+          <main className="mt-12">{children}</main>
           <Footer siteTitle={data.site.siteMetadata.title} />
-        </body>
+        </div>
       )}
     />
   );

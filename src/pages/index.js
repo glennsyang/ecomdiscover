@@ -1,21 +1,61 @@
 import React from "react"
 import { Link } from "gatsby"
-
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-//import Image from "../components/image"
-import logo_shopkeeper from "../images/logo_sellics.png";
+import Card from "../components/card"
 
-function IndexPage() {
+function IndexPage({ data }) {
+  console.log(data);
+
+  const reviews = [
+    { 
+      logo: "../images/logo_sellics.png", 
+      reviewTitle: "First Review", 
+      categories: ["Order Management", "Repricing", "Amazon PPC"],
+      blurb: "You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...",
+      tags: ["#management", "#repricing", "#amazon"],
+      starRating: "2",
+      username: "Doug Short",
+      reviewDate: Date(Date.now()).toString(),
+      displayButton: true
+    },
+    {
+      logo: "../images/logo_shopkeeper.png",
+      reviewTitle: "Second Review",
+      categories: ["Profit Monitoring", "Photo Editing", "Prep Centers"],
+      blurb: "You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...",
+      tags: ["#training", "#marketing", "#walmart", "#walmart", "#graphics"],
+      starRating: "3",
+      username: "Doug Short",
+      reviewDate: Date(Date.now()).toString(),
+      displayButton: true
+    },
+    {
+      logo: "../images/logo_selleractive.png",
+      reviewTitle: "Thirs Review",
+      categories: ["Listing Optimization", "Freight Forwarders", "Label Manipulation", "Virtual Assistants"],
+      blurb: "You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...",
+      tags: ["#photo", "#keyword", "#walmart"],
+      starRating: "4",
+      username: "Doug Short",
+      reviewDate: Date(Date.now()).toString(),
+      displayButton: true
+    }
+  ];
+
   return (
     <Layout>
+
       <SEO
         title="Home"
         keywords={[`amazon`, `seller`, `tools`, `FBA`]}
       />
-      <div className="hero-image flex items-center py-8 sm:py-48">
 
-        <div className="flex flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
+      {/* Hero */}
+      <section className="hero-image flex items-center py-8 sm:py-40" id="hero">
+
+        <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
           <h1 className="text-center text-3xl sm:text-4xl font-semibold text-white">
             FIND TOP-RATED TOOLS & SERVICES FOR YOUR E-COMMERCE BUSINESS
@@ -31,8 +71,8 @@ function IndexPage() {
 								c-4.361,0-7.896,3.535-7.896,7.896s3.535,7.896,7.896,7.896c1.934,0,3.705-0.698,5.078-1.853l4.52,4.519
 								c0.266,0.268,0.699,0.268,0.965,0C19.396,18.863,19.396,18.431,19.129,18.164z M8.567,15.028c-3.568,0-6.461-2.893-6.461-6.461 s2.893-6.461,6.461-6.461c3.568,0,6.46,2.893,6.46,6.461S12.135,15.028,8.567,15.028z" /></svg>
               </div>
-              <div class="flex flex-1">
-                <input placeholder="I'm looking for..." class="w-full text-black outline-none" />
+              <div className="flex flex-1">
+                <input placeholder="I'm looking for..." className="w-full text-black outline-none" />
               </div>
             </div>
             <button
@@ -44,98 +84,41 @@ function IndexPage() {
           </div>
 
           <div className="text-white text-center py-6 inline-block">
-            <Link to="/"  className="mr-5 pb-4 inline-block hover:underline">Order Management</Link> 
-            <Link to="/"  className="mr-5 pb-4 inline-block hover:underline">Repricing</Link> 
-            <Link to="/"  className="mr-5 pb-4 inline-block hover:underline">Profit Monitoring</Link> 
-            <Link to="/"  className="mr-5 pb-4 inline-block hover:underline">Amazon PPC</Link> 
-            <Link to="/"  className="mr-5 pb-4 inline-block hover:underline">Photo Editing</Link> 
+            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Order Management</Link> 
+            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Repricing</Link> 
+            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Profit Monitoring</Link> 
+            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Amazon PPC</Link> 
+            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Profiteering</Link> 
           </div>
 
         </div>
 
-      </div>
+      </section>
       
       {/* Title cards */}
-      <section className="bg-gray-100 py-8">
-
+      <section className="bg-gray-100 py-8" id="title-cards">
         <div className="container mx-auto flex flex-wrap pt-4 pb-12">
 
-          <h3 className="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">E-Commerce Tools & Services</h3>
+          <h3 className="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+            E-Commerce Tools & Services
+          </h3>
           <div className="w-full mb-4">
             <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
           
-          <div class="max-w-sm rounded overflow-hidden shadow-lg bg-white">
-            <Link to="/" className="flex flex-wrap no-underline hover:no-underline">
-              <img class="bg-white mx-6 mt-3" src={logo_shopkeeper} alt="Shopkeeper Logo" />
-              <div class="px-6 py-4">
-                <div class="text-gray-800 font-bold text-xl mb-2">5 stars!</div>
-                <p class="text-gray-700 text-base">
-                  You can see how many units of each product you still have left. It also shows you how many days it will last for, and tells you when you need to reorder. Helps you to avoid long term storage fees...
-                </p>
-                <p className="text-gray-400 text-sm mt-2">Category: Order Management, Repricing, Amazon PPC</p>
-                  
-              </div>
-              <div class="px-6 py-4">
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#management</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#repricing</span>
-                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">#amazon</span>
-              </div>
-              </Link>
-            <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
-              <div className="flex items-center justify-center">
-                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read More</button>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
-            <div className="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
-              <Link to="/" className="flex flex-wrap no-underline hover:no-underline">
-                <p className="w-full text-gray-600 text-xs md:text-sm px-6 pt-2">Repricing</p>
-                <div className="w-full font-bold text-xl text-gray-800 px-6">Sellics</div>
-                <p className="text-gray-800 text-base px-6 mb-5">
-                  Has a nice inventory dashboard, where you can see which products you should order asap.
-                </p>
-                <p className="text-gray-800 text-base px-6 mb-5">
-                  All you need to provide is how many days it takes to manufacture this product and ship it to Amazon. Then the app will tell you when is the time to re-order...
-                </p>
-              </Link>
-            </div>
-            <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
-              <div className="flex items-center justify-center">
-                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read More</button>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
-            <div className="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
-              <Link to="/" className="flex flex-wrap no-underline hover:no-underline">
-                <p className="w-full text-gray-600 text-xs md:text-sm px-6 pt-2">Amazon PPC</p>
-                <div className="w-full font-bold text-xl text-gray-800 px-6">SellerActive</div>
-                <p className="text-gray-800 text-base px-6 mb-5">
-                  They integrate with many non-Amazon marketplaces you may be selling on, like Etsy and Newegg and Walmart, and put all the info combined together.
-                </p>
-                <p className="text-gray-800 text-base px-6 mb-5">
-                  Essentially you will only see how many items you have in stock, and be able to receive low stock alerts. If you're selling only on Amazon...
-                </p>
-              </Link>
-            </div>
-            <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
-              <div className="flex items-center justify-center">
-                <button className="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg">Read More</button>
-              </div>
-            </div>
-          </div>
+          {
+            reviews.map(
+              (review, i) => <Card key={i} review={review} />
+            )
+          }
           
         </div>
       </section>
 
       {/* Waves SVG */}
       <svg className="gradient" viewBox="0 0 1439 147" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <g transform="translate(-1.000000, -14.000000)" fill-rule="nonzero">
+        <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+          <g transform="translate(-1.000000, -14.000000)" fillRule="nonzero">
             <g className="gradient" fill="#f8fafc">
               <path d="M1440,84 C1383.555,64.3 1342.555,51.3 1317,45 C1259.5,30.824 1206.707,25.526 1169,22 C1129.711,18.326 1044.426,18.475 980,22 C954.25,23.409 922.25,26.742 884,32 C845.122,37.787 818.455,42.121 804,45 C776.833,50.41 728.136,61.77 713,65 C660.023,76.309 621.544,87.729 584,94 C517.525,105.104 484.525,106.438 429,108 C379.49,106.484 342.823,104.484 319,102 C278.571,97.783 231.737,88.736 205,84 C154.629,75.076 86.296,57.743 0,32 L0,0 L1440,0 L1440,84 Z"></path>
             </g>
@@ -151,7 +134,7 @@ function IndexPage() {
       </svg>
 
       {/* CTA block */}
-      <section className="container mx-auto text-center py-6 mb-12">
+      <section className="container mx-auto text-center py-6 mb-12" id="call-to-action">
 
         <h1 className="w-full my-2 text-5xl font-bold leading-tight text-center text-white">Write a Review</h1>
         <div className="w-full mb-4">
@@ -169,5 +152,20 @@ function IndexPage() {
     </Layout >
   )
 }
+
+export const query = graphql`
+  query {
+    allFile {
+      edges {
+        node {
+          relativePath
+          prettySize
+          extension
+          birthTime(fromNow: true)
+        }
+      }
+    }
+  }
+`
 
 export default IndexPage
