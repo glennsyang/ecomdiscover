@@ -1,39 +1,56 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
+import SEO from "../components/seo"
+import PageHeader from "../components/pageheader"
 
 export default ({ data }) => {
+
+    const props = { title: "Find Top-Rated Tools By Category", subtitle: "" };
+
     return (
         <Layout>
-            <div className="header-image flex items-center py-8 sm:py-24">
-                <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
-                    <h1 className="text-center text-3xl sm:text-4xl font-semibold uppercase text-white">
-                        Find a Top-Rated Tool By Category
-                    </h1>
-                </div>
-            </div>
-            <div className="flex justify-center bg-white py-10">
-                <div className="grid gap-4 grid-cols-3">
-                    {data.allCategories.edges.map(({ node }) => (
-                        <div className="flex-1 text-blue-500 text-center bg-gray-400 px-4 py-2 m-2" key={node.id}>
-                            {node.name}
+            <SEO
+                title="Categories"
+                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+            />
+            <section className="bg-gray-100">
+
+                <PageHeader props={props} />
+
+                <div className="container mx-auto px-8 pb-4">
+                    <div className="w-full flex flex-col md:flex-row py-8">
+                        <div className="flex-1">
+                            <div className="grid grid-cols-3 gap-1">
+                                {data.allCategories.edges.map(({ node }) => (
+                                    <div className="col-span-1 text-blue-500 text-left p-1 sm:mx-6" key={node.id}>
+                                        <Link to={`/categories`} className="hover:underline">{node.name}</Link>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    ))}
+                    </div>
                 </div>
-            </div>
-        </Layout>
+
+            </section>
+        </Layout >
     )
 }
 
 export const query = graphql`
 query {
-    allCategories {
-        edges {
-            node {
-                id
-                name
-            }
-        }
+    allCategories (
+    sort: {
+      fields: [name]
+      order: ASC
     }
+  ) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
 }
 `
