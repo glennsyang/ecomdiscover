@@ -55,6 +55,14 @@ module.exports = {
               username: doc.username,
               website: doc.website,
             }),
+          },
+          {
+            type: 'Categories',
+            collection: 'categories',
+            map: doc => ({
+              id: doc.id,
+              name: doc.name,
+            }),
           }
         ],
       },

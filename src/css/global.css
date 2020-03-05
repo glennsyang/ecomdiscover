@@ -9,4 +9,13 @@
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
-}  
+}
+
+.header-image {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/apple-devices-books-business-coffee-572056-v2.jpg");
+    height: 50%;
+    background-position: 50% 45%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
