@@ -4,7 +4,7 @@ import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-
+//import Card from "../components/card"
 import logo_sellics from "../images/logo_sellics.png";
 import logo_ads from "../images/ads_digital_ocean.png";
 
@@ -26,10 +26,10 @@ export default function Review({ data }) {
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
             <section className="pt-4 flex flex-col flex-grow overflow-hidden bg-white">
-                <div className="flex bg-gray-100 min-h-40 mb-8 py-6  border-b border-gray-200">
+                <div className="flex bg-gray-100 min-h-40 mb-8 py-6 border-b border-gray-200">
                     <div className="container mx-auto px-6 flex items-center">
                         <div className="flex sm:w-2/3">
-                            <Link title={`${review.username} reviews`} to={`/u/dtshort`} className="rounded-full h-20 w-20 mr-4 flex-shrink-0 overflow-hidden relative">
+                            <Link title={`${review.username} reviews`} to={`/`} className="rounded-full h-20 w-20 mr-4 flex-shrink-0 overflow-hidden relative">
                                 <img src="https://avatars0.githubusercontent.com/u/35756596?v=4" alt="jwana99" className="absolute inset-0 w-full h-full" />
                             </Link>
                             <div className="flex flex-col leading-tight">
@@ -110,14 +110,16 @@ export default function Review({ data }) {
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <h3 className="text-xl font-bold text-black mb-2">Related reviews</h3>
+            <section className="pt-4 flex flex-col flex-grow overflow-hidden bg-white">
+                <div className="flex bg-gray-100 min-h-40 py-6 border-t border-gray-200">
+                    <div className="container mx-auto px-6 flex items-center">
 
-                    <div className="grid grid--250 grid-gap-15 w-full">
-
+                        <h3 className="text-xl font-bold text-black mb-12">Related reviews</h3>
                     </div>
                 </div>
-
             </section>
         </Layout >
     )

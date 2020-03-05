@@ -47,11 +47,11 @@ function IndexPage({ data }) {
           </div>
 
           <div className="text-white text-center py-6 inline-block">
-            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Order Management</Link> 
-            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Repricing</Link> 
-            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Profit Monitoring</Link> 
-            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Amazon PPC</Link> 
-            <Link to={`/`} className="mr-5 pb-4 inline-block hover:underline">Profiteering</Link> 
+            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Order Management</Link> 
+            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Repricing</Link> 
+            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Profit Monitoring</Link> 
+            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Amazon PPC</Link> 
+            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Profiteering</Link> 
           </div>
 
         </div>
