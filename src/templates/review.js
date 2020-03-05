@@ -4,7 +4,6 @@ import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-//import Card from "../components/card"
 import logo_sellics from "../images/logo_sellics.png";
 import logo_ads from "../images/ads_digital_ocean.png";
 
@@ -86,8 +85,8 @@ export default function Review({ data }) {
                             <div className="mb-8">
                                 {/* Tags */}
                                 <div>
-                                    {review.tags.map(
-                                        (tag, i) => <span key={i} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-600 mt-2 mr-2">#{tag}</span>
+                                    {review.tags.map((tag, i) =>
+                                        <span key={i} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-600 mt-2 mr-2">#{tag}</span>
                                     )}
                                 </div>
                             </div>

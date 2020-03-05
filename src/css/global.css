@@ -1,4 +1,3 @@
-
 .gradient {
     background: linear-gradient(90deg,  #6190E8 0%, #A7BFE8 100%);
 }  
@@ -10,7 +9,6 @@
     background-size: cover;
     position: relative;
 }
-
 .header-image {
     background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/apple-devices-books-business-coffee-572056-v2.jpg");
     height: 50%;
@@ -18,4 +16,24 @@
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+}
+
+/* Accordiion */
+label:after {
+    content: '+';
+    position: absolute;
+    right: 1em;
+    color: #aaaaaa;
+}
+input:checked + label:after {
+    content: '-';
+    line-height: .8em;
+}
+.accordion__content{
+    max-height: 0em;
+    transition: all 0.4s cubic-bezier(0.865, 0.14, 0.095, 0.87);
+}
+input[name='panel']:checked ~ .accordion__content {
+  /* Get this as close to what height you expect */
+    max-height: 50em;
 }

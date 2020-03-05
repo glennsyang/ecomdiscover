@@ -5,8 +5,6 @@ import SEO from "../components/seo"
 import Card from "../components/card"
 
 function IndexPage({ data }) {
-  console.log(data);
-
   return (
     <Layout>
 
@@ -40,22 +38,18 @@ function IndexPage({ data }) {
             </div>
             <button
               className="bg-blue-500 hover:bg-blue-700 rounded-none px-6 py-2 my-1 sm:my-0 overflow-hidden"
-              type="submit"
-            >
-              <span className="text-white">GO</span>
+              type="submit">
+                <span className="text-white">GO</span>
             </button>
           </div>
 
           <div className="text-white text-center py-6 inline-block">
-            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Order Management</Link> 
-            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Repricing</Link> 
-            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Profit Monitoring</Link> 
-            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Amazon PPC</Link> 
-            <Link to={`/categories`} className="mr-5 pb-4 inline-block hover:underline">Profiteering</Link> 
+            {data.allCategories.edges.map(({ node }) => (
+              <Link to={`/categories`} key={node.id} className="mr-5 pb-4 inline-block hover:underline">{node.name}</Link>
+            ))}
           </div>
 
         </div>
-
       </section>
       
       {/* Title cards */}
@@ -117,7 +111,7 @@ function IndexPage({ data }) {
 
 export const query = graphql`
 query {
-    allReviews(sort: { fields: [date], order: ASC }) {
+    allReviews(limit: 3, sort: { fields: [date], order: ASC }) {
       totalCount
         edges {
             node {
@@ -138,6 +132,14 @@ query {
             }
         }
     }
+    allCategories(limit: 5) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
 }
 `
 export default IndexPage
