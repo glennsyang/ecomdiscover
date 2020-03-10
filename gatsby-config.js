@@ -2,6 +2,7 @@ module.exports = {
   siteMetadata: {
     title: `E-Seller Tools`,
     description: `A collection of e-commerce resources.  Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources.`,
+    website: `esellertools.com`,
     author: `@gsheppard.yang`,
   },
   plugins: [
@@ -9,13 +10,20 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `src`,
-        path: `${__dirname}/src`,
+        name: `posts`,
+        path: `${__dirname}/src/posts/`,
       },
     },
     `gatsby-transformer-sharp`,
     `gatsby-transformer-remark`,
     `gatsby-plugin-sharp`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `images`,
+        path: `${__dirname}/src/images/`,
+      },
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -42,27 +50,39 @@ module.exports = {
         credential: require("./firebase.json"),
         types: [
           {
+            type: 'Categories',
+            collection: 'categories',
+            map: doc => ({
+              id: doc.id,
+              name: doc.name,
+            }),
+          },
+          {
             type: 'Reviews',
             collection: 'reviews',
             map: doc => ({
-              categories: doc.categories,
               company: doc.company,
               content: doc.content,
               date: doc.date,
+              logo: doc.logo,
               marketplace: doc.marketplace,
               rating: doc.rating,
               tags: doc.tags,
               title: doc.title,
               username: doc.username,
               website: doc.website,
+              categories___NODE: doc.categories.map(category => category.id),
             }),
           },
           {
-            type: 'Categories',
-            collection: 'categories',
+            type: 'Faq',
+            collection: 'faq',
             map: doc => ({
               id: doc.id,
-              name: doc.name,
+              title: doc.title,
+              content: doc.content,
+              published: doc.published,
+              date: doc.date
             }),
           }
         ],

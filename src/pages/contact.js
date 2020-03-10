@@ -1,7 +1,7 @@
 import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/pageheader"
+import PageHeader from "../components/page-header"
 
 export default () => {
 
@@ -32,20 +32,14 @@ export default () => {
                         Email
                     </h4>
                     <p className="text-black text-md mt-2">
-                        info@esellertools.com
+                        <a href="mailto:info@esellertools.com" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">info@esellertools.com</a>
                     </p>
                     <h4 className="text-black text-md underline mt-4">
                         Phone
                     </h4>
                     <p className="text-black text-md mt-2">
-                        604-555-1234
+                        <a href="tel:604-555-1234" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">604-555-1234</a>
                     </p>
-
-
-                    <h4 className="text-black text-lg sm:text-xl font-semibold mt-6">
-                        Contact Form
-                    </h4>
-                    <p className="text-black text-md mt-2">...</p>
 
                 </div>
             </section>

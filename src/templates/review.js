@@ -1,14 +1,29 @@
 import React from "react"
-import { Link } from "gatsby"
-import { graphql } from "gatsby"
+import { Link, graphql } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import logo_sellics from "../images/logo_sellics.png";
-import logo_ads from "../images/ads_digital_ocean.png";
+import ImageFixed from "../components/image-fixed"
+import ImageFluid from "../components/image-fluid"
 
 export default function Review({ data }) {
     const review = data.reviews
+
+    const imgProfile = {
+        imgName: "blank_profile_picture.png",
+        imgAlt: `${review.username} Profile`,
+        imgClass: "absolute inset-0 w-full h-full"
+    };
+    const imgAds = {
+        imgName: "ads_digital_ocean.png",
+        imgAlt: "Digital Ocean Ad",
+        imgClass: ""
+    };
+    const imgLogo = {
+        imgName: review.logo,
+        imgAlt: `${review.company} Logo`,
+        imgClass: "bg-white"
+    };
 
     let starRating = [];
     for (let i = 0; i < review.rating; i++) {
@@ -29,7 +44,7 @@ export default function Review({ data }) {
                     <div className="container mx-auto px-6 flex items-center">
                         <div className="flex sm:w-2/3">
                             <Link title={`${review.username} reviews`} to={`/`} className="rounded-full h-20 w-20 mr-4 flex-shrink-0 overflow-hidden relative">
-                                <img src="https://avatars0.githubusercontent.com/u/35756596?v=4" alt="jwana99" className="absolute inset-0 w-full h-full" />
+                                <ImageFluid props={imgProfile} />
                             </Link>
                             <div className="flex flex-col leading-tight">
                                 <h1 className="text-2xl font-bold text-black">
@@ -40,29 +55,32 @@ export default function Review({ data }) {
                                     <small className="text-gray-500"> • {review.date}</small>
                                 </span>
                                 {/* Categories */}
-                                <p className="text-gray-500 text-sm mt-2">Categories: {review.categories.join(', ')}</p>
+                                <p className="text-gray-500 text-sm mt-2">
+                                    Categories: {review.categories.map((category) =>
+                                        <span key={category.id}>{category.name}, </span>
+                                    )}
+                                </p>
                             </div>
                         </div>
                         <div className="sm:w-1/3 ml-2">
                             <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
-                                <img src={logo_ads} alt="Digital Ocean Ad" />
+                                <ImageFixed props={imgAds} />
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <div className="container mx-auto px-6 pb-12">
-                    <div className="flex flex-col lg:flex-row mb-10">
+                    <div className="flex flex-col lg:flex-row mb-2">
                         <div className="lg:w-3/4">
 
+                            {/* Logo */}
                             <a href={`${review.website}`} rel="noopener noreferrer" target="_blank">
-                                <img className="bg-white" src={logo_sellics} alt="Shopkeeper Logo" />
+                                <ImageFixed props={imgLogo} />
                             </a>
 
                             <h3 className="text-2xl sm:text-2xl font-semibold text-black mt-4">Review</h3>
-                            <p className="sm:text-xl font-light text-black mt-2 mb-6">
-                                {review.content}
-                            </p>
+                            <div className="sm:text-lg font-light text-black mt-2 mb-2" dangerouslySetInnerHTML={{ __html: review.content }} />
 
                         </div>
 
@@ -79,7 +97,7 @@ export default function Review({ data }) {
                                             <span>{review.rating}</span>
                                         </div>
                                     </div>
-                                    <span className="text-sm text-gray-600 text-right block mt-2">from {review.rating} ratings</span>
+                                    <span className="text-sm text-gray-600 text-right block mt-2">from 1 rating</span>
                                 </div>
                             </div>
                             <div className="mb-8">
@@ -127,17 +145,21 @@ export default function Review({ data }) {
 export const query = graphql`
   query($slug: String!) {
     reviews(fields: { slug: { eq: $slug } }) {
-        categories
         company
         content
         date(formatString: "DD MMMM, YYYY")
         id
+        logo
         marketplace
         rating
         tags
         title
         username
         website
+        categories {
+            id
+            name
+        }
     }
   }
 `
