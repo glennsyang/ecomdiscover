@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Glenn Sheppard <glenn@glennsheppard.dev>",
   "dependencies": {
+    "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.3.0",
     "gatsby": "^2.19.17",
     "gatsby-image": "^2.2.43",
     "gatsby-plugin-manifest": "^2.2.41",

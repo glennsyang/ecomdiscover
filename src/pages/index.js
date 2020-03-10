@@ -2,6 +2,7 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import SearchBox from '../components/search-box'
 import Card from "../components/card"
 
 function IndexPage({ data }) {
@@ -25,23 +26,8 @@ function IndexPage({ data }) {
             Search our curated collection of e-commerce resources
           </h4>
 
-          <div className="flex flex-col sm:flex-row">
-            <div className="flex flex-1 relative p-3 bg-white my-1 sm:my-0">
-              <div className="text-gray-600 mx-3 text-2xl rounded inline-flex items-center">
-                <svg className="fill-current w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="gray" d="M19.129,18.164l-4.518-4.52c1.152-1.373,1.852-3.143,1.852-5.077c0-4.361-3.535-7.896-7.896-7.896
-								c-4.361,0-7.896,3.535-7.896,7.896s3.535,7.896,7.896,7.896c1.934,0,3.705-0.698,5.078-1.853l4.52,4.519
-								c0.266,0.268,0.699,0.268,0.965,0C19.396,18.863,19.396,18.431,19.129,18.164z M8.567,15.028c-3.568,0-6.461-2.893-6.461-6.461 s2.893-6.461,6.461-6.461c3.568,0,6.46,2.893,6.46,6.461S12.135,15.028,8.567,15.028z" /></svg>
-              </div>
-              <div className="flex flex-1">
-                <input placeholder="I'm looking for..." className="w-full text-black outline-none" />
-              </div>
-            </div>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 rounded-none px-6 py-2 my-1 sm:my-0 overflow-hidden"
-              type="submit">
-                <span className="text-white">GO</span>
-            </button>
-          </div>
+          {/* Search Box */}
+          <SearchBox searchIndex={data.siteSearchIndex.index} />
 
           <div className="text-white text-center pt-6 inline-block">
             {data.allCategories.edges.map(({ node }) => (
@@ -50,7 +36,7 @@ function IndexPage({ data }) {
                 key={node.id}
                 state={{ category: node.name }}
                 className="mr-5 pb-4 inline-block hover:underline">
-                  {node.name}
+                {node.name}
               </Link>
             ))}
           </div>
@@ -62,7 +48,7 @@ function IndexPage({ data }) {
 
         </div>
       </section>
-      
+
       {/* Title cards */}
       <section className="bg-gray-100 py-8" id="title-cards">
         <div className="container mx-auto flex flex-wrap pt-4 pb-12">
@@ -73,12 +59,12 @@ function IndexPage({ data }) {
           <div className="w-full mb-4">
             <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
-          
+
           {
             data.allReviews.edges.map(({ node }) => (
               <Card key={node.id} review={node} />
-          ))}
-          
+            ))}
+
         </div>
       </section>
 
@@ -108,12 +94,11 @@ function IndexPage({ data }) {
           <div className="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
         </div>
 
-        <h3 className="my-4 text-3xl leading-tight">Review your favorite tools and share your experiences with our community</h3>
+        <h3 className="mt-4 mb-12 text-3xl leading-tight">Review your favorite tools and share your experiences with our community</h3>
 
-        <form action="data">
-          <button type="submit"
-            className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg">Share</button>
-        </form>
+        <Link to={'/writereview'} className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-8 py-4 px-8 shadow-lg">
+          Share
+        </Link>
 
       </section>
     </Layout >
@@ -154,6 +139,9 @@ query {
         name
       }
     }
+  }
+  siteSearchIndex {
+    index
   }
 }
 `

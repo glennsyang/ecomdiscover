@@ -2,7 +2,11 @@ module.exports = {
   siteMetadata: {
     title: `E-Seller Tools`,
     description: `A collection of e-commerce resources.  Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources.`,
+    siteUrl: `https://www.esellertools.com`,
     website: `esellertools.com`,
+    email: `info@esellertools.com`,
+    phone: `604-555-1234`,
+    address: `123 Main Street, Sometown, QC`,
     author: `@gsheppard.yang`,
   },
   plugins: [
@@ -86,6 +90,25 @@ module.exports = {
             }),
           }
         ],
+      },
+    },
+    {
+      resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
+      options: {
+        // Fields to index
+        fields: [`title`, `tags`],
+        // How to resolve each field`s value for a supported node type
+        resolvers: {
+          // For any node of type Reviews, list how to resolve the fields` values
+          Reviews: {
+            title: node => node.title,
+            tags: node => node.tags,
+            slug: node => node.fields.slug,
+          },
+        },
+        // Optional filter to limit indexed nodes
+        filter: (node, getNode) =>
+          node.tags !== 'exempt',
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
