@@ -2,7 +2,7 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/pageheader"
+import PageHeader from "../components/page-header"
 
 export default ({ data }) => {
 
@@ -24,7 +24,11 @@ export default ({ data }) => {
                             <div className="grid grid-cols-3 gap-1">
                                 {data.allCategories.edges.map(({ node }) => (
                                     <div className="col-span-1 text-blue-500 text-left p-1 sm:mx-6" key={node.id}>
-                                        <Link to={`/categories`} className="hover:underline">{node.name}</Link>
+                                        <Link
+                                            to={`/reviews`}
+                                            state={{ category: node.name }}
+                                            className="hover:underline">{node.name}
+                                        </Link>
                                     </div>
                                 ))}
                             </div>
@@ -39,12 +43,7 @@ export default ({ data }) => {
 
 export const query = graphql`
 query {
-    allCategories (
-    sort: {
-      fields: [name]
-      order: ASC
-    }
-  ) {
+    allCategories (sort: { fields: name, order: ASC }) {
     edges {
       node {
         id

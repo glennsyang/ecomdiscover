@@ -6,7 +6,7 @@
   "author": "Glenn Sheppard <glenn@glennsheppard.dev>",
   "dependencies": {
     "gatsby": "^2.19.17",
-    "gatsby-image": "^2.2.41",
+    "gatsby-image": "^2.2.43",
     "gatsby-plugin-manifest": "^2.2.41",
     "gatsby-plugin-offline": "^3.0.34",
     "gatsby-plugin-postcss": "^2.1.20",

@@ -14,7 +14,7 @@ function IndexPage({ data }) {
       />
 
       {/* Hero */}
-      <section className="hero-image flex items-center py-8 sm:py-40" id="hero">
+      <section className="hero-image flex items-center py-8 sm:py-32" id="hero">
 
         <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
@@ -43,10 +43,21 @@ function IndexPage({ data }) {
             </button>
           </div>
 
-          <div className="text-white text-center py-6 inline-block">
+          <div className="text-white text-center pt-6 inline-block">
             {data.allCategories.edges.map(({ node }) => (
-              <Link to={`/categories`} key={node.id} className="mr-5 pb-4 inline-block hover:underline">{node.name}</Link>
+              <Link
+                to={`/reviews`}
+                key={node.id}
+                state={{ category: node.name }}
+                className="mr-5 pb-4 inline-block hover:underline">
+                  {node.name}
+              </Link>
             ))}
+          </div>
+          <div className="text-white text-center inline-block">
+            <Link to={`/categories`} className="inline-block mt-2 font-semibold hover:underline">
+              SEE ALL CATEGORIES
+            </Link>
           </div>
 
         </div>
@@ -111,14 +122,14 @@ function IndexPage({ data }) {
 
 export const query = graphql`
 query {
-    allReviews(limit: 3, sort: { fields: [date], order: ASC }) {
+    allReviews(limit: 3, sort: { fields: date, order: ASC }) {
       totalCount
         edges {
             node {
-                categories
                 company
                 content
                 date(formatString: "DD MMMM, YYYY")
+                logo
                 id
                 fields {
                   slug
@@ -129,6 +140,10 @@ query {
                 title
                 username
                 website
+                categories {
+                  id
+                  name
+                }
             }
         }
     }

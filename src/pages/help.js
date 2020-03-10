@@ -1,11 +1,12 @@
 import React from "react"
+import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/pageheader"
+import PageHeader from "../components/page-header"
 
 export default () => {
 
-    const props = { title: "Help", subtitle: "" }
+    const props = { title: "Help", subtitle: "Let's Connect!" }
 
     return (
         <Layout>
@@ -18,6 +19,17 @@ export default () => {
                 <PageHeader props={props} />
 
                 <div className="container mx-auto px-8 pb-10">
+
+                    <h3 className="text-black text-xl font-semibold mb-4 mt-10">
+                        We want to connect!
+                    </h3>
+                    <p className="text-black text-md">
+                        You can suggest a new service or
+                        <Link to={`/categories`} className="text-blue-500 hover:underline ml-1">
+                            category
+                        </Link>
+                        , or for anything else please <a href="mailto:info@esellertools.com" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">contact us directly</a>.
+                    </p>
 
                 </div>
             </section>

@@ -1,11 +1,11 @@
 import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/pageheader"
+import PageHeader from "../components/page-header"
 
 export default () => {
 
-    const props = { title: "About Us", subtitle: "A collection of ecommerce resources. Primarily related to FBA, but also touching on many other aspects of ecommerce software and resources." };
+    const props = { title: "About Us", subtitle: "A collection of ecommerce resources primarily related to FBA, but also touching on many other aspects of ecommerce software and resources." };
 
     return (
         <Layout>
@@ -19,25 +19,16 @@ export default () => {
 
                 <div className="container mx-auto px-8 pb-10">
                     <h3 className="text-black text-xl font-semibold mb-2 mt-10">
-                        Borrow some experience
+                        Our Story
                     </h3>
                     <p className="text-black text-md">
-                        More than 6 million households nationwide check Angie's List reviews to find the best local service providers, like roofers, plumbers, handymen, mechanics, doctors and dentists. And that's just the short list. We collect ratings and reviews on more than 720 different services. The people who join Angie's List are just like you — real folks looking for a way to find trustworthy companies that perform high-quality work.
+                        Started in February of 2020, we are ecommerce professionals and developers that saw the need for a better way of organizing the quickly expanding selection of services, web tools, and information that supports ecommerce.  We are new and working hard to create a useful service so your feedback is much appreciated.
                     </p>
 
-                    <h3 className="text-black text-xl font-semibold mb-2 mt-8">
-                        "Ratings, Reviews and (Sometimes) Revenge"
-                    </h3>
-                    <p className="text-black text-md">
-                        Angie's List members submit more than 60,000 reviews every month about the companies they hire. They include incredible details about how the project went (including cost), and grade the company's response time, price, professionalism and quality of work -- good or bad -- on an A to F scale. Angie's List members will tell you if a crew was conscious of children and pets, cleaned up after themselves or just totally botched the job.
+                    <p className="text-black text-md mt-6">
+                        While the services, tools, and information listed does cover a number of different categories, the common theme is that they are all useful to ecommerce businesses.
                     </p>
 
-                    <h3 className="text-black text-xl font-semibold mb-2 mt-8">
-                        Power in numbers
-                    </h3>
-                    <p className="text-black text-md">
-                        Through Angie's List, you have the ability to quickly and easily tell thousands of other Angie's List members about your experiences with a company. That's really great news for the companies that do quality work - and not so great news for the companies that don't. So when contractors know that you're an Angie's List member, we've found that you're more likely to get a quick call back, the crews show up on time and work is completed faster.
-                    </p>
                 </div>
             </section>
         </Layout>
