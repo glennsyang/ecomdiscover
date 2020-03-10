@@ -5,6 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
 import ImageFluid from "../components/image-fluid"
+import Tag from "../components/tag"
 
 export default function Review({ data }) {
     const review = data.reviews
@@ -12,7 +13,7 @@ export default function Review({ data }) {
     const imgProfile = {
         imgName: "blank_profile_picture.png",
         imgAlt: `${review.username} Profile`,
-        imgClass: "absolute inset-0 w-full h-full"
+        imgClass: "h-full w-full object-cover"
     };
     const imgAds = {
         imgName: "ads_digital_ocean.png",
@@ -43,7 +44,7 @@ export default function Review({ data }) {
                 <div className="flex bg-gray-100 min-h-40 mb-8 py-6 border-b border-gray-200">
                     <div className="container mx-auto px-6 flex items-center">
                         <div className="flex sm:w-2/3">
-                            <Link title={`${review.username} reviews`} to={`/`} className="rounded-full h-20 w-20 mr-4 flex-shrink-0 overflow-hidden relative">
+                            <Link title={`${review.username} reviews`} to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
                                 <ImageFluid props={imgProfile} />
                             </Link>
                             <div className="flex flex-col leading-tight">
@@ -103,9 +104,7 @@ export default function Review({ data }) {
                             <div className="mb-8">
                                 {/* Tags */}
                                 <div>
-                                    {review.tags.map((tag, i) =>
-                                        <span key={i} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-600 mt-2 mr-2">#{tag}</span>
-                                    )}
+                                    <Tag tags={review.tags} />
                                 </div>
                             </div>
                             <div className="mb-6">

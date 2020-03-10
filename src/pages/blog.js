@@ -3,6 +3,7 @@ import { graphql, Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/page-header"
+import Tag from "../components/tag"
 
 export default ({ data }) => {
 
@@ -45,11 +46,7 @@ export default ({ data }) => {
                 {node.excerpt}
               </p>
               <div className="mt-2">
-                {node.frontmatter.tags.map((tag, i) =>
-                  <span key={i} className="inline-block bg-gray-200 rounded-full px-3 py-1 mr-1 text-sm font-semibold text-gray-600">
-                    #{tag}
-                  </span>
-                )}
+                <Tag tags={node.frontmatter.tags} />
               </div>
               <div className="w-full mt-8 mb-4">
                 <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>

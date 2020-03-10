@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
 import ImageFixed from "./image-fixed"
+import Tag from "../components/tag"
 
 const Card = ({ review }) => {
     const props = {
@@ -57,9 +58,7 @@ const Card = ({ review }) => {
 
                     {/* Tags */}
                     <div className="px-6">
-                        {review.tags.map(
-                            (tag, i) => <span key={i} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-600 mt-2 mr-2">#{tag}</span>
-                        )}
+                        <Tag tags={review.tags} />
                     </div>
                 </Link>
 

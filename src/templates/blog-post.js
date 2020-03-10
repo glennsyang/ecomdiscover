@@ -1,11 +1,25 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
+
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import logo_ads from "../images/ads_digital_ocean.png";
+import ImageFixed from "../components/image-fixed"
+import ImageFluid from "../components/image-fluid"
+import Tag from "../components/tag";
 
 export default ({ data }) => {
   const post = data.markdownRemark
+
+  const imgProfile = {
+    imgName: "blank_profile_picture.png",
+    imgAlt: `${post.author} Profile`,
+    imgClass: "h-full w-full object-cover"
+  }
+  const imgAds = {
+    imgName: "ads_digital_ocean.png",
+    imgAlt: "Digital Ocean Ad",
+    imgClass: ""
+  }
 
   return (
     <Layout>
@@ -19,7 +33,7 @@ export default ({ data }) => {
           <div className="container mx-auto px-6 flex items-center">
             <div className="flex sm:w-2/3">
               <Link title={`${post.frontmatter.author}`} to={`/`} className="rounded-full h-20 w-20 mr-4 flex-shrink-0 overflow-hidden relative">
-                <img src="https://avatars0.githubusercontent.com/u/35756596?v=4" alt={post.frontmatter.author} className="absolute inset-0 w-full h-full" />
+                <ImageFluid props={imgProfile} />
               </Link>
               <div className="flex flex-col leading-tight">
                 <h1 className="text-2xl font-bold text-black">
@@ -43,7 +57,7 @@ export default ({ data }) => {
 
             <div className="sm:w-1/3 ml-2 mt-4">
               <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
-                <img src={logo_ads} alt="Digital Ocean Ad" />
+                <ImageFixed props={imgAds} />
               </a>
             </div>
           </div>
@@ -60,11 +74,7 @@ export default ({ data }) => {
             <div className="w-1/4 sm:flex justify-between lg:block ml-8">
               {/* Tags */}
               <div>
-                {post.frontmatter.tags.map((tag, i) =>
-                  <span key={i} className="inline-block bg-gray-200 rounded-full px-3 py-1 mt-2 mr-2 text-sm font-semibold text-gray-600">
-                    #{tag}
-                  </span>
-                )}
+                <Tag tags={post.frontmatter.tags} />
               </div>
             </div>
 

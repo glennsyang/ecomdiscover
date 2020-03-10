@@ -1,9 +1,10 @@
 import React from "react"
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/page-header"
 
-export default () => {
+export default ({ data }) => {
 
     const props = { title: "Contact Us", subtitle: "We welcome any feedback. Feel free to drop us a line" };
 
@@ -22,8 +23,9 @@ export default () => {
                     <h3 className="text-black text-lg sm:text-xl font-semibold mb-2 mt-10">
                         E-Seller Tools Offices
                     </h3>
-                    <p className="text-black text-md mt-2">123 Main Street</p>
-                    <p className="text-black text-md">Sometown, QC</p>
+                    <p className="text-black text-md mt-2">
+                        {data.site.siteMetadata.address}
+                    </p>
 
                     <h3 className="text-black text-lg sm:text-xl font-semibold mb-2 mt-8">
                         For general inquiries, please contact us at:
@@ -32,13 +34,17 @@ export default () => {
                         Email
                     </h4>
                     <p className="text-black text-md mt-2">
-                        <a href="mailto:info@esellertools.com" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">info@esellertools.com</a>
+                        <a href="mailto:info@esellertools.com" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">
+                            {data.site.siteMetadata.email}
+                        </a>
                     </p>
                     <h4 className="text-black text-md underline mt-4">
                         Phone
                     </h4>
                     <p className="text-black text-md mt-2">
-                        <a href="tel:604-555-1234" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">604-555-1234</a>
+                        <a href="tel:604-555-1234" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">
+                            {data.site.siteMetadata.phone}
+                        </a>
                     </p>
 
                 </div>
@@ -46,3 +52,17 @@ export default () => {
         </Layout>
     )
 }
+
+export const query = graphql`
+query {
+    site {
+    siteMetadata {
+      title
+      website
+      email
+      phone
+      address
+    }
+  }
+}
+`
