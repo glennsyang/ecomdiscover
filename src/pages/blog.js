@@ -34,10 +34,14 @@ export default ({ data }) => {
               <p className="text-gray-500 text-xs">
                 Categories:
                 {node.frontmatter.category.map((category, i) =>
-                  <Link to={`/categories`} key={i} className="hover:underline">
-                    <span className="ml-1">{category},</span>
-                  </Link>
-                )}
+                <Link
+                  key={i}
+                  to={`/reviews`}
+                  state={{ category: category }}
+                  className="hover:underline">
+                  <span className="ml-1">{category},</span>
+                </Link>
+              )}
               </p>
               <p className="text-gray-500 text-xs mt-1">
                 {node.frontmatter.date}

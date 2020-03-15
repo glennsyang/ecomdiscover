@@ -6,6 +6,7 @@ import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
 import ImageFluid from "../components/image-fluid"
 import Tag from "../components/tag"
+import Category from "../components/category"
 
 export default function Review({ data }) {
     const review = data.reviews
@@ -28,10 +29,10 @@ export default function Review({ data }) {
 
     let starRating = [];
     for (let i = 0; i < review.rating; i++) {
-        starRating.push(<svg key={i} className="w-4 h-4 fill-current text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" /></svg>);
+        starRating.push(<svg key={i} className="w-6 h-6 fill-current text-blue-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" /></svg>);
     }
     for (let i = review.rating; i < 5; i++) {
-        starRating.push(<svg key={i} className="w-4 h-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" /></svg>);
+        starRating.push(<svg key={i} className="w-6 h-6 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" /></svg>);
     }
 
     return (
@@ -51,16 +52,14 @@ export default function Review({ data }) {
                                 <h1 className="text-2xl font-bold text-black">
                                     {review.title}
                                 </h1>
-                                <span className="text-md text-gray-600">
+                                <h3 className="text-md text-gray-600">
                                     <Link to={`/`} className="text-gray-600">By {review.username}</Link>
                                     <small className="text-gray-500"> • {review.date}</small>
-                                </span>
+                                </h3>
                                 {/* Categories */}
-                                <p className="text-gray-500 text-sm mt-2">
-                                    Categories: {review.categories.map((category) =>
-                                        <span key={category.id}>{category.name}, </span>
-                                    )}
-                                </p>
+                                <h4 className="text-gray-500 text-sm mt-2">
+                                    <Category categories={review.categories} />
+                                </h4>
                             </div>
                         </div>
                         <div className="sm:w-1/3 ml-2">
@@ -103,9 +102,7 @@ export default function Review({ data }) {
                             </div>
                             <div className="mb-8">
                                 {/* Tags */}
-                                <div>
-                                    <Tag tags={review.tags} />
-                                </div>
+                                <Tag tags={review.tags} />
                             </div>
                             <div className="mb-6">
                                 {/* Marketplace */}

@@ -1,8 +1,6 @@
 import React from "react"
 
 const Tag = ({ tags }) => {
-    console.log("tags:", tags)
-
     return (
         <div>
             {tags.map(

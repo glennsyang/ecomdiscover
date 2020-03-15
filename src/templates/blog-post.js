@@ -1,11 +1,35 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
+import rehypeReact from "rehype-react";
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
 import ImageFluid from "../components/image-fluid"
 import Tag from "../components/tag";
+import Category from "../components/category";
+
+const Paragraph = ({ children }) => <p className="mt-2">{children}</p>;
+const ExternalLink = ({ href, children }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline"
+  >
+    {children}
+  </a>
+);
+const LineBreak = ({ children }) => (<span className="my-20">{children}</span>);
+const Title = ({ children }) => (<h1 className="text-lg font-bold">{children}</h1>);
+const Subtitle = ({ children }) => (<h2 className="mt-2 font-semibold">{children}</h2>);
+const List = ({ children }) => (<ul className="mt-2 font-semibold">{children}</ul>);
+const ListItem = ({ children }) => (<li className="list-disc list-inside text-black text-md mt-2">{children}</li>);
+
+const renderAst = new rehypeReact({
+  createElement: React.createElement,
+  components: { p: Paragraph, a: ExternalLink, ul: List, li: ListItem, br: LineBreak, h1: Title, h2: Subtitle }
+}).Compiler;
 
 export default ({ data }) => {
   const post = data.markdownRemark
@@ -28,7 +52,6 @@ export default ({ data }) => {
         keywords={[`amazon`, `seller`, `tools`, `FBA`]}
       />
       <section className="bg-white">
-
         <div className="flex bg-gray-100 min-h-40 mb-6 py-6 border-b border-gray-200">
           <div className="container mx-auto px-6 flex items-center">
             <div className="flex sm:w-2/3">
@@ -39,19 +62,14 @@ export default ({ data }) => {
                 <h1 className="text-2xl font-bold text-black">
                   {post.frontmatter.title}
                 </h1>
-                <span className="text-md text-gray-600">
+                <h3 className="text-md text-gray-600">
                   <Link to={`/`} className="text-gray-600">By {post.frontmatter.author}</Link>
                   <small className="text-gray-500"> • {post.frontmatter.date}</small>
-                </span>
+                </h3>
                 {/* Categories */}
-                <p className="text-gray-500 text-sm mt-2">
-                  Categories:
-                  {post.frontmatter.category.map((category, i) =>
-                    <Link to={`/categories`} key={i} className="hover:underline">
-                      <span className="ml-1">{category},</span>
-                    </Link>
-                  )}
-                </p>
+                <h4 className="text-gray-500 text-sm mt-2">
+                  <Category categories={post.frontmatter.category} />
+                </h4>
               </div>
             </div>
 
@@ -67,15 +85,12 @@ export default ({ data }) => {
           <div className="flex flex-col lg:flex-row mb-10">
 
             <div className="w-3/4">
-              <div className="text-gray-500" dangerouslySetInnerHTML={{ __html: post.html }} />
-
+              <div className="text-gray-500">{renderAst(post.htmlAst)}</div>
             </div>
 
             <div className="w-1/4 sm:flex justify-between lg:block ml-8">
               {/* Tags */}
-              <div>
-                <Tag tags={post.frontmatter.tags} />
-              </div>
+              <Tag tags={post.frontmatter.tags} />
             </div>
 
           </div>
@@ -91,6 +106,7 @@ export const query = graphql`
   query($slug: String!) {
     markdownRemark(fields: { slug: { eq: $slug } }) {
       html
+      htmlAst
       frontmatter {
         title
         subtitle
