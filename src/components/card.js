@@ -48,8 +48,8 @@ const Card = ({ review }) => {
                         {/* Categories */}
                         <p className="text-gray-500 text-xs mt-2">
                             Categories:{review.categories.map((category) =>
-                                <span key={category.id} className="ml-1">{category.name}, </span>
-                            )}
+                            <span key={category.id} className="ml-1">{category.name},</span>
+                        )}
                         </p>
 
                         {/* Review */}

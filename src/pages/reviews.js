@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/page-header"
 import Tag from "../components/tag"
+import Category from "../components/category"
 
 export default ({ location, data }) => {
 
@@ -53,17 +54,12 @@ export default ({ location, data }) => {
                                         {node.title}
                                     </h3>
                                 </Link>
-                                <p className="text-gray-500 text-xs">
-                                    Categories:
-                                    {node.categories.map((category) =>
-                                        <Link to={`/categories`} key={category.id} className="hover:underline">
-                                            <span className="ml-1">{category.name}, </span>
-                                        </Link>
-                                    )}
-                                </p>
-                                <p className="text-gray-500 text-xs mt-1">
+                                <h4 className="text-gray-500 text-xs">
+                                    <Category categories={node.categories} />
+                                </h4>
+                                <h4 className="text-gray-500 text-xs mt-1">
                                     {node.date}
-                                </p>
+                                </h4>
                                 <p className="text-gray-600 mt-2" dangerouslySetInnerHTML={{ __html: truncateStr(node.content, 250, true) }} />
 
                                 <div className="mt-2">

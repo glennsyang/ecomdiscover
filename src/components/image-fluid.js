@@ -3,8 +3,8 @@ import { StaticQuery, graphql } from "gatsby";
 import Img from "gatsby-image"
 
 const ImageFluid = ({ props }) => (
-    <StaticQuery
-        query={graphql`
+  <StaticQuery
+    query={graphql`
       query {
         allImageSharp {
           edges {
@@ -18,17 +18,16 @@ const ImageFluid = ({ props }) => (
         }
       }
     `}
-        render={data => {
-            const image = data.allImageSharp.edges.find(
-                edge => edge.node.fluid.originalName === props.imgName
-            )
-            if (!image) {
-                console.log("return null");
-                return null
-            }
-            console.log("return:", props.imgAlt)
-            return <Img fluid={image.node.fluid} alt={props.imgAlt} className={props.imgClass} />
-        }}
-    />
+    render={data => {
+      const image = data.allImageSharp.edges.find(
+        edge => edge.node.fluid.originalName === props.imgName
+      )
+      if (!image) {
+        console.log("return null");
+        return null
+      }
+      return <Img fluid={image.node.fluid} alt={props.imgAlt} className={props.imgClass} />
+    }}
+  />
 )
 export default ImageFluid

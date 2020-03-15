@@ -60,10 +60,9 @@ function IndexPage({ data }) {
             <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
 
-          {
-            data.allReviews.edges.map(({ node }) => (
-              <Card key={node.id} review={node} />
-            ))}
+          {data.allReviews.edges.map(({ node }) => (
+            <Card key={node.id} review={node} />
+          ))}
 
         </div>
       </section>
@@ -106,7 +105,7 @@ function IndexPage({ data }) {
 }
 
 export const query = graphql`
-query {
+  query {
     allReviews(limit: 3, sort: { fields: date, order: ASC }) {
       totalCount
         edges {
