@@ -11449,6 +11449,11 @@ react-helmet@^5.2.1:
     react-fast-compare "^2.0.2"
     react-side-effect "^1.1.0"
 
+react-hook-form@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-5.1.0.tgz#3d3af0428b3f932b465dee432725753edd17bfbf"
+  integrity sha512-WJZM4kuH0Wx/EtueWziJWhHeWMqaN9Y3G2rMdjB6FPa/BgnRisLWlk89BL42BwtdXzZRlxCMD8xjNNXsSawABg==
+
 react-hot-loader@^4.12.18:
   version "4.12.19"
   resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.12.19.tgz#99a1c763352828f404fa51cd887c5e16bb5b74d1"
