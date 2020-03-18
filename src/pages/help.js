@@ -4,7 +4,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/page-header"
 
-export default () => {
+export default ({ data }) => {
 
     const props = { title: "Help", subtitle: "Let's Connect!" }
 
@@ -28,7 +28,7 @@ export default () => {
                         <Link to={`/categories`} className="text-blue-500 hover:underline ml-1">
                             category
                         </Link>
-                        , or for anything else please <a href="mailto:info@esellertools.com" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">contact us directly</a>.
+                        , or for anything else please <a href={`mailto:${data.site.siteMetadata.email}`} className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">contact us directly</a>.
                     </p>
 
                 </div>
@@ -36,3 +36,13 @@ export default () => {
         </Layout>
     )
 }
+
+export const query = graphql`
+query {
+    site {
+    siteMetadata {
+      email
+    }
+  }
+}
+`
