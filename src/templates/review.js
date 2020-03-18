@@ -42,8 +42,11 @@ export default function Review({ data }) {
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
             <section className="pt-4 flex flex-col flex-grow overflow-hidden bg-white">
-                <div className="flex bg-gray-100 min-h-40 mb-8 py-6 border-b border-gray-200">
-                    <div className="container mx-auto px-6 flex items-center">
+
+                <div className="flex bg-gray-100 min-h-40 mb-8 py-6">
+
+                    <div className="container mx-auto px-10 flex items-center">
+
                         <div className="flex sm:w-2/3">
                             <Link title={`${review.username} reviews`} to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
                                 <ImageFluid props={imgProfile} />
@@ -70,7 +73,7 @@ export default function Review({ data }) {
                     </div>
                 </div>
 
-                <div className="container mx-auto px-6 pb-12">
+                <div className="container mx-auto px-10 pb-12">
                     <div className="flex flex-col lg:flex-row mb-2">
                         <div className="lg:w-3/4">
 

@@ -21,7 +21,7 @@ export default ({ data }) => {
                 <div className="container mx-auto px-8 pb-10">
 
                     <h3 className="text-black text-lg sm:text-xl font-semibold mb-2 mt-10">
-                        E-Seller Tools Offices
+                        {data.site.siteMetadata.title} Offices
                     </h3>
                     <p className="text-black text-md mt-2">
                         {data.site.siteMetadata.address}
@@ -58,7 +58,6 @@ query {
     site {
     siteMetadata {
       title
-      website
       email
       phone
       address

@@ -1,10 +1,10 @@
 module.exports = {
   siteMetadata: {
-    title: `E-Seller Tools`,
+    title: `Ecom Discover`,
     description: `A collection of e-commerce resources.  Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources.`,
-    siteUrl: `https://www.esellertools.com`,
-    website: `esellertools.com`,
-    email: `info@esellertools.com`,
+    siteUrl: `https://www.ecomdiscover.com`,
+    website: `ecomdiscover.com`,
+    email: `info@ecomdiscover.com`,
     phone: `604-555-1234`,
     address: `123 Main Street, Sometown, QC`,
     author: `@gsheppard.yang`,
