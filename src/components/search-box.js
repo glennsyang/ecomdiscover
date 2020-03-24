@@ -51,10 +51,9 @@ export default class SearchBox extends Component {
         )
     }
 
-    getOrCreateIndex = () =>
-        this.index
-            ? this.index
-            : Index.load(this.props.searchIndex);
+    getOrCreateIndex = () => this.index
+        ? this.index
+        : Index.load(this.props.searchIndex);
 
     search = evt => {
         const query = evt.target.value

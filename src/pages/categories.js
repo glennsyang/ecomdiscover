@@ -23,7 +23,7 @@ export default ({ data }) => {
                         <div className="flex-1">
                             <div className="grid grid-cols-3 gap-1">
                                 {data.allCategories.edges.map(({ node }) => (
-                                    <div className="col-span-1 text-blue-500 text-left p-1 sm:mx-6" key={node.id}>
+                                    <div key={node.id} className="col-span-1 text-blue-500 text-left p-1 sm:mx-6">
                                         <Link
                                             to={`/reviews`}
                                             state={{ category: node.name }}

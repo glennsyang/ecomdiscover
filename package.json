@@ -6,8 +6,10 @@
   "author": "Glenn Sheppard <glenn@glennsheppard.dev>",
   "dependencies": {
     "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.3.0",
+    "firebase": "^7.12.0",
     "gatsby": "^2.19.17",
     "gatsby-image": "^2.2.43",
+    "gatsby-plugin-firebase": "^0.2.0-beta.4",
     "gatsby-plugin-manifest": "^2.2.41",
     "gatsby-plugin-offline": "^3.0.34",
     "gatsby-plugin-postcss": "^2.1.20",
@@ -23,11 +25,13 @@
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-hook-form": "^5.1.0",
+    "react-select": "^3.0.8",
     "rehype-react": "^4.0.1",
     "surge": "^0.21.3",
     "tailwindcss": "^1.2.0"
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "prettier": "^1.19.1"
   },
   "keywords": [

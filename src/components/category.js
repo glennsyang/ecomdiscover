@@ -2,8 +2,6 @@ import React from "react"
 import { Link } from "gatsby"
 
 const Category = ({ categories }) => {
-    console.log("categories:", categories)
-
     return (
         <div>
             Categories:
