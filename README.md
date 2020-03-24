@@ -1,4 +1,4 @@
-# E-Seller Tools Directory & Review
+# Ecom Discover - Ecommerce Tools & Services Reviews
 
 
 ## About
@@ -10,11 +10,9 @@ A collection of e-commerce resources. Primarily related to FBA, but also touchin
 
 [Gatsby](https://github.com/gatsbyjs/gatsby)
 
-[Material-UI](https://github.com/mui-org/material-ui)
+[Tailwind-CSS](https://tailwindcss.com)
 
-## Based On
+## Author
 
-[Material UI Gatsby Starter](https://github.com/mui-org/material-ui/tree/master/examples/gatsby)
-
-[Material UI Album Template](https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/album)
+[Glenn Sheppard](https://glennsheppard.dev)
 
