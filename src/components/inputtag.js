@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
-function InputTag({ options }) {
+const InputTag = ({ name, register }) => {
+    const isChecked = true
     const [tags, setTags] = useState([])
 
     const inputKeyDown = (e) => {
@@ -23,27 +24,40 @@ function InputTag({ options }) {
     }
 
     return (
-        <div className="flex flex-wrap bg-white box-border rounded-md border border-gray-400 shadow-inner px-2 py-2">
-            <ul className="inline-block flex-wrap m-0 p-0 w-full">
+        <div className="bg-white border border-gray-400 shadow-inner rounded-md flex flex-wrap p-2">
+            <ul className="inline-flex flex-wrap p-0 w-full">
                 {tags.map((tag, i) => (
-                    <li key={i} className="inline-flex items-center px-3 py-1 mb-1 mr-1 text-gray-600 text-sm font-semibold bg-gray-200 rounded-full list-none">
+                    <li key={i} className="items-center bg-gray-200 rounded-full text-gray-600 flex font-semibold list-none mr-1 mt-1 px-3 py-1 text-sm">
                         #{tag}
                         <button
                             type="button"
                             onClick={() => { removeTag(i) }}
-                            className="inline-flex justify-center items-center appearance-none bg-blue-500 text-white border-none cursor-pointer rounded-full w-5 h-5 focus:outline-none origin-center transform rotate-45 ml-2"
+                            className="items-center appearance-none bg-blue-500 border-none rounded-full text-white text-xs font-bold cursor-pointer inline-flex justify-center origin-center ml-2 transform rotate-45 w-6 h-6 focus:outline-none"
                         >+</button>
                     </li>
                 ))}
-
-                <li>
+                <li className="flex-grow">
                     <input
                         type="text"
-                        onKeyDown={inputKeyDown}
                         placeholder="Enter tags by pressing Enter"
-                        className="inline-flex p-0 w-full text-black outline-none"
+                        onKeyDown={inputKeyDown}
+                        className="text-black w-full flex-grow p-0 outline-none placeholder-gray-400"
                     />
                 </li>
+                {tags.map((tag, i) =>
+                    <React.Fragment key={i}>
+                        <input
+                            type="checkbox"
+                            name={name}
+                            value={tag}
+                            defaultChecked={isChecked}
+                            hidden={isChecked}
+                            ref={register}
+                            placeholder="fake tags go here"
+                            className="text-black w-full flex-grow"
+                        />
+                    </React.Fragment>
+                )}
             </ul>
         </div>
     )

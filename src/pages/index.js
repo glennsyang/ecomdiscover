@@ -93,7 +93,7 @@ function IndexPage({ data }) {
           <div className="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
         </div>
 
-        <h3 className="mt-4 mb-12 text-3xl leading-tight">Review your favorite tools and share your experiences with our community</h3>
+        <h3 className="mt-4 mb-12 text-3xl leading-tight px-2">Review your favorite tools and share your experiences with our community</h3>
 
         <Link to={'/writereview'} className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-8 py-4 px-8 shadow-lg">
           Share
