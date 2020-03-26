@@ -9,18 +9,15 @@ function Header({ siteTitle }) {
 
       <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
 
-        <div className="flex pl-4 items-center">
+        <div className="flex pl-4">
           {/* Logo */}
-          <Link to={`/`} className="">
-            <img src={logo_image} alt={`${siteTitle} Logo`} className="h-16 w-32 fill-current inline" />
+          <Link to={`/`} className="flex items-center">
+            <img src={logo_image} alt={`${siteTitle} Logo`} className="flex-1 h-12 w-32 fill-current inline" />
+            <div className="flex-1">
+              <span className="text-4xl font-light text-blue-500">Ecom</span>
+              <span className="text-4xl font-light text-black">Discover</span>
+            </div>
           </Link>
-          <div className="flex-1 text-4xl font-light text-blue-500">
-            Ecom
-          </div>
-          <div className="flex-1 text-4xl font-light text-black">
-            Discover
-          </div>
-
         </div>
 
         <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20 justify-end flex-1" id="nav-content">

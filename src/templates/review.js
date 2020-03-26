@@ -57,7 +57,7 @@ export default function Review({ data }) {
                                 </h1>
                                 <h3 className="text-md text-gray-600">
                                     <Link to={`/`} className="text-gray-600">By {review.username}</Link>
-                                    <small className="text-gray-500"> • {review.date}</small>
+                                    <small className="text-gray-500"> • {review.created}</small>
                                 </h3>
                                 {/* Categories */}
                                 <h4 className="text-gray-500 text-sm mt-2">
@@ -146,7 +146,7 @@ export const query = graphql`
     reviews(fields: { slug: { eq: $slug } }) {
         company
         content
-        date(formatString: "DD MMMM, YYYY")
+        created(formatString: "DD MMMM, YYYY")
         id
         logo
         marketplace

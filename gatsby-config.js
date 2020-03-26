@@ -69,7 +69,7 @@ module.exports = {
             map: doc => ({
               company: doc.company,
               content: doc.content,
-              date: doc.date,
+              created: doc.created,
               logo: doc.logo,
               marketplace: doc.marketplace,
               rating: doc.rating,
@@ -128,8 +128,8 @@ module.exports = {
           },
         },
         // Optional filter to limit indexed nodes
-        filter: (node, getNode) =>
-          node.tags !== 'exempt',
+        //filter: (node, getNode) =>
+        //  node.tags !== 'exempt',
       },
     },
     // this (optional) plugin enables Progressive Web App + Offline functionality
