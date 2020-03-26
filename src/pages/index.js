@@ -106,13 +106,13 @@ function IndexPage({ data }) {
 
 export const query = graphql`
   query {
-    allReviews(limit: 3, sort: { fields: date, order: ASC }) {
+    allReviews(limit: 3, sort: { fields: created, order: ASC }) {
       totalCount
         edges {
             node {
                 company
                 content
-                date(formatString: "DD MMMM, YYYY")
+                created(formatString: "DD MMMM, YYYY")
                 logo
                 id
                 fields {

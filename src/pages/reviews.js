@@ -58,7 +58,7 @@ export default ({ location, data }) => {
                                     <Category categories={node.categories} />
                                 </h4>
                                 <h4 className="text-gray-500 text-xs mt-1">
-                                    {node.date}
+                                    {node.created}
                                 </h4>
                                 <p className="text-gray-600 mt-2" dangerouslySetInnerHTML={{ __html: truncateStr(node.content, 250, true) }} />
 
@@ -78,13 +78,13 @@ export default ({ location, data }) => {
 
 export const query = graphql`
   query {
-  allReviews (sort:{ fields: date, order: DESC}) {
+  allReviews (sort:{ fields: created, order: DESC}) {
     totalCount
     edges {
       node {
         company
         content
-        date(formatString: "DD MMMM, YYYY")
+        created(formatString: "DD MMMM, YYYY")
         logo
         id
         fields {
