@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { Link, graphql, navigate } from "gatsby"
 import { useForm } from "react-hook-form"
-import Select from 'react-select'
+import Select from "react-select"
+import CreatableSelect from 'react-select/creatable';
 import firebase from "gatsby-plugin-firebase"
 
 import * as Constants from '../constants'
-import Layout from "../components/layout"
+import Layout from '../components/layout'
 import SEO from "../components/seo"
 import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
@@ -60,61 +61,88 @@ const customStyles = {
     placeholder: styles => ({ ...styles, color: '#cbd5e0' }),
 }
 
-export default ({ data }) => {
+const createOption = (label) => (
+    { value: label, label: label, website: "" }
+)
+
+export default function WriteReview({ data }) {
     const { register, errors, handleSubmit, setValue } = useForm()
     const onSubmit = formData => {
-        formData = Object.assign(formData, {
-            rating: Number(formData.rating),
-            logo: 'logo_sellics.png',
+        console.log("data:", formData)
+        // check if entered new company
+        if (formData.company.value === formData.company.label) {
+            firebase
+                .firestore()
+                .collection('companies')
+                .add({ name: formData.company.label, logo: '', website: formData.website })
+                .then(ref => {
+                    updateFirestore(formData, ref.id)
+                })
+        } else {
+            updateFirestore(formData, formData.company.value)
+        }
+    }
+
+    const updateFirestore = (dataObject, companyId) => {
+        delete dataObject.website
+        dataObject = Object.assign(dataObject, {
+            rating: Number(dataObject.rating),
             username: "Glenn Sheppard",
             created: firebase.firestore.FieldValue.serverTimestamp(),
-            categories: formData.categories.map((category) => (
+            company: firebase.firestore().doc(`companies/${companyId}`),
+            categories: dataObject.categories.map((category) => (
                 firebase.firestore().doc(`categories/${category.value}`)
             ))
         })
+        firebase
+            .firestore()
+            .collection('reviews')
+            .add(dataObject)
+            .then(ref => {
+                console.log("sent to firestore:", ref.id)
+            })
         navigate(
             "/form-submitted",
             {
-                state: { username: formData.username, company: formData.company },
+                state: { username: dataObject.username },
                 replace: true,
             }
         )
-        // firebase
-        //     .firestore()
-        //     .collection('reviews')
-        //     .doc()
-        //     .set(formData)
-        //     .then(() => {
-        //         console.log("sent to firestore!")
-        //         reset({
-        //             rating: 0,
-        //             tags: [],
-        //             marketplace: countriesSelected
-        //         });
-        //         setValue('categories', [])
-        //     })
     }
-    console.log(errors && `errors: ${errors}, rating: ${errors.rating}`)
+    console.log(`errors: ${errors.title}`)
 
+    // Companies
+    const defaultCompanies = data.allCompanies.edges.map(({ node }) => (
+        { value: node.id, label: node.name, website: node.website }
+    ))
+    const [options, setOptions] = useState(defaultCompanies)
+    const [companies, setCompanies] = useState({});
+    const handleChange = selectedValue => {
+        setValue('company', selectedValue)
+        setValue('website', selectedValue ? selectedValue.website : "")
+        setCompanies(selectedValue);
+    }
+    const handleCreate = newValue => {
+        // add the new Company to existing list
+        const newOption = createOption(newValue)
+        setOptions([...options, newOption])
+        setValue('company', newOption)
+        setCompanies(newOption);
+    }
+    // Categories
     const categories = data.allCategories.edges.map(({ node }) => (
         { value: node.id, label: node.name }
     ))
-    const [values, setCategories] = useState({
-        selectedOption: [],
-    })
+    const [values, setCategories] = useState({ selectedOption: [] })
     const handleMultiChange = selectedOption => {
         setValue('categories', selectedOption)
         setCategories({ selectedOption })
     }
-    useEffect(() => {
-        register({ name: 'categories' })
-    })
 
-    const countriesSelected = [
-        { id: 1, value: "USA", isChecked: false },
-        { id: 2, value: "Canada", isChecked: false },
-        { id: 3, value: "Other", isChecked: false }
-    ]
+    useEffect(() => {
+        register({ name: "company" })
+        register({ name: "categories" })
+    }, [register])
 
     const imgProfile = {
         imgName: "blank_profile_picture.png",
@@ -186,13 +214,27 @@ export default ({ data }) => {
 
                                 <div className="flex">
                                     <div className="w-3/5">
-                                        <div className="block text-left text-black text-2xl font-bold mt-4">Company</div>
-                                        <input
-                                            type="text"
+                                        <div className="block text-left text-black text-2xl font-bold mt-4">Tool or Service Name</div>
+                                        <CreatableSelect
                                             name="company"
-                                            placeholder="Software, Tool or Service Name"
-                                            ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                                            className="block text-black w-full box-border rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                                            placeholder="Select Company..."
+                                            value={companies}
+                                            options={options}
+                                            styles={customStyles}
+                                            onChange={handleChange}
+                                            onCreateOption={handleCreate}
+                                            ref={() =>
+                                                register(
+                                                    { name: "company" },
+                                                    {
+                                                        validate: value => {
+                                                            // need to validate if it is undefined or empty array
+                                                            return Array.isArray(value) ? value.length > 0 : !!value || Constants.FIELD_REQUIRED;
+                                                        }
+                                                    }
+                                                )
+                                            }
+                                            isClearable
                                         />
                                         {errors.company && <span className="text-red-400 text-md">{errors?.company?.message}</span>}
                                     </div>
@@ -212,14 +254,26 @@ export default ({ data }) => {
 
                                 <div className="block text-left text-black text-2xl font-bold mt-4">Categories</div>
                                 <Select
-                                    styles={customStyles}
                                     name="categories"
-                                    placeholder="Select Categories"
+                                    placeholder="Select Categories..."
                                     value={values.selectedOption}
                                     options={categories}
+                                    styles={customStyles}
                                     onChange={handleMultiChange}
+                                    ref={() =>
+                                        register(
+                                            { name: "categories" },
+                                            {
+                                                validate: value => {
+                                                    // need to validate if it is undefined or empty array
+                                                    return Array.isArray(value) ? value.length > 0 : !!value || Constants.FIELD_REQUIRED;
+                                                }
+                                            }
+                                        )
+                                    }
                                     isMulti
                                 />
+                                {errors.categories && <span className="text-red-400 text-md">{errors?.categories?.message}</span>}
 
                                 <button
                                     type="submit"
@@ -242,7 +296,7 @@ export default ({ data }) => {
 
                             <div className="block text-left text-black text-2xl font-bold mt-4">Marketplace</div>
                             <div className="flex-row justify-start text-black">
-                                {countriesSelected.map((country) =>
+                                {Constants.MARKETPLACE_OPTIONS.map((country) =>
                                     <React.Fragment key={country.id}>
                                         <input
                                             type="checkbox"
@@ -267,12 +321,22 @@ export default ({ data }) => {
 export const query = graphql`
 query {
     allCategories (sort: { fields: name, order: ASC }) {
-    edges {
-      node {
-        id
-        name
-      }
+        edges {
+            node {
+                id
+                name
+            }
+        }
+    }   
+    allCompanies (sort: { fields: name, order: ASC }) {
+        edges {
+            node {
+                id
+                name
+                logo
+                website
+            }
+        }
     }
-  }
 }
 `

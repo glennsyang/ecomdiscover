@@ -21,7 +21,7 @@ export default ({ location }) => {
                 <div className="container mx-auto px-8 pb-10">
 
                     <h3 className="text-black text-xl font-semibold mb-4 mt-10">
-                        Thank you {state ? state.username : ''} for your submission{state ? ` about: ${state.company}` : ''}!
+                        Thank you {state ? state.username : ''} for your submission!
                     </h3>
                     <p className="text-black text-md">
                         By sharing your experiences you're helping businesses make better choices.
