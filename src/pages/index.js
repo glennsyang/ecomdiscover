@@ -60,7 +60,7 @@ function IndexPage({ data }) {
             <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
 
-          {data.allReviews.edges.map(({ node }) => (
+          {data.reviews.edges.map(({ node }) => (
             <Card key={node.id} review={node} />
           ))}
 
@@ -106,14 +106,17 @@ function IndexPage({ data }) {
 
 export const query = graphql`
   query {
-    allReviews(limit: 3, sort: { fields: created, order: ASC }) {
+    reviews: allReviews(limit: 3, sort: { fields: created, order: ASC }) {
       totalCount
         edges {
             node {
-                company
+                company {
+                  name
+                  logo
+                  website
+                }
                 content
                 created(formatString: "DD MMMM, YYYY")
-                logo
                 id
                 fields {
                   slug
@@ -123,7 +126,6 @@ export const query = graphql`
                 tags
                 title
                 username
-                website
                 categories {
                   id
                   name

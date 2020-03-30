@@ -82,10 +82,13 @@ export const query = graphql`
     totalCount
     edges {
       node {
-        company
+        company {
+            name
+            logo
+            website
+        }
         content
         created(formatString: "DD MMMM, YYYY")
-        logo
         id
         fields {
           slug
@@ -95,7 +98,6 @@ export const query = graphql`
         tags
         title
         username
-        website
         categories {
           id
           name
