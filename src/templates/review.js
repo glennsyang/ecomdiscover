@@ -22,8 +22,8 @@ export default function Review({ data }) {
         imgClass: ""
     };
     const imgLogo = {
-        imgName: review.logo,
-        imgAlt: `${review.company} Logo`,
+        imgName: review.company.logo,
+        imgAlt: `${review.company.name} Logo`,
         imgClass: "bg-white"
     };
 
@@ -78,7 +78,7 @@ export default function Review({ data }) {
                         <div className="lg:w-3/4">
 
                             {/* Logo */}
-                            <a href={`${review.website}`} rel="noopener noreferrer" target="_blank">
+                            <a href={`${review.company.website}`} rel="noopener noreferrer" target="_blank">
                                 <ImageFixed props={imgLogo} />
                             </a>
 
@@ -119,8 +119,8 @@ export default function Review({ data }) {
                                 <div className="text-xl font-bold text-black mb-2">Website</div>
                                 <div>
                                     {/* Website */}
-                                    <a href={`${review.website}`} rel="noopener noreferrer" target="_blank">
-                                        <span className="text-gray-500 underline text-md mt-2">{review.website}</span>
+                                    <a href={`${review.company.website}`} rel="noopener noreferrer" target="_blank">
+                                        <span className="text-gray-500 underline text-md mt-2">{review.company.website}</span>
                                     </a>
                                 </div>
                             </div>
@@ -144,17 +144,19 @@ export default function Review({ data }) {
 export const query = graphql`
   query($slug: String!) {
     reviews(fields: { slug: { eq: $slug } }) {
-        company
+        company {
+            name
+            logo
+            website
+        }
         content
         created(formatString: "DD MMMM, YYYY")
         id
-        logo
         marketplace
         rating
         tags
         title
         username
-        website
         categories {
             id
             name

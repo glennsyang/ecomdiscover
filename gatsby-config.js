@@ -64,20 +64,28 @@ module.exports = {
             }),
           },
           {
+            type: 'Companies',
+            collection: 'companies',
+            map: doc => ({
+              id: doc.id,
+              name: doc.name,
+              logo: doc.logo,
+              website: doc.website
+            }),
+          },
+          {
             type: 'Reviews',
             collection: 'reviews',
             map: doc => ({
-              company: doc.company,
               content: doc.content,
               created: doc.created,
-              logo: doc.logo,
               marketplace: doc.marketplace,
               rating: doc.rating,
               tags: doc.tags,
               title: doc.title,
               username: doc.username,
-              website: doc.website,
               categories___NODE: doc.categories.map(category => category.id),
+              company___NODE: doc.company.id,
             }),
           },
           {
