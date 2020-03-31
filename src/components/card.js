@@ -5,8 +5,8 @@ import Tag from "../components/tag"
 
 const Card = ({ review }) => {
     const props = {
-        imgName: review.logo,
-        imgAlt: `${review.company} Logo`,
+        imgName: review.company.logo,
+        imgAlt: `${review.company.name} Logo`,
         imgClass: "bg-white mx-6 mt-3"
     };
 

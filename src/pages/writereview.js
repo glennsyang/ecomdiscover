@@ -62,7 +62,7 @@ const customStyles = {
 }
 
 const createOption = (label) => (
-    { value: label, label: label, website: "" }
+    { value: label, label: label, website: '' }
 )
 
 export default function WriteReview({ data }) {
@@ -86,7 +86,7 @@ export default function WriteReview({ data }) {
     const updateFirestore = (dataObject, companyId) => {
         delete dataObject.website
         dataObject = Object.assign(dataObject, {
-            rating: Number(dataObject.rating),
+            rating: dataObject.rating ? Number(dataObject.rating) : 0,
             username: "Glenn Sheppard",
             created: firebase.firestore.FieldValue.serverTimestamp(),
             company: firebase.firestore().doc(`companies/${companyId}`),
@@ -109,14 +109,14 @@ export default function WriteReview({ data }) {
             }
         )
     }
-    console.log(`errors: ${errors.title}`)
+    //console.log("errors:", errors)
 
     // Companies
     const defaultCompanies = data.allCompanies.edges.map(({ node }) => (
         { value: node.id, label: node.name, website: node.website }
     ))
     const [options, setOptions] = useState(defaultCompanies)
-    const [companies, setCompanies] = useState({});
+    const [companies, setCompanies] = useState();
     const handleChange = selectedValue => {
         setValue('company', selectedValue)
         setValue('website', selectedValue ? selectedValue.website : "")
@@ -142,6 +142,7 @@ export default function WriteReview({ data }) {
     useEffect(() => {
         register({ name: "company" })
         register({ name: "categories" })
+        //register({ name: "rating" }, { required: true });
     }, [register])
 
     const imgProfile = {
@@ -275,24 +276,35 @@ export default function WriteReview({ data }) {
                                 />
                                 {errors.categories && <span className="text-red-400 text-md">{errors?.categories?.message}</span>}
 
-                                <button
-                                    type="submit"
-                                    value="Submit"
-                                    className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full my-6 py-4 px-8 shadow opacity-75 text-white gradient">
-                                    Submit
+                                <div className="text-black">
+                                    <button
+                                        type="submit"
+                                        value="Submit"
+                                        className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full my-6 py-4 px-8 shadow opacity-75 text-white gradient">
+                                        Submit
                                 </button>
+                                </div>
                             </form>
                         </div>
 
                         <div className="w-2/6 pl-12">
                             <span className="block text-left text-black text-2xl font-bold mb-2">Rating</span>
 
-                            <StarRating totalStars={5} name="rating" register={register} rules={{ required: true, message: Constants.SELECT_MARKETPLACE }} />
+                            <StarRating
+                                totalStars={5}
+                                name="rating"
+                                register={register}
+                                required
+                            />
                             {errors.rating && <span className="text-red-400 text-md">{errors?.rating?.message}</span>}
 
                             <div className="block text-black text-2xl font-bold mt-8">Tags</div>
 
-                            <InputTag name="tags" label="Tags" register={register} />
+                            <InputTag
+                                name="tags"
+                                label="Tags"
+                                register={register}
+                                required />
 
                             <div className="block text-left text-black text-2xl font-bold mt-4">Marketplace</div>
                             <div className="flex-row justify-start text-black">
