@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from 'prop-types'
 import { Link } from "gatsby"
-import logo_image from "../images/logo_1.svg"
+import logo_image from "../images/logo_2.png"
 
 function Header({ siteTitle }) {
   return (
@@ -11,12 +11,8 @@ function Header({ siteTitle }) {
 
         <div className="flex pl-4">
           {/* Logo */}
-          <Link to={`/`} className="flex items-center">
-            <img src={logo_image} alt={`${siteTitle} Logo`} className="flex-1 h-12 w-32 fill-current inline" />
-            <div className="flex-1">
-              <span className="text-4xl font-light text-blue-500">Ecom</span>
-              <span className="text-4xl font-light text-black">Discover</span>
-            </div>
+          <Link to={`/`}>
+            <img src={logo_image} alt={`${siteTitle} Logo`} className="h-16 fill-current inline" />
           </Link>
         </div>
 
