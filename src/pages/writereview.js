@@ -153,7 +153,7 @@ export default function WriteReview({ data }) {
     const imgAds = {
         imgName: "ads_digital_ocean.png",
         imgAlt: "Digital Ocean Ad",
-        imgClass: ""
+        imgClass: "h-8 w-8 object-cover"
     };
 
     return (
@@ -162,24 +162,25 @@ export default function WriteReview({ data }) {
                 title="Write Review"
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
-            <section className="pt-4 bg-white">
+            <section className="pt-4 flex flex-col flex-grow overflow-hidden bg-white">
 
-                <div className="bg-gray-100 py-2">
+                <div className="flex bg-gray-100 min-h-40 mb-4 py-6">
 
-                    <div className="container mx-auto px-18 flex items-center">
+                    <div className="container mx-auto px-10 flex flex-col lg:flex-row items-center">
 
-                        <div className="flex sm:w-2/3">
+                        <div className="lg:flex lg:w-2/3">
                             <Link title="User reviews" to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
                                 <ImageFluid props={imgProfile} />
                             </Link>
-                            <div className="mb-auto mt-auto">
+                            <div className="flex flex-col leading-tight">
                                 <h3 className="text-md text-gray-600">
                                     <Link to={`/`} className="text-gray-600">By Doug Short</Link>
                                     <small className="text-gray-500"> • {currentDate()}</small>
                                 </h3>
                             </div>
                         </div>
-                        <div className="sm:w-1/3 mt-2 ml-2">
+                        {/* Ads */}
+                        <div className="lg:flex lg:w-1/3 overflow-hidden relative">
                             <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
                                 <ImageFixed props={imgAds} />
                             </a>
@@ -187,13 +188,13 @@ export default function WriteReview({ data }) {
                     </div>
                 </div>
 
-                <div className="container mx-auto px-18 py-4">
-                    <div className="flex flex-col lg:flex-row">
+                <div className="container mx-auto px-10 pb-2">
+                    <form onSubmit={handleSubmit(onSubmit)} >
+                        <div className="flex flex-col lg:flex-row mb-2">
+                            <div className="lg:w-4/6">
 
-                        <div className="lg:w-4/6">
 
-                            <form onSubmit={handleSubmit(onSubmit)} >
-                                <div className="block text-left text-black text-2xl font-bold">Title</div>
+                                <div className="block text-left text-black lg:text-2xl text-xl font-bold">Title</div>
                                 <input
                                     type="text"
                                     name="title"
@@ -203,7 +204,7 @@ export default function WriteReview({ data }) {
                                 />
                                 {errors.title && <span className="text-red-400 text-md">{errors?.title?.message}</span>}
 
-                                <div className="block text-left text-black text-2xl font-bold mt-4">Review</div>
+                                <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Review</div>
                                 <textarea
                                     type="text"
                                     name="content"
@@ -213,9 +214,9 @@ export default function WriteReview({ data }) {
                                 />
                                 {errors.content && <span className="text-red-400 text-md">{errors?.content?.message}</span>}
 
-                                <div className="flex">
-                                    <div className="w-3/5">
-                                        <div className="block text-left text-black text-2xl font-bold mt-4">Tool or Service Name</div>
+                                <div className="lg:flex flex-row">
+                                    <div className="lg:w-3/5">
+                                        <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Tool or Service Name</div>
                                         <CreatableSelect
                                             name="company"
                                             placeholder="Select Company..."
@@ -240,8 +241,8 @@ export default function WriteReview({ data }) {
                                         {errors.company && <span className="text-red-400 text-md">{errors?.company?.message}</span>}
                                     </div>
 
-                                    <div className="w-2/5 ml-4">
-                                        <div className="block text-left text-black text-2xl font-bold mt-4">Website</div>
+                                    <div className="lg:w-2/5 lg:ml-4">
+                                        <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Website</div>
                                         <input
                                             type="url"
                                             name="website"
@@ -253,7 +254,7 @@ export default function WriteReview({ data }) {
                                     </div>
                                 </div>
 
-                                <div className="block text-left text-black text-2xl font-bold mt-4">Categories</div>
+                                <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Categories</div>
                                 <Select
                                     name="categories"
                                     placeholder="Select Categories..."
@@ -275,57 +276,56 @@ export default function WriteReview({ data }) {
                                     isMulti
                                 />
                                 {errors.categories && <span className="text-red-400 text-md">{errors?.categories?.message}</span>}
-
-                                <div className="text-black">
-                                    <button
-                                        type="submit"
-                                        value="Submit"
-                                        className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full my-6 py-4 px-8 shadow opacity-75 text-white gradient">
-                                        Submit
-                                </button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div className="w-2/6 pl-12">
-                            <span className="block text-left text-black text-2xl font-bold mb-2">Rating</span>
-
-                            <StarRating
-                                totalStars={5}
-                                name="rating"
-                                register={register}
-                                required
-                            />
-                            {errors.rating && <span className="text-red-400 text-md">{errors?.rating?.message}</span>}
-
-                            <div className="block text-black text-2xl font-bold mt-8">Tags</div>
-
-                            <InputTag
-                                name="tags"
-                                label="Tags"
-                                register={register}
-                                required />
-
-                            <div className="block text-left text-black text-2xl font-bold mt-4">Marketplace</div>
-                            <div className="flex-row justify-start text-black">
-                                {Constants.MARKETPLACE_OPTIONS.map((country) =>
-                                    <React.Fragment key={country.id}>
-                                        <input
-                                            type="checkbox"
-                                            name="marketplace"
-                                            value={country.value}
-                                            ref={register({ required: { value: true, message: Constants.SELECT_MARKETPLACE } })}
-                                            className="m-2"
-                                        />{country.value}
-                                    </React.Fragment>
-                                )}
                             </div>
-                            {errors.marketplace && <span className="text-red-400 text-md">{errors?.marketplace?.message}</span>}
 
+                            <div className="lg:w-2/6 lg:pl-10 lg:mt-0 mt-4">
+                                <span className="block text-left text-black lg:text-2xl text-xl font-bold mb-2">Rating</span>
+
+                                <StarRating
+                                    totalStars={5}
+                                    name="rating"
+                                    register={register}
+                                    required
+                                />
+                                {errors.rating && <span className="text-red-400 text-md">{errors?.rating?.message}</span>}
+
+                                <div className="block text-black lg:text-2xl text-xl font-bold mt-8">Tags</div>
+
+                                <InputTag
+                                    name="tags"
+                                    label="Tags"
+                                    register={register}
+                                    required />
+
+                                <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Marketplace</div>
+                                <div className="flex-row justify-start text-black">
+                                    {Constants.MARKETPLACE_OPTIONS.map((country) =>
+                                        <React.Fragment key={country.id}>
+                                            <input
+                                                type="checkbox"
+                                                name="marketplace"
+                                                value={country.value}
+                                                ref={register({ required: { value: true, message: Constants.SELECT_MARKETPLACE } })}
+                                                className="m-2"
+                                            />{country.value}
+                                        </React.Fragment>
+                                    )}
+                                </div>
+                                {errors.marketplace && <span className="text-red-400 text-md">{errors?.marketplace?.message}</span>}
+
+                            </div>
                         </div>
-                    </div>
+                        <div className="text-black mb-2">
+                            <button
+                                type="submit"
+                                value="Submit"
+                                className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full my-6 py-4 px-8 shadow opacity-75 text-white gradient">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </section >
+            </section>
         </Layout >
     )
 }

@@ -8,7 +8,7 @@ import Category from "../components/category"
 
 export default ({ location, data }) => {
 
-    const props = { title: "REVIEWS", subtitle: "Find top-rated reviews for all your ecommerce tools & services." }
+    const props = { title: "Reviews", subtitle: "Find top-rated reviews for all your ecommerce tools & services." }
 
     const reviews = data.allReviews.edges
     let filteredReviews = []
