@@ -1,10 +1,9 @@
 import React from "react"
-import { graphql, Link } from "gatsby"
+import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/page-header"
-import Tag from "../components/tag"
-import Category from "../components/category"
+import Card from "../components/card"
 
 export default ({ location, data }) => {
 
@@ -23,14 +22,6 @@ export default ({ location, data }) => {
             })
     }
 
-    function truncateStr(str, n, useWordBoundary) {
-        if (str.length <= n) { return str; }
-        var subString = str.substr(0, n - 1);
-        return (useWordBoundary
-            ? subString.substr(0, subString.lastIndexOf(' '))
-            : subString) + "...";
-    }
-
     return (
         <Layout>
             <SEO
@@ -41,35 +32,20 @@ export default ({ location, data }) => {
 
                 <PageHeader props={props} />
 
-                <div className="container mx-auto px-10 pb-10">
+                <div className="container mx-auto pb-8">
 
-                    <h3 className="text-black text-2xl sm:text-2xl font-semibold mb-6 mt-10">
+                    <h3 className="text-black text-2xl sm:text-2xl font-semibold mt-6 mx-6">
                         <span>{filteredReviews.length === 1 ? `${filteredReviews.length} Review` : `${filteredReviews.length} Reviews`}</span>
+                        <span className="ml-2">-</span>
+                        <span className="ml-2">{location.state.category}</span>
                     </h3>
-                    {filteredReviews
-                        .map(({ node }) => (
-                            <div key={node.id} className="sm:w-2/3 mt-8">
-                                <Link to={node.fields.slug}>
-                                    <h3 className="text-black text-xl font-semibold hover:underline">
-                                        {node.title}
-                                    </h3>
-                                </Link>
-                                <h4 className="text-gray-500 text-xs">
-                                    <Category categories={node.categories} />
-                                </h4>
-                                <h4 className="text-gray-500 text-xs mt-1">
-                                    {node.created}
-                                </h4>
-                                <p className="text-gray-600 mt-2" dangerouslySetInnerHTML={{ __html: truncateStr(node.content, 250, true) }} />
 
-                                <div className="mt-2">
-                                    <Tag tags={node.tags} />
-                                </div>
-                                <div className="w-full mt-8 mb-4">
-                                    <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
-                                </div>
-                            </div>
+                    <div className="flex flex-wrap">
+                        {filteredReviews.map(({ node }) => (
+                            <Card key={node.id} review={node} />
                         ))}
+                    </div>
+
                 </div>
             </section>
         </Layout>

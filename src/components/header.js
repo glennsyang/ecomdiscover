@@ -2,9 +2,6 @@ import React from "react"
 import PropTypes from 'prop-types'
 import { Link } from "gatsby"
 import Logo from "../components/logo"
-//import logo_image from "../images/logo_2.png"
-//import logo_image from "../images/logo_ecomdiscover.svg"
-// <img src={logo_image} alt={`${siteTitle} Logo`} className="h-12 fill-current inline" />
 
 function Header({ siteTitle }) {
   return (
@@ -21,11 +18,11 @@ function Header({ siteTitle }) {
           </Link>
         </div>
 
-        <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20 justify-end flex-1" id="nav-content">
-          <Link to={`/login`} className="mr-5 py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500">
+        <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20 justify-end flex-1 lg:mr-8" id="nav-content">
+          <Link to={`/app/login`} className="mr-5 py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500">
             Log In
           </Link>
-          <Link to={`/signup`} className="mx-auto lg:mx-0 hover:underline bg-blue-500 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 text-white gradient">
+          <Link to={`/app/signup`} className="mx-auto lg:mx-0 hover:underline bg-blue-500 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 text-white gradient">
             Sign Up
           </Link>
         </div>

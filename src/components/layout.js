@@ -18,7 +18,7 @@ function Layout({ children }) {
         }
       `}
       render={data => (
-        <div className="leading-normal tracking-normal text-white bg-white">
+        <div className="leading-normal tracking-normal antialiased text-white bg-white">
           <Header siteTitle={data.site.siteMetadata.title} />
           <main className="mt-16">{children}</main>
           <Footer siteTitle={data.site.siteMetadata.title} />

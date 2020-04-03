@@ -41,37 +41,14 @@ input[name='panel']:checked ~ .accordion__content {
     max-height: 50em;
 }
 
-.star {
-  cursor: pointer;
-  width: 2em;
-  height: 2em;
-  background-color: grey;
-  -webkit-clip-path: polygon(
-    50% 0%,
-    63% 38%,
-    100% 38%,
-    69% 59%,
-    82% 100%,
-    50% 75%,
-    18% 100%,
-    31% 59%,
-    0% 38%,
-    37% 38%
-  );
-  clip-path: polygon(
-    50% 0%,
-    63% 38%,
-    100% 38%,
-    69% 59%,
-    82% 100%,
-    50% 75%,
-    18% 100%,
-    31% 59%,
-    0% 38%,
-    37% 38%
-  );
+.tooltip .tooltip-text {
+  visibility: hidden;
+  text-align: center;
+  padding: 2px 6px;
+  position: absolute;
+  z-index: 100;
+  transition-duration: 300ms;
 }
-
-.star.selected {
-  background-color: red;
+.tooltip:hover .tooltip-text {
+  visibility: visible;
 }

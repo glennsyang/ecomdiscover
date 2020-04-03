@@ -60,8 +60,7 @@ const customStyles = {
     }),
     placeholder: styles => ({ ...styles, color: '#cbd5e0' }),
 }
-
-const createOption = (label) => (
+const createCompany = (label) => (
     { value: label, label: label, website: '' }
 )
 
@@ -124,7 +123,7 @@ export default function WriteReview({ data }) {
     }
     const handleCreate = newValue => {
         // add the new Company to existing list
-        const newOption = createOption(newValue)
+        const newOption = createCompany(newValue)
         setOptions([...options, newOption])
         setValue('company', newOption)
         setCompanies(newOption);
@@ -138,11 +137,43 @@ export default function WriteReview({ data }) {
         setValue('categories', selectedOption)
         setCategories({ selectedOption })
     }
+    // Tags
+    /*
+    const [tags, setTags] = useState({ inputValue: '', tagValue: [] })
+    const { inputValue, tagValue } = tags
+    const handleChangeTag = value => {
+        console.log("handleChangeTag:", value)
+        setTags({ inputValue: value, tagValue: [...tagValue] })
+    }
+    const handleInputChangeTag = inputTag => {
+        const { inputValue, tagValue } = tags
+        if (!inputTag) return;
+        console.log("handleInputChange:", inputTag)
+        setTags({ inputValue: inputTag, tagValue: [...tagValue] })
+        console.log("Tags:", tags)
+    }
+    const handleKeyDown = (event) => {
+        const { inputValue, tagValue } = tags
+        console.log("inputValue:", inputValue)
+        console.log("tagValue:", tagValue)
+        if (!inputValue) return;
+        switch (event.key) {
+            case 'Enter':
+            case 'Tab':
+                console.log(tagValue);
+                setTags({
+                    inputValue: '',
+                    tagValue: [...tagValue, createTag(inputValue)],
+                })
+                event.preventDefault()
+        }
+    }
+    */
 
     useEffect(() => {
         register({ name: "company" })
         register({ name: "categories" })
-        //register({ name: "rating" }, { required: true });
+        //register({ name: "tags" });
     }, [register])
 
     const imgProfile = {
@@ -295,7 +326,7 @@ export default function WriteReview({ data }) {
                                     name="tags"
                                     label="Tags"
                                     register={register}
-                                    required />
+                                />
 
                                 <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Marketplace</div>
                                 <div className="flex-row justify-start text-black">
