@@ -4,14 +4,13 @@ import { Link } from "gatsby"
 const Category = ({ categories }) => {
     return (
         <div>
-            Categories:
             {categories.map((category) =>
                 <Link
                     key={category.id}
                     to={`/reviews`}
                     state={{ category: category.name }}
                     className="hover:underline">
-                    <span className="ml-1">{category.name},</span>
+                    <span className="mr-1">{category.name},</span>
                 </Link>
             )}
         </div>

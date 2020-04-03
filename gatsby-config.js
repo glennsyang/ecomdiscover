@@ -106,6 +106,7 @@ module.exports = {
       resolve: "gatsby-plugin-firebase",
       options: {
         features: {
+          auth: true,
           database: true,
           firestore: true,
         },

@@ -8,20 +8,18 @@ import Card from "../components/card"
 function IndexPage({ data }) {
   return (
     <Layout>
-
       <SEO
         title="Home"
         keywords={[`amazon`, `seller`, `tools`, `FBA`]}
       />
 
       <div className="gradient">
-
         {/* Hero */}
-        <section className="hero-image flex items-center py-8 sm:py-32" id="hero">
+        <section className="hero-image flex items-center py-8 sm:py-24" id="hero">
 
           <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
-            <h1 className="font-serif antialiased text-center text-3xl sm:text-4xl font-semibold text-white">
+            <h1 className="font-serif text-center text-3xl sm:text-4xl font-semibold text-white">
               Find Top-Rated Tools & Services For Your E-commerce Business
           </h1>
             <h4 className="text-center sm:text-xl font-light text-white mb-6">
@@ -31,13 +29,13 @@ function IndexPage({ data }) {
             {/* Search Box */}
             <SearchBox searchIndex={data.siteSearchIndex.index} />
 
-            <div className="text-white text-center pt-6 inline-block">
+            <div className="text-white text-center font-semibold pt-6 inline-block">
               {data.allCategories.edges.map(({ node }) => (
                 <Link
                   to={`/reviews`}
                   key={node.id}
                   state={{ category: node.name }}
-                  className="mr-5 pb-4 inline-block hover:underline">
+                  className="mr-4 pb-4 inline-block hover:underline">
                   {node.name}
                 </Link>
               ))}

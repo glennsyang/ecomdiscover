@@ -5,6 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
 import ImageFluid from "../components/image-fluid"
+import ThumbsUp from "../components/thumbsup"
 import Tag from "../components/tag"
 import Category from "../components/category"
 
@@ -19,7 +20,7 @@ export default function Review({ data }) {
     const imgAds = {
         imgName: "ads_digital_ocean.png",
         imgAlt: "Digital Ocean Ad",
-        imgClass: "w-64"
+        imgClass: "w-64 h-full"
     };
     const imgLogo = {
         imgName: review.company.logo,
@@ -46,98 +47,123 @@ export default function Review({ data }) {
                 <div className="container mx-auto bg-white">
 
                     {/* Row */}
-                    <div className="flex flex-col mt-20">
+                    {/*<div className="flex flex-col mt-20 bg-gray-400 p-4">*/}
 
-                        <div className="flex flex-col lg:flex-row">
+                    <div id="wrapper" className="flex flex-col lg:flex-row">
 
-                            <div className="lg:w-3/4 flex flex-col p-4 mb-12">
+                        <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
 
-                                {/* Company Heading */}
-                                <div className="flex flex-col lg:flex-row lg:flex-grow">
+                            {/* Company Heading */}
+                            <div className="flex flex-col lg:flex-row lg:flex-grow">
 
-                                    <div className="lg:w-3/5 flex ml-4">
-                                        {/* Logo */}
-                                        <div className="flex items-center">
-                                            <a href={`${review.company.website}`} rel="noopener noreferrer" target="_blank">
-                                                <ImageFixed props={imgLogo} />
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <div className="lg:w-2/5 flex flex-col justify-between lg:block">
-                                        {/* Website */}
-                                        <h3 className="flex text-xl font-bold text-black mb-2">Website</h3>
-                                        {/* Website */}
+                                <div className="lg:w-1/2 flex lg:ml-10">
+                                    {/* Logo */}
+                                    <div className="flex items-center">
                                         <a href={`${review.company.website}`} rel="noopener noreferrer" target="_blank">
-                                            <span className="text-gray-500 underline text-md mt-2">{review.company.website}</span>
+                                            <ImageFixed props={imgLogo} />
                                         </a>
-                                        {/* Marketplace */}
-                                        <h3 className="flex text-xl font-bold text-black mb-2 mt-2">Marketplace</h3>
-                                        <div>
-                                            <span className="text-gray-500 text-md mt-2">{review.marketplace.join(', ')}</span>
-                                        </div>
                                     </div>
-
                                 </div>
 
-                                <hr className="border-b border-gray-400 opacity-25 mt-4 py-0" />
+                                <div className="lg:w-1/2 flex flex-col justify-between lg:block">
+                                    {/* Categories */}
+                                    <h3 className="flex text-xl font-bold text-black mb-2">Categories</h3>
+                                    <div className="text-gray-500 text-md">
+                                        <Category categories={review.categories} />
+                                    </div>
+                                    {/* Marketplace */}
+                                    <h3 className="flex text-xl font-bold text-black mb-2 mt-2">Marketplace</h3>
+                                    <div>
+                                        <span className="text-gray-500 text-md mt-2">{review.marketplace.join(', ')}</span>
+                                    </div>
+                                </div>
 
-                                <div className="flex flex-col lg:px-10 py-6">
+                            </div>
 
-                                    <h3 className="text-2xl sm:text-2xl font-bold text-black mb-4">Reviews</h3>
+                            <hr id="reviews" className="border-b border-gray-400 opacity-25 mt-4 py-0" />
 
-                                    {/* Card */}
-                                    <div className="rounded-lg shadow-xl border border-gray-100 bg-white p-10 mt-10">
+                            <div className="flex flex-col lg:px-10 py-6">
 
-                                        <div className="flex flex-col lg:flex-row lg:flex-grow">
-                                            {/* Avatar */}
-                                            <div className="lg:w-32 flex">
-                                                <Link title={`${review.username} reviews`} to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
-                                                    <ImageFluid props={imgProfile} />
-                                                </Link>
+                                <h3 className="text-2xl sm:text-2xl font-bold text-black mb-4">Reviews</h3>
+
+                                {/* Card */}
+                                <div className="rounded-lg shadow-xl border border-gray-100 bg-white p-10">
+
+                                    <div className="flex flex-col lg:flex-row lg:flex-grow">
+                                        {/* Avatar */}
+                                        <div className="lg:w-32 flex">
+                                            <Link title={`${review.username} reviews`} to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
+                                                <ImageFluid props={imgProfile} />
+                                            </Link>
+                                        </div>
+                                        {/* User Details & Review Content */}
+                                        <div className="lg:w-full flex flex-col">
+                                            <h3 className="flex text-base font-bold text-black">
+                                                {review.username}
+                                            </h3>
+                                            <div className="flex pt-2 mb-4">
+                                                <span className="text-gray-400 text-sm lg:text-xs">{review.created}</span>
+                                                <span className="text-gray-400 text-sm lg:text-xs">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                                                <span className="text-gray-400 text-sm lg:text-xs">Member Since:&nbsp;</span>
+                                                <span className="text-gray-400 text-sm lg:text-xs">01/01/20</span>
                                             </div>
-                                            {/* User Details & Review Content */}
-                                            <div className="lg:w-full flex flex-col">
-                                                <h3 className="flex text-base font-bold text-black">
-                                                    {review.username}
-                                                </h3>
-                                                <div className="flex pt-2 mb-4">
-                                                    <span className="text-gray-400 text-xs">{review.created}</span>
-                                                    <span className="text-gray-400 text-xs">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                                                    <span className="text-gray-400 text-xs">Member Since:&nbsp;</span>
-                                                    <span className="text-gray-400 text-xs">01/01/20</span>
-                                                </div>
-                                                <div className="flex flex-1 mb-4">
+                                            <div className="flex flex-col lg:flex-row flex-auto mb-4">
+                                                {/* Rating */}
+                                                <div class="flex mb-4 lg:mb-0">
                                                     {starRating}
                                                 </div>
-                                                <p className="text-black text-base font-bold mb-4">{review.title}</p>
-                                                <div
-                                                    className="text-md font-light text-black"
-                                                    dangerouslySetInnerHTML={{ __html: review.content }}
-                                                />
-                                                <div className="mt-8 mr-4">
-                                                    <button className="float-right bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
-                                                        <span>Helpful</span>
+                                                <div class="flex lg:ml-6">
+                                                    {/* Tags */}
+                                                    <Tag tags={review.tags} />
+                                                </div>
+                                            </div>
+                                            {/* Title */}
+                                            <p className="text-black text-base font-bold mb-4">{review.title}</p>
+                                            <div
+                                                className="text-base font-normal text-gray-800"
+                                                dangerouslySetInnerHTML={{ __html: review.content }}
+                                            />
+                                            <div className="bg-white">
+                                                <div className="float-right mt-12 lg:mr-6">
+                                                    <button name="submit" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
+                                                        <ThumbsUp width="14" height="14" viewBox="0 0 47 47" className="mr-2" />
+                                                        <span className="tooltip">
+                                                            Helpful
+                                                                <span class='tooltip-text bg-black text-white text-xs p-3 -mt-8 -ml-16 rounded'>
+                                                                Please <Link to={`/signup`} className="text-blue-500">sign-in</Link> to rate helpful.
+                                                                </span>
+                                                        </span>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
 
                                 </div>
 
                             </div>
 
-                            {/* Ads */}
-                            <div className="lg:w-1/4 flex p-4 bg-gray-200">
+                        </div>
+
+                        {/* Ads */}
+                        <div id="sidebar" className="lg:w-1/4 flex flex-col py-10 lg:pb-0 bg-gray-200 relative">
+                            <div className="flex mx-auto">
                                 <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
                                     <ImageFluid props={imgAds} />
                                 </a>
                             </div>
+                            <div className="flex mx-auto ml-10 lg:mt-32 fixed">
+                                <div className="flex">
+                                    {starRating}
+                                    <span className="text-lg text-blue-500 pl-4">
+                                        <a href="#reviews">1 Reviews</a>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
+
+                    {/*</div>*/}
 
                 </div>
             </div>

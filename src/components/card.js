@@ -7,7 +7,7 @@ const Card = ({ review }) => {
     const props = {
         imgName: review.company.logo,
         imgAlt: `${review.company.name} Logo`,
-        imgClass: "bg-white mx-6 mt-3"
+        imgClass: "bg-white mx-6 mt-4"
     };
 
     let starRating = [];
@@ -31,8 +31,8 @@ const Card = ({ review }) => {
     }
 
     return (
-        <div className="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
-            <div className="flex-1 bg-white rounded-lg overflow-hidden shadow-md">
+        <div className="w-full md:w-1/3 p-6 flex flex-col flex-shrink">
+            <div className="flex-1 bg-white rounded-lg overflow-hidden shadow-lg">
                 <Link to={review.fields.slug}>
 
                     {/* Logo */}
