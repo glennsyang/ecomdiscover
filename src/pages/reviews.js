@@ -37,7 +37,7 @@ export default ({ location, data }) => {
                     <h3 className="text-black text-2xl sm:text-2xl font-semibold mt-6 mx-6">
                         <span>{filteredReviews.length === 1 ? `${filteredReviews.length} Review` : `${filteredReviews.length} Reviews`}</span>
                         <span className="ml-2">-</span>
-                        <span className="ml-2">{location.state.category}</span>
+                        {location.state && <span className="ml-2">{location.state.category}</span>}
                     </h3>
 
                     <div className="flex flex-wrap">

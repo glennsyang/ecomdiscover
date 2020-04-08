@@ -32,34 +32,6 @@ function currentDate() {
         return dateStr;
     }
 }
-const customStyles = {
-    control: styles => ({
-        ...styles,
-        backgroundColor: 'white',
-        boxShadow: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-        padding: '1px',
-        borderColor: '#cbd5e0'
-    }),
-    option: (provided, state) => ({
-        ...provided,
-        borderBottom: '1px gray',
-        backgroundColor: state.isSelected ? 'white' : 'white',
-        color: '#2d3748',
-        ':hover': {
-            backgroundColor: '#f7fafc',
-            color: '#4299e1',
-        },
-        padding: 10,
-        fontSize: '14px',
-    }),
-    singleValue: ((provided, state) => {
-        const opacity = state.isDisabled ? 0.5 : 1;
-        const transition = 'opacity 300ms';
-
-        return { ...provided, opacity, transition };
-    }),
-    placeholder: styles => ({ ...styles, color: '#cbd5e0' }),
-}
 const createCompany = (label) => (
     { value: label, label: label, website: '' }
 )
@@ -193,25 +165,25 @@ export default function WriteReview({ data }) {
                 title="Write Review"
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
-            <section className="pt-4 flex flex-col flex-grow overflow-hidden bg-white">
+            <section className="flex flex-col flex-grow overflow-hidden bg-white">
 
-                <div className="flex bg-gray-100 min-h-40 mb-4 py-6">
+                <div className="flex bg-gray-100 min-h-40 py-4">
 
                     <div className="container mx-auto px-10 flex flex-col lg:flex-row items-center">
 
-                        <div className="lg:flex lg:w-2/3">
+                        <div className="lg:flex lg:w-2/3 mb-4 lg:mb-0">
                             <Link title="User reviews" to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
                                 <ImageFluid props={imgProfile} />
                             </Link>
-                            <div className="flex flex-col leading-tight">
-                                <h3 className="text-md text-gray-600">
+                            <div className="flex flex-col lg:flex-row leading-tight">
+                                <h3 className="flex items-center text-md text-gray-600">
                                     <Link to={`/`} className="text-gray-600">By Doug Short</Link>
                                     <small className="text-gray-500"> • {currentDate()}</small>
                                 </h3>
                             </div>
                         </div>
                         {/* Ads */}
-                        <div className="lg:flex lg:w-1/3 overflow-hidden relative">
+                        <div className="lg:flex lg:w-1/3 overflow-hidden relative hidden md:visible lg:visible xl:visible">
                             <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
                                 <ImageFixed props={imgAds} />
                             </a>
@@ -219,9 +191,9 @@ export default function WriteReview({ data }) {
                     </div>
                 </div>
 
-                <div className="container mx-auto px-10 pb-2">
+                <div className="container mx-auto px-10 py-4">
                     <form onSubmit={handleSubmit(onSubmit)} >
-                        <div className="flex flex-col lg:flex-row mb-2">
+                        <div className="flex flex-col lg:flex-row">
                             <div className="lg:w-4/6">
 
 
@@ -253,7 +225,7 @@ export default function WriteReview({ data }) {
                                             placeholder="Select Company..."
                                             value={companies}
                                             options={options}
-                                            styles={customStyles}
+                                            styles={Constants.customStyles}
                                             onChange={handleChange}
                                             onCreateOption={handleCreate}
                                             ref={() =>
@@ -291,7 +263,7 @@ export default function WriteReview({ data }) {
                                     placeholder="Select Categories..."
                                     value={values.selectedOption}
                                     options={categories}
-                                    styles={customStyles}
+                                    styles={Constants.customStyles}
                                     onChange={handleMultiChange}
                                     ref={() =>
                                         register(
@@ -346,7 +318,7 @@ export default function WriteReview({ data }) {
 
                             </div>
                         </div>
-                        <div className="text-black mb-2">
+                        <div className="text-black">
                             <button
                                 type="submit"
                                 value="Submit"

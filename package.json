@@ -23,6 +23,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-firebaseui": "^4.1.0",
     "react-helmet": "^5.2.1",
     "react-hook-form": "^5.1.0",
     "react-select": "^3.0.8",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "dotenv": "^8.2.0",
+    "gatsby-plugin-create-client-paths": "^2.2.1",
     "prettier": "^1.19.1"
   },
   "keywords": [
@@ -43,6 +45,7 @@
   "license": "MIT",
   "scripts": {
     "build": "gatsby build",
+    "build:pp": "gatsby build --prefix-paths",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
