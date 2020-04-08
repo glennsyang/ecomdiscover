@@ -109,10 +109,10 @@ export default function Review({ data }) {
                                             </div>
                                             <div className="flex flex-col lg:flex-row flex-auto mb-4">
                                                 {/* Rating */}
-                                                <div class="flex mb-4 lg:mb-0">
+                                                <div className="flex mb-4 lg:mb-0">
                                                     {starRating}
                                                 </div>
-                                                <div class="flex lg:ml-6">
+                                                <div className="flex lg:ml-6">
                                                     {/* Tags */}
                                                     <Tag tags={review.tags} />
                                                 </div>
@@ -129,7 +129,7 @@ export default function Review({ data }) {
                                                         <ThumbsUp width="14" height="14" viewBox="0 0 47 47" className="mr-2" />
                                                         <span className="tooltip">
                                                             Helpful
-                                                                <span class='tooltip-text bg-black text-white text-xs p-3 -mt-8 -ml-16 rounded'>
+                                                                <span className='tooltip-text bg-black text-white text-xs p-3 -mt-8 -ml-16 rounded'>
                                                                 Please <Link to={`/signup`} className="text-blue-500">sign-in</Link> to rate helpful.
                                                                 </span>
                                                         </span>
