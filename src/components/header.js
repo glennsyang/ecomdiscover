@@ -12,7 +12,7 @@ function Header({ siteTitle }) {
 
         <div className="flex pl-4">
           {/* Logo */}
-          <Link to={`/`}>
+          <Link to={`/`} title={siteTitle}>
             <div className="pb-2/3">
               <Logo width="100%" height="100%" viewBox="0 0 1450 400" className="lg:h-16 h-12 object-cover" />
             </div>

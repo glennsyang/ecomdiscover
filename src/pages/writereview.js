@@ -80,7 +80,7 @@ export default function WriteReview({ data }) {
             }
         )
     }
-    //console.log("errors:", errors)
+    console.log("errors:", data)
 
     // Companies
     const defaultCompanies = data.allCompanies.edges.map(({ node }) => (

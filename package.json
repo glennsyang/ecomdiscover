@@ -20,10 +20,10 @@
     "gatsby-source-firestore": "^1.0.3",
     "gatsby-transformer-remark": "^2.6.53",
     "gatsby-transformer-sharp": "^2.3.14",
+    "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-firebaseui": "^4.1.0",
     "react-helmet": "^5.2.1",
     "react-hook-form": "^5.1.0",
     "react-select": "^3.0.8",
@@ -37,10 +37,10 @@
     "prettier": "^1.19.1"
   },
   "keywords": [
-    "gatsby",
-    "tailwind",
-    "tailwindcss",
-    "purgecss"
+    "amazon",
+    "FBA",
+    "ecommerce",
+    "repricing"
   ],
   "license": "MIT",
   "scripts": {
