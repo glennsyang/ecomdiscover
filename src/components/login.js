@@ -1,47 +1,90 @@
 import React from "react"
 import { navigate } from '@reach/router'
 import { Link } from 'gatsby'
-//import View from "./View"
-//import { useState } from "react"
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import AuthenticationView from "../components/authenticationview"
+import { useForm } from 'react-hook-form';
 import { setUser, isLoggedIn } from "../utils/auth"
 import firebase from "gatsby-plugin-firebase"
+import * as Constants from '../constants'
 
 const Login = () => {
+    const { register, errors, handleSubmit } = useForm()
+    const onSubmit = data => {
+        console.log("data:", data)
+        firebase
+            .auth()
+            .signInWithEmailAndPassword(data.email, data.password)
+            .then(result => {
+                console.log("result:", result.user)
+                setUser(result.user);
+                navigate('/app/profile');
+            })
+            .catch(error => {
+                switch (error.code) {
+                    case 'auth/wrong-password':
+                        alert('Wrong password')
+                        break
+                    case 'auth/invalid-email':
+                        alert('E-mail address is not valid')
+                        break
+                    case 'auth/user-disabled':
+                        alert('User corresponding to the given email has been disabled')
+                        break
+                    case 'auth/user-not-found':
+                        alert('There is no user corresponding to the given email')
+                        break
+                    default:
+                        break
+                }
+            })
+    }
 
     if (isLoggedIn()) {
         navigate(`/app/profile`)
     }
 
-    function getUiConfig(auth) {
-        return {
-            signInFlow: 'popup',
-            signInOptions: [
-                auth.GoogleAuthProvider.PROVIDER_ID,
-                auth.EmailAuthProvider.PROVIDER_ID
-            ],
-            // signInSuccessUrl: '/app/profile',
-            callbacks: {
-                signInSuccessWithAuthResult: (result) => {
-                    setUser(result.user);
-                    navigate('/app/profile');
-                }
-            }
-        };
-    }
-
     return (
-        //<View title="Log In">
-        //</View>
-        <div className="container mx-auto bg-white">
-            <div className="bg-white px-4 pt-6 pb-8 mb-4 md:mx-24 lg:mx-64">
-                <h1 className="text-2xl font-bold">Sign In</h1>
-                <p>If you have not created an account yet, then please <Link to={`/app/signup`} className="text-blue-500">sign up</Link> first.</p>
-                {firebase && <StyledFirebaseAuth uiConfig={getUiConfig(firebase.auth)} firebaseAuth={firebase.auth()} />}
-            </div>
-        </div>
+        <AuthenticationView title="Sign In">
+            <p className="text-lg">If you have not created an account yet, then please <Link to={`/app/signup`} className="text-blue-500 text-left hover:underline">sign up</Link> first.</p>
+            {firebase &&
+                <div className="w-full xl:w-5/6 mt-6">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="text-left text-black lg:text-2xl text-xl font-bold mb-2">E-mail*</div>
+                        <input
+                            type="text"
+                            placeholder="E-mail address"
+                            name="email"
+                            ref={register({
+                                required: Constants.FIELD_REQUIRED,
+                                pattern: { value: /^\S+@\S+$/i, message: Constants.VALID_EMAIL }
+                            })}
+                            className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                        />
+                        {errors.email && <span className="text-red-400 text-md">{errors?.email?.message}</span>}
+                        <div className="text-left text-black lg:text-2xl text-xl font-bold mb-2 mt-4">Password*</div>
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            name="password"
+                            ref={register({
+                                required: Constants.FIELD_REQUIRED,
+                                minLength: { value: 8, message: Constants.VALID_PASSWORD }
+                            })}
+                            className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                        />
+                        {errors.password && <span className="text-red-400 text-md">{errors?.password?.message}</span>}
+                        <div className="text-black">
+                            <button
+                                type="submit"
+                                value="Submit"
+                                className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full mt-6 py-4 px-8 shadow opacity-75 text-white gradient">
+                                Sign In
+                            </button>
+                        </div>
+                    </form>
+                </div>}
+        </AuthenticationView>
     );
-
 }
 
 export default Login

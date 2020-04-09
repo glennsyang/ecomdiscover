@@ -16,7 +16,7 @@ export const isLoggedIn = () => {
 
 export const logout = (firebase) => {
     return new Promise(resolve => {
-        firebase.auth().signOut().then(function () {
+        firebase.auth().signOut().then(() => {
             setUser({});
             resolve();
         });

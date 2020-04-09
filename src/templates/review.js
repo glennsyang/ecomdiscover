@@ -1,6 +1,5 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
-
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
@@ -47,8 +46,6 @@ export default function Review({ data }) {
                 <div className="container mx-auto bg-white">
 
                     {/* Row */}
-                    {/*<div className="flex flex-col mt-20 bg-gray-400 p-4">*/}
-
                     <div id="wrapper" className="flex flex-col lg:flex-row">
 
                         <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
@@ -103,9 +100,9 @@ export default function Review({ data }) {
                                             </h3>
                                             <div className="flex pt-2 mb-4">
                                                 <span className="text-gray-400 text-sm lg:text-xs">{review.created}</span>
-                                                <span className="text-gray-400 text-sm lg:text-xs">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                                                <span className="text-gray-400 text-sm lg:text-xs">Member Since:&nbsp;</span>
-                                                <span className="text-gray-400 text-sm lg:text-xs">01/01/20</span>
+                                                <span className="text-gray-400 text-sm lg:text-xs pl-2">|</span>
+                                                <span className="text-gray-400 text-sm lg:text-xs pl-2">Member Since:</span>
+                                                <span className="text-gray-400 text-sm lg:text-xs pl-1">01/01/20</span>
                                             </div>
                                             <div className="flex flex-col lg:flex-row flex-auto mb-4">
                                                 {/* Rating */}
@@ -162,8 +159,6 @@ export default function Review({ data }) {
                             </div>
                         </div>
                     </div>
-
-                    {/*</div>*/}
 
                 </div>
             </div>

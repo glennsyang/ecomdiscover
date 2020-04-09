@@ -40,6 +40,7 @@ export const query = graphql`
       node {
         content
         title
+        date
         id
       }
     }

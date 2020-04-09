@@ -3,7 +3,10 @@ export const DJISYMBOL = "&symbol=DJI"
 export const ONE_DAY_MS = 24 * 3600 * 1000
 
 export const FIELD_REQUIRED = "*This field is required."
+export const VALID_EMAIL = "*Please enter a valid e-mail address."
+export const VALID_PASSWORD = "*Password must be at least 12 characters long."
 export const SELECT_MARKETPLACE = "*Please select at least one Marketplace."
+
 
 export const MARKETPLACE_OPTIONS = [
     { id: 1, value: "USA", isChecked: false },
