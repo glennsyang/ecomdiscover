@@ -80,7 +80,6 @@ export default function WriteReview({ data }) {
             }
         )
     }
-    console.log("errors:", data)
 
     // Companies
     const defaultCompanies = data.allCompanies.edges.map(({ node }) => (
@@ -150,7 +149,7 @@ export default function WriteReview({ data }) {
 
     const imgProfile = {
         imgName: "blank_profile_picture.png",
-        imgAlt: `My Profile`,
+        imgAlt: `Profile`,
         imgClass: "h-full w-full object-cover"
     };
     const imgAds = {

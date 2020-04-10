@@ -10,7 +10,6 @@ export const setUser = user =>
 
 export const isLoggedIn = () => {
     const user = getUser()
-    console.log("isLoggedIn:", user);
     return !!user.email
 }
 

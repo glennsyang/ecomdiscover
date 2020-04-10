@@ -1,37 +1,35 @@
 import React from "react"
 import { navigate } from '@reach/router'
 import { Link } from 'gatsby'
-import AuthenticationView from "../components/authenticationview"
+import AuthenticationView from "./authenticationview"
 import { useForm } from 'react-hook-form';
-import { setUser, isLoggedIn } from "../utils/auth"
+import { setUser, isLoggedIn } from "../../utils/auth"
 import firebase from "gatsby-plugin-firebase"
-import * as Constants from '../constants'
+import * as Constants from '../../constants'
 
-const Login = () => {
-    const { register, errors, handleSubmit } = useForm()
+const SignUp = () => {
+    const { register, errors, setError, handleSubmit } = useForm()
     const onSubmit = data => {
-        console.log("data:", data)
         firebase
             .auth()
-            .signInWithEmailAndPassword(data.email, data.password)
+            .createUserWithEmailAndPassword(data.email, data.password)
             .then(result => {
-                console.log("result:", result.user)
                 setUser(result.user);
                 navigate('/app/profile');
             })
             .catch(error => {
                 switch (error.code) {
-                    case 'auth/wrong-password':
-                        alert('Wrong password')
+                    case 'auth/email-already-in-use':
+                        setError("email", "submitError", "*There already exists an account with the given email address.")
                         break
                     case 'auth/invalid-email':
-                        alert('E-mail address is not valid')
+                        setError("email", "submitError", "*E-mail address is not valid.")
                         break
-                    case 'auth/user-disabled':
-                        alert('User corresponding to the given email has been disabled')
+                    case 'auth/operation-not-allowed':
+                        setError("email", "submitError", "*E-mail and password accounts are not enabled.")
                         break
-                    case 'auth/user-not-found':
-                        alert('There is no user corresponding to the given email')
+                    case 'auth/weak-password':
+                        setError("password", "submitError", "*The password is not strong enough.")
                         break
                     default:
                         break
@@ -44,8 +42,8 @@ const Login = () => {
     }
 
     return (
-        <AuthenticationView title="Sign In">
-            <p className="text-lg">If you have not created an account yet, then please <Link to={`/app/signup`} className="text-blue-500 text-left hover:underline">sign up</Link> first.</p>
+        <AuthenticationView title="Sign Up">
+            <p className="text-lg">Already have an account? Then please <Link to={`/app/login`} className="text-blue-500 text-left hover:underline">sign in</Link>.</p>
             {firebase &&
                 <div className="w-full xl:w-5/6 mt-6">
                     <form onSubmit={handleSubmit(onSubmit)}>
@@ -60,7 +58,7 @@ const Login = () => {
                             })}
                             className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                         />
-                        {errors.email && <span className="text-red-400 text-md">{errors?.email?.message}</span>}
+                        {errors.email && <span className="text-red-500 text-md">{errors?.email?.message}</span>}
                         <div className="text-left text-black lg:text-2xl text-xl font-bold mb-2 mt-4">Password*</div>
                         <input
                             type="password"
@@ -72,13 +70,13 @@ const Login = () => {
                             })}
                             className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                         />
-                        {errors.password && <span className="text-red-400 text-md">{errors?.password?.message}</span>}
+                        {errors.password && <span className="text-red-500 text-md">{errors?.password?.message}</span>}
                         <div className="text-black">
                             <button
                                 type="submit"
                                 value="Submit"
                                 className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full mt-6 py-4 px-8 shadow opacity-75 text-white gradient">
-                                Sign In
+                                Sign Up
                             </button>
                         </div>
                     </form>
@@ -87,4 +85,4 @@ const Login = () => {
     );
 }
 
-export default Login
+export default SignUp
