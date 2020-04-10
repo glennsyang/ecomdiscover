@@ -127,7 +127,7 @@ export default function Review({ data }) {
                                                         <span className="tooltip">
                                                             Helpful
                                                                 <span className='tooltip-text bg-black text-white text-xs p-3 -mt-8 -ml-16 rounded'>
-                                                                Please <Link to={`/signup`} className="text-blue-500">sign-in</Link> to rate helpful.
+                                                                Please <Link to={`/app/signup`} className="text-blue-500">sign-in</Link> to rate helpful.
                                                                 </span>
                                                         </span>
                                                     </button>

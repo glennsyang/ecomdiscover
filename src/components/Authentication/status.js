@@ -1,6 +1,6 @@
 import React from "react"
 import { Link, navigate } from "@reach/router"
-import { getUser, isLoggedIn, logout } from "../utils/auth"
+import { getUser, isLoggedIn, logout } from "../../utils/auth"
 import firebase from "gatsby-plugin-firebase"
 
 export default () => {

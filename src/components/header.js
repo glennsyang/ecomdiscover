@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from 'prop-types'
 import { Link } from "gatsby"
 import Logo from "../components/logo"
-import Status from "../components/status"
+import Status from "./Authentication/status"
 
 function Header({ siteTitle }) {
   return (
