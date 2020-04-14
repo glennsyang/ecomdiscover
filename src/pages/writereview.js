@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Link, graphql, navigate } from "gatsby"
+import { Link, navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import Select from "react-select"
 import CreatableSelect from 'react-select/creatable';
@@ -10,8 +10,10 @@ import Layout from '../components/layout'
 import SEO from "../components/seo"
 import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
-import StarRating from "../components/star-rating"
+import StarRating from "../components/starrating"
 import InputTag from "../components/inputtag"
+import { useCategories } from "../hooks/use-categories"
+import { useCompanies } from "../hooks/use-companies"
 
 // returns a date like Fri Jun 14
 function getMDY(ts) {
@@ -36,7 +38,7 @@ const createCompany = (label) => (
     { value: label, label: label, website: '' }
 )
 
-export default function WriteReview({ data }) {
+export default function WriteReview() {
     const { register, errors, handleSubmit, setValue } = useForm()
     const onSubmit = formData => {
         console.log("data:", formData)
@@ -82,7 +84,8 @@ export default function WriteReview({ data }) {
     }
 
     // Companies
-    const defaultCompanies = data.allCompanies.edges.map(({ node }) => (
+    const { allCompanies } = useCompanies()
+    const defaultCompanies = allCompanies.nodes.map((node) => (
         { value: node.id, label: node.name, website: node.website }
     ))
     const [options, setOptions] = useState(defaultCompanies)
@@ -100,7 +103,8 @@ export default function WriteReview({ data }) {
         setCompanies(newOption);
     }
     // Categories
-    const categories = data.allCategories.edges.map(({ node }) => (
+    const { allCategories } = useCategories()
+    const categories = allCategories.nodes.map((node) => (
         { value: node.id, label: node.name }
     ))
     const [values, setCategories] = useState({ selectedOption: [] })
@@ -331,26 +335,3 @@ export default function WriteReview({ data }) {
         </Layout >
     )
 }
-
-export const query = graphql`
-query {
-    allCategories (sort: { fields: name, order: ASC }) {
-        edges {
-            node {
-                id
-                name
-            }
-        }
-    }   
-    allCompanies (sort: { fields: name, order: ASC }) {
-        edges {
-            node {
-                id
-                name
-                logo
-                website
-            }
-        }
-    }
-}
-`

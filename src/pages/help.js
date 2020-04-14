@@ -1,12 +1,13 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
+import { useSiteMetadata } from "../hooks/use-site-metadata"
 
-export default ({ data }) => {
-
+export default () => {
     const props = { title: "Help", subtitle: "Let's Connect!" }
+    const { email } = useSiteMetadata()
 
     return (
         <Layout>
@@ -28,7 +29,7 @@ export default ({ data }) => {
                         <Link to={`/categories`} className="text-blue-500 hover:underline ml-1">
                             category
                         </Link>
-                        , or for anything else please <a href={`mailto:${data.site.siteMetadata.email}`} className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">contact us directly</a>.
+                        , or for anything else please <a href={`mailto:${email}`} className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">contact us directly</a>.
                     </p>
 
                 </div>
@@ -36,13 +37,3 @@ export default ({ data }) => {
         </Layout>
     )
 }
-
-export const query = graphql`
-query {
-    site {
-    siteMetadata {
-      email
-    }
-  }
-}
-`

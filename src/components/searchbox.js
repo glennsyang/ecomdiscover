@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'gatsby'
 import { Index } from 'elasticlunr'
-import Tag from "../components/tag"
+import Tag from "./tag"
 
 export default class SearchBox extends Component {
     constructor(props) {

@@ -2,11 +2,10 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
 import Accordion from "../components/accordion"
 
 export default ({ data }) => {
-
   const props = { title: "Frequently Asked Questions", subtitle: "You've got questions. We've got answers." }
 
   return (

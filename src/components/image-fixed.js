@@ -23,6 +23,7 @@ const ImageFixed = ({ props }) => (
         edge => edge.node.fixed.originalName === props.imgName
       )
       if (!image) {
+        console.log("ImageFixed return null");
         return null
       }
       return <Img fixed={image.node.fixed} alt={props.imgAlt} className={props.imgClass} />

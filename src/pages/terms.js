@@ -1,12 +1,15 @@
 import React from "react"
-import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
+import { useSiteMetadata } from "../hooks/use-site-metadata"
 
 export default ({ data }) => {
-
-    const props = { title: "Terms Of Service", subtitle: `We offer you the web sites, applications, services and content on ${data.site.siteMetadata.website} (“${data.site.siteMetadata.title}”) on the condition that you agree to the following terms.` };
+    const { title, website } = useSiteMetadata()
+    const props = {
+        title: "Terms Of Service",
+        subtitle: `We offer you the web sites, applications, services and content on ${website} (“${title}”) on the condition that you agree to the following terms.`
+    }
 
     return (
         <Layout>
@@ -104,16 +107,3 @@ export default ({ data }) => {
         </Layout>
     )
 }
-
-export const query = graphql`
-query {
-    site {
-    siteMetadata {
-      author
-      description
-      title
-      website
-    }
-  }
-}
-`

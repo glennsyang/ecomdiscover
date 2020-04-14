@@ -2,7 +2,7 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import SearchBox from '../components/search-box'
+import SearchBox from '../components/searchbox'
 import Card from "../components/card"
 
 function IndexPage({ data }) {

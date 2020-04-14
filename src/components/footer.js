@@ -1,9 +1,11 @@
 import React from "react"
-import PropTypes from "prop-types"
 import { Link } from "gatsby"
+import { useSiteMetadata } from "../hooks/use-site-metadata"
 import logo_image from "../images/logo_1.svg"
 
-const Footer = ({ siteTitle }) => {
+const Footer = () => {
+    const { title } = useSiteMetadata()
+
     return (
         <footer className="bg-white">
             <hr className="border-b border-gray-200 my-0 py-0" />
@@ -11,9 +13,9 @@ const Footer = ({ siteTitle }) => {
                 <div className="w-full flex flex-col md:flex-row py-6">
                     <div className="flex-1 mb-6 text-center md:px-6 md:text-left">
                         {/* Logo */}
-                        <Link to={`/`}>
-                            <div className="">
-                                <img src={logo_image} alt={`${siteTitle} Logo`} className="h-32 fill-current inline" />
+                        <Link to={`/`} title={title}>
+                            <div>
+                                <img src={logo_image} alt={`${title} Logo`} className="h-32 fill-current inline" />
                             </div>
                         </Link>
                     </div>
@@ -60,19 +62,11 @@ const Footer = ({ siteTitle }) => {
             </div>
             <div className="bg-blue-500 text-center px-6 pt-2 pb-4">
                 <div className="text-gray-400 text-sm mt-3">
-                    Copyright © {new Date().getFullYear()} {` `} {siteTitle} Inc. All rights reserved
+                    Copyright © {new Date().getFullYear()} {` `} {title} Inc. All rights reserved
                 </div>
             </div>
         </footer >
     )
-}
-
-Footer.propTypes = {
-    siteTitle: PropTypes.string,
-}
-
-Footer.defaultProps = {
-    siteTitle: ``,
 }
 
 export default Footer

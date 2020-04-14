@@ -1,10 +1,12 @@
 import React from "react"
-import PropTypes from 'prop-types'
 import { Link } from "gatsby"
+import { useSiteMetadata } from "../hooks/use-site-metadata"
 import Logo from "../components/logo"
 import Status from "./Authentication/status"
 
-function Header({ siteTitle }) {
+function Header() {
+  const { title } = useSiteMetadata()
+
   return (
     <nav id="header" className="sticky w-full z-30 top-0 text-white bg-white shadow">
 
@@ -12,7 +14,7 @@ function Header({ siteTitle }) {
 
         <div className="flex pl-4">
           {/* Logo */}
-          <Link to={`/`} title={siteTitle}>
+          <Link to={`/`} title={title}>
             <div className="pb-2/3">
               <Logo width="100%" height="100%" viewBox="0 0 1450 400" className="lg:h-16 h-12 object-cover" />
             </div>
@@ -27,13 +29,5 @@ function Header({ siteTitle }) {
     </nav>
   );
 }
-
-Header.propTypes = {
-  siteTitle: PropTypes.string
-};
-
-Header.defaultProps = {
-  siteTitle: ``
-};
 
 export default Header;
