@@ -2,13 +2,11 @@ import React from "react"
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
 import Card from "../components/card"
 
 export default ({ location, data }) => {
-
     const props = { title: "Reviews", subtitle: "Find top-rated reviews for all your ecommerce tools & services." }
-
     const reviews = data.allReviews.edges
     let filteredReviews = []
 

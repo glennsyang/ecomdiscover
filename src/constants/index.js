@@ -7,12 +7,21 @@ export const VALID_EMAIL = "*Please enter a valid e-mail address."
 export const VALID_PASSWORD = "*Password must be at least 12 characters long."
 export const SELECT_MARKETPLACE = "*Please select at least one Marketplace."
 
-
 export const MARKETPLACE_OPTIONS = [
     { id: 1, value: "USA", isChecked: false },
     { id: 2, value: "Canada", isChecked: false },
     { id: 3, value: "Other", isChecked: false }
 ]
+
+export const RATING_MESSAGE = [
+    { stars: 0, starMessage: "" },
+    { stars: 1, starMessage: "Terrible" },
+    { stars: 2, starMessage: "Poor" },
+    { stars: 3, starMessage: "Average" },
+    { stars: 4, starMessage: "Very Good" },
+    { stars: 5, starMessage: "Excellent" },
+]
+
 
 export const customStyles = {
     control: styles => ({

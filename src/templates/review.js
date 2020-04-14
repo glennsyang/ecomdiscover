@@ -167,25 +167,25 @@ export default function Review({ data }) {
 }
 
 export const query = graphql`
-  query($slug: String!) {
-    reviews(fields: { slug: { eq: $slug } }) {
-        company {
-            name
-            logo
-            website
-        }
-        content
-        created(formatString: "DD MMMM, YYYY, h:mm a")
-        id
-        marketplace
-        rating
-        tags
-        title
-        username
-        categories {
+    query($slug: String!) {
+        reviews(fields: { slug: { eq: $slug } }) {
+            company {
+                name
+                logo
+                website
+            }
+            content
+            created(formatString: "DD MMMM, YYYY, h:mm a")
             id
-            name
+            marketplace
+            rating
+            tags
+            title
+            username
+            categories {
+                id
+                name
+            }
         }
     }
-  }
 `
