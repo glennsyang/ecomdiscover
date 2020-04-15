@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
 import Card from "../components/card"
+import { isLoggedIn } from "../utils/auth"
 
 function IndexPage({ data }) {
   return (
@@ -95,9 +96,14 @@ function IndexPage({ data }) {
 
           <h3 className="mt-4 mb-12 text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h3>
 
-          <Link to={'/writereview'} className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-8 py-4 px-8 shadow-lg">
+          <Link
+            to={isLoggedIn() ? '/app/writereview' : '/app/login'}
+            state={{ fromShare: true }}
+            title={isLoggedIn() ? 'Share!' : 'Please log-in to share a review'}
+            className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-8 py-4 px-8 shadow-lg"
+          >
             Share
-        </Link>
+          </Link>
 
         </section>
 
