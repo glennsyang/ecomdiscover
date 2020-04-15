@@ -7,15 +7,19 @@ import { setUser, isLoggedIn } from "../../utils/auth"
 import firebase from "gatsby-plugin-firebase"
 import * as Constants from '../../constants'
 
-const Login = () => {
+const Login = ({ location }) => {
     const { register, errors, setError, handleSubmit } = useForm()
     const onSubmit = data => {
         firebase
             .auth()
             .signInWithEmailAndPassword(data.email, data.password)
             .then(result => {
-                setUser(result.user);
-                navigate('/app/profile');
+                setUser(result.user)
+                if (location.state.fromShare) {
+                    navigate('/app/writereview')
+                } else {
+                    navigate('/app/profile')
+                }
             })
             .catch(error => {
                 switch (error.code) {

@@ -7,13 +7,19 @@ import ImageFluid from "../components/image-fluid"
 import ThumbsUp from "../components/thumbsup"
 import Tag from "../components/tag"
 import Category from "../components/category"
+import { isLoggedIn, setUser } from "../utils/auth"
 
 export default function Review({ data }) {
+    // Review functions
     const review = data.reviews
-
+    const handleRateHelpful = () => {
+        alert('Thank you for rating!')
+    }
+    // User functions
+    const memberSince = review.user.created
     const imgProfile = {
         imgName: "blank_profile_picture.png",
-        imgAlt: `${review.username} Profile`,
+        imgAlt: `${review.user.username} Profile`,
         imgClass: "h-full w-full object-cover"
     };
     const imgAds = {
@@ -52,7 +58,6 @@ export default function Review({ data }) {
 
                             {/* Company Heading */}
                             <div className="flex flex-col lg:flex-row lg:flex-grow">
-
                                 <div className="lg:w-1/2 flex lg:ml-10">
                                     {/* Logo */}
                                     <div className="flex items-center">
@@ -89,20 +94,20 @@ export default function Review({ data }) {
                                     <div className="flex flex-col lg:flex-row lg:flex-grow">
                                         {/* Avatar */}
                                         <div className="lg:w-32 flex">
-                                            <Link title={`${review.username} reviews`} to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
+                                            <Link title={`${review.user.username} Profile`} to={`/app/profile`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
                                                 <ImageFluid props={imgProfile} />
                                             </Link>
                                         </div>
                                         {/* User Details & Review Content */}
                                         <div className="lg:w-full flex flex-col">
                                             <h3 className="flex text-base font-bold text-black">
-                                                {review.username}
+                                                {review.user.username}
                                             </h3>
                                             <div className="flex pt-2 mb-4">
                                                 <span className="text-gray-400 text-sm lg:text-xs">{review.created}</span>
                                                 <span className="text-gray-400 text-sm lg:text-xs pl-2">|</span>
                                                 <span className="text-gray-400 text-sm lg:text-xs pl-2">Member Since:</span>
-                                                <span className="text-gray-400 text-sm lg:text-xs pl-1">01/01/20</span>
+                                                <span className="text-gray-400 text-sm lg:text-xs pl-1">{memberSince}</span>
                                             </div>
                                             <div className="flex flex-col lg:flex-row flex-auto mb-4">
                                                 {/* Rating */}
@@ -122,13 +127,13 @@ export default function Review({ data }) {
                                             />
                                             <div className="bg-white">
                                                 <div className="float-right mt-12 lg:mr-6">
-                                                    <button name="submit" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
+                                                    <button name="submit" onClick={handleRateHelpful} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                                                         <ThumbsUp width="14" height="14" viewBox="0 0 47 47" className="mr-2" />
                                                         <span className="tooltip">
-                                                            Helpful
+                                                            Helpful {!isLoggedIn() ?
                                                                 <span className='tooltip-text bg-black text-white text-xs p-3 -mt-8 -ml-16 rounded'>
-                                                                Please <Link to={`/app/signup`} className="text-blue-500">sign-in</Link> to rate helpful.
-                                                                </span>
+                                                                    Please <Link to={`/app/signup`} className="text-blue-500">sign-in</Link> to rate helpful.
+                                                                </span> : ''}
                                                         </span>
                                                     </button>
                                                 </div>
@@ -181,7 +186,12 @@ export const query = graphql`
             rating
             tags
             title
-            username
+            user {
+                id
+                username
+                photoURL
+                created(formatString: "DD MMMM YYYY")
+            }
             categories {
                 id
                 name

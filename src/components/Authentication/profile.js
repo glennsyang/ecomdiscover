@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { navigate } from "gatsby"
 import AuthenticationView from "./authenticationview"
 import ImageFluid from "../image-fluid"
@@ -8,8 +8,7 @@ import moment from "moment"
 
 const Profile = () => {
     const user = getUser()
-    const { displayName, email, emailVerified, photoURL, createdAt } = user
-
+    const { uid, displayName, email, emailVerified, photoURL, createdAt } = user
     const memberSince = moment(+createdAt).format("D MMMM YYYY")
     const signInMethods = user.providerData.map(profile => {
         if (profile.providerId === "password") {
@@ -22,32 +21,59 @@ const Profile = () => {
         imgAlt: `${displayName} Profile Photo`,
         imgClass: "h-full w-full object-cover"
     }
+    const [username, setUserName] = useState(displayName)
+    const [isEditing, setIsEditing] = useState(false)
+
     // Buttons
+    const handleChange = (e) => {
+        setUserName(e.target.value)
+    }
     const handleEditProfile = () => {
-        firebase.auth().onAuthStateChanged(currentUser => {
-            if (currentUser) {
-                console.log("Current user:", currentUser)
-                currentUser
-                    .updateProfile({
-                        //displayName: "Glenn Sheppard",
-                        //photoURL: null
+        setIsEditing(true)
+    }
+    const handleSaveProfile = (e) => {
+        setUserName(username)
+        e.preventDefault()
+        setIsEditing(false)
+        firebase
+            .firestore()
+            .collection('users')
+            .doc(uid)
+            .update({
+                displayName: username
+            })
+            .then(() => {
+                user.displayName = username
+                setUser(user)
+                firebase
+                    .auth()
+                    .onAuthStateChanged(currentUser => {
+                        if (currentUser) {
+                            currentUser
+                                .updateProfile({
+                                    displayName: username,
+                                    //photoURL: null
+                                })
+                                .then(() => {
+                                    setUser(currentUser)
+                                })
+                                .catch(error => {
+                                    console.log("Error:", error)
+                                    alert('An error occurred. Unable to update profile: ' + email)
+                                })
+                        }
                     })
-                    .then(() => {
-                        setUser(currentUser)
-                        navigate('/app/profile')
-                    })
-                    .catch(error => {
-                        console.log("Error:", error)
-                        alert('An error occurred. Unable to update profile:' + email)
-                    })
-            }
-        })
+            })
+            .catch(error => {
+                console.log("Error:", error)
+                alert('An error occurred. Unable to update user: ' + email)
+            })
     }
     const handleChangeSignIn = () => {
         alert('Not Available')
     }
     const handleDeleteAccount = () => {
-        const currentUser = firebase.auth().currentUser;
+        const currentUser = firebase.auth().currentUser
         currentUser
             .delete()
             .then(() => {
@@ -63,7 +89,7 @@ const Profile = () => {
     return (
         <AuthenticationView title="Profile">
             {/* Card */}
-            <div className="flex flex-col lg:flex-row lg:flex-grow lg:mt-6 shadow-xl rounded-lg border border-gray-100 p-10">
+            <div className="flex flex-col lg:flex-row lg:flex-grow shadow-xl rounded-lg border border-gray-100 p-10">
 
                 <div className="flex flex-col lg:flex-row lg:flex-grow">
                     {/* Avatar */}
@@ -76,20 +102,30 @@ const Profile = () => {
                     <div className="lg:w-full flex flex-col mt-4 md:mt-0 lg:mt-0">
                         <div className="flex flex-col lg:flex-row lg:flex-grow pb-4">
                             <div className="lg:w-3/5">
-                                <h3 className="flex text-base font-bold text-black">
-                                    {displayName ?? '{displayName}'}
-                                </h3>
+                                {isEditing ?
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        name="name"
+                                        value={username}
+                                        onChange={handleChange}
+                                        //defaultValue={displayName}
+                                        className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                                    />
+                                    :
+                                    <h3 className="flex text-base font-bold text-black">
+                                        {username ?? '{displayName}'}
+                                    </h3>
+                                }
                                 <div className="flex pt-2">
-                                    <span className="text-gray-500 text-sm lg:text-xs">Member Since:</span>
+                                    <span className="text-gray-500 text-sm lg:text-xs">Member Since</span>
                                     <span className="text-gray-500 text-sm lg:text-xs pl-1">{memberSince}</span>
                                 </div>
                                 <div className="flex pt-2">
-                                    <span className="text-gray-500 text-sm lg:text-xs">Email:</span>
-                                    <span className="text-gray-500 text-sm lg:text-xs pl-1">{`${email}`}</span>
+                                    <span className="text-gray-500 text-sm lg:text-xs">{`${email}`}</span>
                                 </div>
                                 <div className="flex pt-2">
-                                    <span className="text-gray-500 text-sm lg:text-xs">Verified:</span>
-                                    <span className="text-gray-500 text-sm lg:text-xs pl-1">{`${emailVerified}`}</span>
+                                    <span className="text-gray-500 text-sm lg:text-xs">Email is {`${emailVerified ? 'verified!' : 'not verified'}`}</span>
                                 </div>
                                 <div className="flex pt-2">
                                     <span className="text-gray-500 text-sm lg:text-xs">Photo:</span>
@@ -98,9 +134,15 @@ const Profile = () => {
                             </div>
                             <div className="lg:w-2/5">
                                 <div className="float-right">
-                                    <button name="edit" onClick={handleEditProfile} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
-                                        Edit Profile
-                                </button>
+                                    {isEditing ?
+                                        <button name="save" onClick={handleSaveProfile} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
+                                            Save
+                                        </button>
+                                        :
+                                        <button name="edit" onClick={handleEditProfile} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
+                                            Edit
+                                        </button>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -141,7 +183,7 @@ const Profile = () => {
                             <div className="lg:w-2/5">
                                 <div className="float-right">
                                     <button name="delete" onClick={handleDeleteAccount} className="bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center">
-                                        Deactivate Account
+                                        Deactivate
                                 </button>
                                 </div>
                             </div>

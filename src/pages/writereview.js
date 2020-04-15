@@ -6,7 +6,6 @@ import CreatableSelect from 'react-select/creatable';
 import firebase from "gatsby-plugin-firebase"
 
 import * as Constants from '../constants'
-import Layout from '../components/layout'
 import SEO from "../components/seo"
 import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
@@ -14,6 +13,7 @@ import StarRating from "../components/starrating"
 import InputTag from "../components/inputtag"
 import { useCategories } from "../hooks/use-categories"
 import { useCompanies } from "../hooks/use-companies"
+import { getUser } from "../utils/auth"
 
 // returns a date like Fri Jun 14
 function getMDY(ts) {
@@ -39,6 +39,8 @@ const createCompany = (label) => (
 )
 
 export default function WriteReview() {
+    const { uid, displayName, email, photoURL } = getUser()
+
     const { register, errors, handleSubmit, setValue } = useForm()
     const onSubmit = formData => {
         console.log("data:", formData)
@@ -51,16 +53,21 @@ export default function WriteReview() {
                 .then(ref => {
                     updateFirestore(formData, ref.id)
                 })
+                .catch(error => {
+                    alert("Error: " + error)
+                })
         } else {
             updateFirestore(formData, formData.company.value)
         }
     }
-
+    // save the Review in the database
     const updateFirestore = (dataObject, companyId) => {
         delete dataObject.website
         dataObject = Object.assign(dataObject, {
             rating: dataObject.rating ? Number(dataObject.rating) : 0,
-            username: "Glenn Sheppard",
+            tags: dataObject.tags === 'string' ? [dataObject.tags] : dataObject.tags,
+            username: displayName,
+            uid: firebase.firestore().collection('users').doc(uid),
             created: firebase.firestore.FieldValue.serverTimestamp(),
             company: firebase.firestore().doc(`companies/${companyId}`),
             categories: dataObject.categories.map((category) => (
@@ -73,14 +80,17 @@ export default function WriteReview() {
             .add(dataObject)
             .then(ref => {
                 console.log("sent to firestore:", ref.id)
+                navigate(
+                    "/form-submitted",
+                    {
+                        state: { username: dataObject.username },
+                        replace: true,
+                    }
+                )
             })
-        navigate(
-            "/form-submitted",
-            {
-                state: { username: dataObject.username },
-                replace: true,
-            }
-        )
+            .catch(error => {
+                alert("Error: " + error)
+            })
     }
 
     // Companies
@@ -153,17 +163,17 @@ export default function WriteReview() {
 
     const imgProfile = {
         imgName: "blank_profile_picture.png",
-        imgAlt: `Profile`,
+        imgAlt: `${displayName} Profile Photo`,
         imgClass: "h-full w-full object-cover"
-    };
+    }
     const imgAds = {
         imgName: "ads_digital_ocean.png",
         imgAlt: "Digital Ocean Ad",
         imgClass: "h-8 w-8 object-cover"
-    };
+    }
 
     return (
-        <Layout>
+        <>
             <SEO
                 title="Write Review"
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
@@ -175,13 +185,13 @@ export default function WriteReview() {
                     <div className="container mx-auto px-10 flex flex-col lg:flex-row items-center">
 
                         <div className="lg:flex lg:w-2/3 mb-4 lg:mb-0">
-                            <Link title="User reviews" to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
-                                <ImageFluid props={imgProfile} />
+                            <Link title={`${displayName}: ${email}`} to={`/app/profile`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
+                                {photoURL ? <img src={photoURL} alt="profile" /> : <ImageFluid props={imgProfile} />}
                             </Link>
                             <div className="flex flex-col lg:flex-row leading-tight">
                                 <h3 className="flex items-center text-md text-gray-600">
-                                    <Link to={`/`} className="text-gray-600">By Doug Short</Link>
-                                    <small className="text-gray-500"> • {currentDate()}</small>
+                                    By {displayName}
+                                    <small className="text-gray-500 pl-1 pt-1"> • {currentDate()}</small>
                                 </h3>
                             </div>
                         </div>
@@ -198,7 +208,6 @@ export default function WriteReview() {
                     <form onSubmit={handleSubmit(onSubmit)} >
                         <div className="flex flex-col lg:flex-row">
                             <div className="lg:w-4/6">
-
 
                                 <div className="block text-left text-black lg:text-2xl text-xl font-bold">Title</div>
                                 <input
@@ -332,6 +341,6 @@ export default function WriteReview() {
                     </form>
                 </div>
             </section>
-        </Layout >
+        </ >
     )
 }

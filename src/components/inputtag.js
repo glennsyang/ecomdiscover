@@ -53,9 +53,8 @@ const InputTag = ({ name, register }) => {
                             defaultChecked={isChecked}
                             hidden={isChecked}
                             ref={register}
-                            placeholder="fake tags go here"
                             className="text-black w-full flex-grow"
-                        />
+                        />{tag}
                     </React.Fragment>
                 )}
             </ul>

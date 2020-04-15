@@ -88,8 +88,21 @@ module.exports = {
               tags: doc.tags,
               title: doc.title,
               username: doc.username,
+              user___NODE: doc.uid.id,
               categories___NODE: doc.categories.map(category => category.id),
               company___NODE: doc.company.id,
+            }),
+          },
+          {
+            type: 'Users',
+            collection: 'users',
+            map: doc => ({
+              id: doc.id,
+              username: doc.displayName,
+              email: doc.email,
+              photoURL: doc.photoURL,
+              created: doc.created,
+              updated: doc.updated
             }),
           },
           {

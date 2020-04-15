@@ -10,12 +10,36 @@ import * as Constants from '../../constants'
 const SignUp = () => {
     const { register, errors, setError, handleSubmit } = useForm()
     const onSubmit = data => {
-        firebase
-            .auth()
-            .createUserWithEmailAndPassword(data.email, data.password)
+        firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
             .then(result => {
-                setUser(result.user);
-                navigate('/app/profile');
+                // Create user in 'users' collection
+                firebase.firestore().collection('users').doc(result.user.uid)
+                    .set({
+                        created: firebase.firestore.FieldValue.serverTimestamp(),
+                        displayName: data.name,
+                        email: data.email,
+                        photoURL: '',
+                        updated: firebase.firestore.FieldValue.serverTimestamp()
+                    })
+                    .then(() => {
+                        // Update the user profile with 'displayName'
+                        result.user
+                            .updateProfile({
+                                displayName: data.name,
+                            })
+                            .then(() => {
+                                setUser(result.user)
+                                navigate('/app/profile')
+                            })
+                            .catch(error => {
+                                console.log("Error:", error)
+                                alert('An error occurred. Unable to update Name:' + result.user)
+                            })
+                    })
+                    .catch(error => {
+                        console.log("Error:", error)
+                        alert('An error occurred. Unable to create user:' + data.email)
+                    })
             })
             .catch(error => {
                 switch (error.code) {
@@ -47,7 +71,20 @@ const SignUp = () => {
             {firebase &&
                 <div className="w-full xl:w-5/6 mt-6">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="text-left text-black lg:text-2xl text-xl font-bold mb-2">E-mail*</div>
+                        {/* Name */}
+                        <div className="text-left text-black lg:text-2xl text-xl font-bold mb-2">Name*</div>
+                        <input
+                            type="text"
+                            placeholder="Name"
+                            name="name"
+                            ref={register({
+                                required: Constants.FIELD_REQUIRED,
+                            })}
+                            className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                        />
+                        {errors.name && <span className="text-red-500 text-md">{errors?.name?.message}</span>}
+                        {/* E-mail */}
+                        <div className="text-left text-black lg:text-2xl text-xl font-bold mb-2 mt-4">E-mail*</div>
                         <input
                             type="text"
                             placeholder="E-mail address"
@@ -59,6 +96,7 @@ const SignUp = () => {
                             className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                         />
                         {errors.email && <span className="text-red-500 text-md">{errors?.email?.message}</span>}
+                        {/* Password */}
                         <div className="text-left text-black lg:text-2xl text-xl font-bold mb-2 mt-4">Password*</div>
                         <input
                             type="password"
