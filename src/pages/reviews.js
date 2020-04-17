@@ -3,7 +3,7 @@ import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
-import Card from "../components/card"
+import Card from "../components/cards/card"
 
 export default ({ location, data }) => {
     const props = { title: "Reviews", subtitle: "Find top-rated reviews for all your ecommerce tools & services." }
@@ -65,16 +65,15 @@ export const query = graphql`
         created(formatString: "DD MMMM, YYYY")
         id
         fields {
-          slug
+            slug
         }
         marketplace
         rating
         tags
         title
-        username
-        categories {
-          id
-          name
+        user {
+            id
+            username
         }
       }
     }

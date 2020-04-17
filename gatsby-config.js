@@ -74,23 +74,28 @@ module.exports = {
               id: doc.id,
               name: doc.name,
               logo: doc.logo,
-              website: doc.website
+              website: doc.website,
+              blurb: doc.blurb,
+              marketplace: doc.marketplace,
+              categories___NODE: doc.categories.map(category => category.id),
+              reviews___NODE: doc.reviews.map(review => review.id),
             }),
           },
           {
             type: 'Reviews',
             collection: 'reviews',
             map: doc => ({
+              id: doc.id,
               content: doc.content,
               created: doc.created,
               marketplace: doc.marketplace,
               rating: doc.rating,
               tags: doc.tags,
               title: doc.title,
-              username: doc.username,
+              helpful___NODE: doc.helpful.map(user => user.id),
               user___NODE: doc.uid.id,
-              categories___NODE: doc.categories.map(category => category.id),
               company___NODE: doc.company.id,
+              categories___NODE: doc.categories.map(category => category.id),
             }),
           },
           {
@@ -102,7 +107,8 @@ module.exports = {
               email: doc.email,
               photoURL: doc.photoURL,
               created: doc.created,
-              updated: doc.updated
+              updated: doc.updated,
+              helpful___NODE: doc.helpful.map(review => review.id),
             }),
           },
           {
@@ -126,6 +132,7 @@ module.exports = {
           auth: true,
           database: true,
           firestore: true,
+          storage: true,
         },
         credentials: {
           apiKey: process.env.GATSBY_FIREBASE_API_KEY,

@@ -4,13 +4,12 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
 import ImageFluid from "../components/image-fluid"
-import ThumbsUp from "../components/thumbsup"
 import Tag from "../components/tag"
 import Category from "../components/category"
-import { isLoggedIn, setUser } from "../utils/auth"
+import { isLoggedIn } from "../utils/auth"
+import { FaThumbsUp } from 'react-icons/fa'
 
-export default function Review({ data }) {
-    // Review functions
+export default function Company({ data }) {
     const review = data.reviews
     const handleRateHelpful = () => {
         alert('Thank you for rating!')
@@ -19,7 +18,7 @@ export default function Review({ data }) {
     const memberSince = review.user.created
     const imgProfile = {
         imgName: "blank_profile_picture.png",
-        imgAlt: `${review.user.username} Profile`,
+        imgAlt: `${review.user.displayName} Profile`,
         imgClass: "h-full w-full object-cover"
     };
     const imgAds = {
@@ -44,7 +43,7 @@ export default function Review({ data }) {
     return (
         <Layout>
             <SEO
-                title="Review"
+                title="Reviews"
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
             <div className="bg-gray-200">
@@ -61,7 +60,7 @@ export default function Review({ data }) {
                                 <div className="lg:w-1/2 flex lg:ml-10">
                                     {/* Logo */}
                                     <div className="flex items-center">
-                                        <a href={`${review.company.website}`} rel="noopener noreferrer" target="_blank">
+                                        <a href={`${review.company.website}`} title={review.company.name} rel="noopener noreferrer" target="_blank">
                                             <ImageFixed props={imgLogo} />
                                         </a>
                                     </div>
@@ -95,7 +94,10 @@ export default function Review({ data }) {
                                         {/* Avatar */}
                                         <div className="lg:w-32 flex">
                                             <Link title={`${review.user.username} Profile`} to={`/app/profile`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
-                                                <ImageFluid props={imgProfile} />
+                                                {review.user.photoURL
+                                                    ? <img src={review.user.photoURL} alt={review.user.username} className="h-full w-full object-cover" />
+                                                    : <ImageFluid props={imgProfile} />
+                                                }
                                             </Link>
                                         </div>
                                         {/* User Details & Review Content */}
@@ -128,7 +130,7 @@ export default function Review({ data }) {
                                             <div className="bg-white">
                                                 <div className="float-right mt-12 lg:mr-6">
                                                     <button name="submit" onClick={handleRateHelpful} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
-                                                        <ThumbsUp width="14" height="14" viewBox="0 0 47 47" className="mr-2" />
+                                                        <FaThumbsUp size={18} className="mr-2" />
                                                         <span className="tooltip">
                                                             Helpful {!isLoggedIn() ?
                                                                 <span className='tooltip-text bg-black text-white text-xs p-3 -mt-8 -ml-16 rounded'>
@@ -172,30 +174,30 @@ export default function Review({ data }) {
 }
 
 export const query = graphql`
-    query($slug: String!) {
-        reviews(fields: { slug: { eq: $slug } }) {
-            company {
-                name
-                logo
-                website
-            }
-            content
-            created(formatString: "DD MMMM, YYYY, h:mm a")
-            id
+  query($slug: String!) {
+    reviews(fields: { slug: { eq: $slug } }) {
+        company {
+            name
+            logo
+            website
+            blurb
             marketplace
-            rating
-            tags
-            title
-            user {
-                id
-                username
-                photoURL
-                created(formatString: "DD MMMM YYYY")
-            }
-            categories {
-                id
-                name
-            }
+        }
+        content
+        created(formatString: "DD MMMM, YYYY")
+        id
+        marketplace
+        rating
+        tags
+        title
+        user {
+            username
+            photoURL
+        }
+        categories {
+            id
+            name
         }
     }
+  }
 `

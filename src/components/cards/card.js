@@ -1,7 +1,8 @@
 import React from "react"
 import { Link } from "gatsby"
-import ImageFixed from "./image-fixed"
-import Tag from "../components/tag"
+import ImageFixed from "../image-fixed"
+import Tag from "../tag"
+import Category from "../category"
 
 const Card = ({ review }) => {
     const props = {
@@ -46,10 +47,8 @@ const Card = ({ review }) => {
                         </div>
 
                         {/* Categories */}
-                        <p className="text-gray-500 text-xs mt-2">
-                            Categories:{review.categories.map((category) =>
-                            <span key={category.id} className="ml-1">{category.name},</span>
-                        )}
+                        <p className="text-gray-500 text-xs mt-3">
+                            <Category categories={review.categories} />
                         </p>
 
                         {/* Review */}

@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react"
+import * as React from "react"
 import firebase from "gatsby-plugin-firebase"
-import { isLoggedIn } from "../utils/auth"
 
-const useFirestoreDoc = (docRef) => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [doc, setDoc] = useState(null)
+const useFirestoreDoc = (collectionId, docId) => {
+    console.log("parms:", collectionId, docId)
 
-    useEffect(() => {
-        const unsubscribe = docRef.onSnapshot((snapshot) => {
+    const [isLoading, setIsLoading] = React.useState(true)
+    const [error, setError] = React.useState(null)
+    const [doc, setDoc] = React.useState(null)
+
+    React.useEffect(() => {
+        const unsubscribe = firebase.firestore().collection(collectionId).doc(docId).onSnapshot((snapshot) => {
             setIsLoading(false)
             if (!snapshot.exists) return null
             setDoc({

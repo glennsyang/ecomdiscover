@@ -66,7 +66,6 @@ export default function WriteReview() {
         dataObject = Object.assign(dataObject, {
             rating: dataObject.rating ? Number(dataObject.rating) : 0,
             tags: dataObject.tags === 'string' ? [dataObject.tags] : dataObject.tags,
-            username: displayName,
             uid: firebase.firestore().collection('users').doc(uid),
             created: firebase.firestore.FieldValue.serverTimestamp(),
             company: firebase.firestore().doc(`companies/${companyId}`),
@@ -83,7 +82,7 @@ export default function WriteReview() {
                 navigate(
                     "/form-submitted",
                     {
-                        state: { username: dataObject.username },
+                        state: { username: displayName },
                         replace: true,
                     }
                 )

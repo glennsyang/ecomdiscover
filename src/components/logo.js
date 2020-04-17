@@ -1,7 +1,7 @@
 import React from "react";
 
 function Logo(props) {
-    const { width, height, viewBox, className } = props;
+    const { width, height, viewBox, className } = props
 
     return (
         <svg

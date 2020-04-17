@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import { useSiteMetadata } from "../hooks/use-site-metadata"
 import Logo from "../components/logo"
-import Status from "./Authentication/status"
+import Status from "./authentication/status"
 
 function Header() {
   const { title } = useSiteMetadata()
