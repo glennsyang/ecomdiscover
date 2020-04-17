@@ -1,16 +1,18 @@
 import React from "react"
 import { Link } from "gatsby"
 
-const Category = ({ categories }) => {
+const Category = (props) => {
+    const { categories, className } = props
+
     return (
         <div>
-            {categories.map((category) =>
-                <Link
-                    key={category.id}
-                    to={`/reviews`}
-                    state={{ category: category.name }}
-                    className="hover:underline">
-                    <span className="mr-1">{category.name},</span>
+            {categories.map(category =>
+                <Link to={`/reviews`} state={{ category: category.name }}>
+                    <div
+                        key={category.id}
+                        className={className}>
+                        {category.name}
+                    </div>
                 </Link>
             )}
         </div>

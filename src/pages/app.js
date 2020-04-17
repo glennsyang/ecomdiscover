@@ -1,11 +1,11 @@
 import React from "react"
 import { Router } from "@reach/router"
 import Layout from "../components/layout"
-import Profile from "../components/Authentication/profile"
-import Login from "../components/Authentication/login"
-import SignUp from "../components/Authentication/signup"
-import PasswordReset from "../components/Authentication/passwordreset"
-import PrivateRoute from "../components/Authentication/privateroute"
+import Profile from "../components/authentication/profile"
+import Login from "../components/authentication/login"
+import SignUp from "../components/authentication/signup"
+import PasswordReset from "../components/authentication/passwordreset"
+import PrivateRoute from "../components/authentication/privateroute"
 import WriteReview from "../pages/writereview"
 
 const App = () => (

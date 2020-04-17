@@ -27,6 +27,7 @@
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-hook-form": "^5.1.0",
+    "react-icons": "^3.9.0",
     "react-select": "^3.0.8",
     "rehype-react": "^4.0.1",
     "surge": "^0.21.3",

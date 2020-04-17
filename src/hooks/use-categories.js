@@ -2,7 +2,7 @@ import { useStaticQuery, graphql } from "gatsby"
 
 export const useCategories = () => {
     const data = useStaticQuery(graphql`
-      query {
+    query {
         allCategories(sort: {fields: name, order: ASC}) {
             nodes {
                 id

@@ -10,9 +10,7 @@ import * as Constants from '../../constants'
 const Login = ({ location }) => {
     const { register, errors, setError, handleSubmit } = useForm()
     const onSubmit = data => {
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(data.email, data.password)
+        firebase.auth().signInWithEmailAndPassword(data.email, data.password)
             .then(result => {
                 setUser(result.user)
                 if (location.state.fromShare) {

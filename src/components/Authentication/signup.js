@@ -19,7 +19,8 @@ const SignUp = () => {
                         displayName: data.name,
                         email: data.email,
                         photoURL: '',
-                        updated: firebase.firestore.FieldValue.serverTimestamp()
+                        updated: firebase.firestore.FieldValue.serverTimestamp(),
+                        helpful: []
                     })
                     .then(() => {
                         // Update the user profile with 'displayName'

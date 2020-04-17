@@ -3,7 +3,7 @@ import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
-import Card from "../components/card"
+import Card from "../components/cards/card"
 import { isLoggedIn } from "../utils/auth"
 
 function IndexPage({ data }) {
@@ -16,7 +16,7 @@ function IndexPage({ data }) {
 
       <div className="gradient">
         {/* Hero */}
-        <section className="hero-image flex items-center py-8 sm:py-24" id="hero">
+        <section className="hero-image flex items-center py-8 sm:py-20" id="hero">
 
           <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
@@ -42,9 +42,13 @@ function IndexPage({ data }) {
               ))}
             </div>
             <div className="text-white text-center inline-block">
-              <Link to={`/categories`} className="inline-block mt-2 font-semibold hover:underline">
+              <Link to={`/categories`} className="block mt-2 font-semibold hover:underline">
                 SEE ALL CATEGORIES
-            </Link>
+              </Link>
+              <div className="block mt-2 font-semibold">- OR -</div>
+              <Link to={`/companies`} className="block mt-2 font-semibold hover:underline">
+                COMPANIES
+              </Link>
             </div>
 
           </div>
@@ -56,7 +60,7 @@ function IndexPage({ data }) {
 
             <h3 className="antialiased w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
               E-Commerce Tools & Services
-          </h3>
+            </h3>
             <div className="w-full mb-4">
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
             </div>
@@ -133,7 +137,10 @@ export const query = graphql`
                 rating
                 tags
                 title
-                username
+                user {
+                  id
+                  username
+                }
                 categories {
                   id
                   name
