@@ -3,6 +3,7 @@ import { navigate } from "gatsby"
 import AuthenticationView from "./authenticationview"
 import ImageFluid from "../image-fluid"
 import Loader from "../loader"
+import { FaCheck, FaTimes, FaPen, FaThumbsUp } from 'react-icons/fa'
 import { getUser, setUser } from "../../utils/auth"
 import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
@@ -27,10 +28,23 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false)
 
     useEffect(() => {
-        firebase.firestore().collection('users').doc(uid).onSnapshot(snapshot => {
-            setUserInfo({ name: snapshot.data().displayName, photo: snapshot.data().photoURL })
+        firebase.firestore().collection('users').doc(uid).get().then(doc => {
+            setUserInfo({
+                name: doc.data().displayName,
+                photo: doc.data().photoURL,
+                helpful: doc.data().helpful.length,
+            })
+            console.log("Helpful:", doc.data().helpful.length)
         })
-        //unsubscribe();
+        const userDocRef = firebase.firestore().collection('users').doc(uid)
+        firebase.firestore().collection('reviews').where("uid", "==", userDocRef).onSnapshot(snapshot => {
+            var reviews = [];
+            snapshot.forEach(doc => {
+                reviews.push(doc.data().id);
+            })
+            setUserInfo({ ...userInfo, numReviews: reviews.length })
+            console.log("Written:", reviews.length)
+        })
     }, [uid])
     /*
     useEffect(() => {
@@ -140,9 +154,11 @@ const Profile = () => {
                                     </div>
                                     <div className="flex pt-2">
                                         <span className="text-gray-500 text-sm lg:text-xs">{`${email}`}</span>
+                                        <span className="text-lg lg:text-base pl-3">{emailVerified ? <FaCheck title="Email Verified!" className="text-green-500" /> : <FaTimes title="Email Not Verified" className="text-red-500" />}</span>
                                     </div>
                                     <div className="flex pt-2">
-                                        <span className="text-gray-500 text-sm lg:text-xs">Email is {`${emailVerified ? 'verified!' : 'not verified'}`}</span>
+                                        <span className="text-gray-500 text-sm lg:text-xs">{userInfo.numReviews}</span><FaPen className="text-gray-500 text-lg lg:text-base pl-1" title={`Wrote ${userInfo.numReviews} Reviews`} />
+                                        <span className="text-gray-500 text-sm lg:text-xs ml-4">{userInfo.helpful}</span><FaThumbsUp className="text-gray-500 text-lg lg:text-base pl-1" title={`Liked ${userInfo.helpful} Reviews`} />
                                     </div>
                                 </div>
                                 <div className="lg:w-2/5">

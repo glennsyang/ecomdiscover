@@ -43,7 +43,7 @@ export default function Company({ data }) {
                                 <div className="lg:w-3/4 flex flex-col lg:ml-10">
                                     {/* Categories */}
                                     <div className="flex">
-                                        <Category categories={company.categories} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-black tracking-tight mr-1" />
+                                        <Category categories={company.categories} useLink={false} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-black tracking-tight mr-1" />
                                     </div>
                                     <div className="flex mt-1">
                                         <h1 className="text-3xl font-extrabold text-black">{company.name}</h1>

@@ -47,9 +47,9 @@ const Card = ({ review }) => {
                         </div>
 
                         {/* Categories */}
-                        <p className="text-gray-500 text-xs mt-3">
+                        <div className="text-gray-500 text-xs mt-3">
                             <Category categories={review.categories} />
-                        </p>
+                        </div>
 
                         {/* Review */}
                         <div className="text-gray-700 text-base mt-4" dangerouslySetInnerHTML={{ __html: truncateStr(review.content, 250, true) }} />
