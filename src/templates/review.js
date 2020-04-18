@@ -70,7 +70,7 @@ export default function Company({ data }) {
                                     {/* Categories */}
                                     <h3 className="flex text-xl font-bold text-black mb-2">Categories</h3>
                                     <div className="text-gray-500 text-md">
-                                        <Category categories={review.categories} />
+                                        <Category categories={review.categories} useLink={true} />
                                     </div>
                                     {/* Marketplace */}
                                     <h3 className="flex text-xl font-bold text-black mb-2 mt-2">Marketplace</h3>

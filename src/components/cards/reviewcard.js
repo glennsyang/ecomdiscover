@@ -1,14 +1,25 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from "gatsby"
 import ImageFluid from "../image-fluid"
 import Tag from "../tag"
 import AvgRating from "../avgrating"
 import { isLoggedIn } from "../../utils/auth"
 import { FaThumbsUp } from 'react-icons/fa'
+import firebase from "gatsby-plugin-firebase"
+import { getUser } from "../../utils/auth"
 
 const ReviewCard = ({ review }) => {
     const memberSince = review.user.created
-    const helpfulCount = review.helpful.length
+    //const helpfulCount = review.helpful.length
+    // Get Live helpfulCount from db
+    const [helpfulCount, setHelpfulCount] = useState(0)
+    useEffect(() => {
+        firebase.firestore().collection('reviews').doc(review.id).onSnapshot(snapshot => {
+            setHelpfulCount(snapshot.data().helpful.length)
+        })
+        //unsubscribe();
+    }, [])
+
     const imgProfile = {
         imgName: "blank_profile_picture.png",
         imgAlt: `${review.user.username} Profile`,
@@ -16,13 +27,33 @@ const ReviewCard = ({ review }) => {
     }
     // User functions
     const handleRateHelpful = (e) => {
-        alert('Thank you for rating! ')
+        //e.preventDefault()
         // get current logged-in user
-
+        const { uid } = getUser()
         // update 'helpful' field in 'reviews' with current user id
-
-        // update 'helpful' field in 'users' with current user id
-
+        firebase.firestore().collection('reviews').doc(review.id)
+            .update({
+                helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('users').doc(uid)),
+            })
+            .then(() => {
+                //alert('Success! Update review: ' + review.title)
+                // update 'helpful' field in 'users' with current review id
+                firebase.firestore().collection('users').doc(uid)
+                    .update({
+                        helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('reviews').doc(review.id)),
+                    })
+                    .then(() => {
+                        //alert('Success! Update user: ' + uid)
+                    })
+                    .catch(error => {
+                        console.log("Error:", error)
+                        alert('An error occurred. Unable to update user: ' + uid + '. Reason: ' + error)
+                    })
+            })
+            .catch(error => {
+                console.log("Error:", error)
+                alert('An error occurred. Unable to update review: ' + review.id + '. Reason: ' + error)
+            })
     }
 
     return (

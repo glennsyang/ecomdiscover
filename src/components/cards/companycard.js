@@ -24,7 +24,7 @@ const CompanyCard = ({ company }) => {
             <div className="p-4">
                 {/* Categories */}
                 <div className="mb-4">
-                    <Category categories={company.categories} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight mr-1" />
+                    <Category categories={company.categories} useLink={true} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight mr-1" />
                 </div>
                 <hr className="border-b border-gray-300 opacity-25 py-0" />
                 <div className="font-semibold py-4">
