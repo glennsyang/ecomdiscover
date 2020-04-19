@@ -51,7 +51,7 @@ const Footer = () => {
                                 <Link to={`/blog`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Official Blog</Link>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <Link to={`/about/`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">About Us</Link>
+                                <Link to={`/about`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">About Us</Link>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/contact`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Contact</Link>
