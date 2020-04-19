@@ -3,10 +3,13 @@ import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
-import Card from "../components/cards/card"
+import CompanyCard from "../components/cards/companycard"
+import { useCompanies } from "../hooks/use-companies"
 import { isLoggedIn } from "../utils/auth"
 
 function IndexPage({ data }) {
+  const { allCompanies } = useCompanies()
+
   return (
     <Layout>
       <SEO
@@ -57,18 +60,15 @@ function IndexPage({ data }) {
         {/* Title cards */}
         <section className="bg-gray-100 py-8" id="title-cards">
           <div className="container mx-auto flex flex-wrap pt-2 pb-12">
-
             <h3 className="antialiased w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
               E-Commerce Tools & Services
             </h3>
             <div className="w-full mb-4">
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
             </div>
-
-            {data.reviews.edges.map(({ node }) => (
-              <Card key={node.id} review={node} />
+            {allCompanies.nodes.map(node => (
+              <CompanyCard key={node.id} company={node} />
             ))}
-
           </div>
         </section>
 
@@ -118,43 +118,13 @@ function IndexPage({ data }) {
 
 export const query = graphql`
   query {
-    reviews: allReviews(limit: 3, sort: { fields: created, order: ASC }) {
-      totalCount
-        edges {
-            node {
-                company {
-                  name
-                  logo
-                  website
-                }
-                content
-                created(formatString: "DD MMMM, YYYY")
-                id
-                fields {
-                  slug
-                }
-                marketplace
-                rating
-                tags
-                title
-                user {
-                  id
-                  username
-                }
-                categories {
-                  id
-                  name
-                }
-            }
+    allCategories(limit: 5, sort: {fields: name, order: ASC}, skip: 15) {
+      edges {
+        node {
+          id
+          name
         }
-    }
-    allCategories(limit: 5) {
-    edges {
-      node {
-        id
-        name
       }
-    }
   }
   siteSearchIndex {
     index

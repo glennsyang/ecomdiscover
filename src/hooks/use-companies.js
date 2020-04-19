@@ -31,7 +31,10 @@ export const useCompanies = () => {
                     tags
                     user {
                         username
+                        email
                         photoURL
+                        created
+                        updated
                     }
                 }
             }

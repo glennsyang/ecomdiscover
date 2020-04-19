@@ -16,9 +16,7 @@ export default () => {
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
             <section className="bg-gray-100">
-
                 <PageHeader props={props} />
-
                 <div className="container mx-auto px-8 pb-4">
                     <div className="w-full flex flex-col md:flex-row py-8">
                         <div className="flex-1">
@@ -26,9 +24,10 @@ export default () => {
                                 {allCategories.nodes.map((node) => (
                                     <div key={node.id} className="col-span-1 text-blue-500 text-left p-1 sm:mx-6">
                                         <Link
-                                            to={`/reviews`}
+                                            to={`/companies`}
                                             state={{ category: node.name }}
-                                            className="hover:underline">{node.name}
+                                            className="hover:underline">
+                                            {node.name}
                                         </Link>
                                     </div>
                                 ))}
@@ -36,7 +35,6 @@ export default () => {
                         </div>
                     </div>
                 </div>
-
             </section>
         </Layout >
     )

@@ -18,7 +18,7 @@ const ReviewCard = ({ review }) => {
             setHelpfulCount(snapshot.data().helpful.length)
         })
         //unsubscribe();
-    }, [])
+    }, [review.id])
 
     const imgProfile = {
         imgName: "blank_profile_picture.png",

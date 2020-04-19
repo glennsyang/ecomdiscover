@@ -1,20 +1,27 @@
 import React from "react"
 import { Link } from "gatsby"
 
+const CategoryDisplay = (props) => {
+    const { category, className } = props
+    return (<div key={category.id} className={className}>{category.name}</div>)
+}
+
 const Category = (props) => {
     const { categories, className, useLink } = props
 
     return (
         <div>
-            {categories.map(category =>
-                <Link key={category.id} to={`/reviews`} state={{ category: category.name }}>
-                    <div
-                        key={category.id}
-                        className={className}>
-                        {category.name}
-                    </div>
-                </Link>
-            )}
+            {useLink ?
+                categories.map(category =>
+                    <Link key={category.id} to={`/reviews`} state={{ category: category.name }}>
+                        <CategoryDisplay category={category} className={className} />
+                    </Link>
+                )
+                :
+                categories.map(category =>
+                    <CategoryDisplay category={category} className={className} />
+                )
+            }
         </div>
     )
 }
