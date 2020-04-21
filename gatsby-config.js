@@ -150,14 +150,21 @@ module.exports = {
       resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
       options: {
         // Fields to index
-        fields: [`title`, `tags`],
+        fields: [`name`, `categories`, `title`, `tags`],
         // How to resolve each field`s value for a supported node type
         resolvers: {
           // For any node of type Reviews, list how to resolve the fields` values
+          Companies: {
+            type: node => "companies",
+            name: node => node.name,
+            categories: (node, getNode) => node.categories___NODE.map(catNode => getNode(catNode).name),
+            slug: node => node.fields.slug,
+          },
           Reviews: {
+            type: node => "reviews",
             title: node => node.title,
             tags: node => node.tags,
-            slug: node => node.fields.slug,
+            company: node => node.company___NODE,
           },
         },
         // Optional filter to limit indexed nodes

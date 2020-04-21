@@ -7,7 +7,7 @@ import Category from "../components/category"
 import { useCompanies } from "../hooks/use-companies"
 
 export default ({ location }) => {
-    const props = { title: "Find Top-Rated Tools By Company", subtitle: "" }
+    const props = { title: "E-Commerce Tools & Services", subtitle: "" }
     const { allCompanies } = useCompanies()
     let filteredCompanies = []
 
@@ -16,12 +16,14 @@ export default ({ location }) => {
     const flteredCategory = [{ id: 0, name: category }]
 
     if (category) {
+        console.log("Before filter:", allCompanies.nodes)
         filteredCompanies = allCompanies.nodes
             .filter((company) =>
                 company.categories.some((cat) => cat.name === category))
-            .map(company => {
-                return Object.assign({}, company, { categories: company.categories.filter(cat => cat.name === category) })
-            })
+        //.map(company => {
+        //    return Object.assign({}, company, { categories: company.categories.filter(cat => cat.name === category) })
+        //})
+        console.log("filtered:", filteredCompanies)
     } else {
         filteredCompanies = allCompanies.nodes
     }

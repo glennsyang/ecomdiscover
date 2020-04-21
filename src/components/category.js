@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 
 const CategoryDisplay = (props) => {
     const { category, className } = props
-    return (<div key={category.id} className={className}>{category.name}</div>)
+    return (<div className={className}>{category.name}</div>)
 }
 
 const Category = (props) => {
@@ -13,13 +13,13 @@ const Category = (props) => {
         <div>
             {useLink ?
                 categories.map(category =>
-                    <Link key={category.id} to={`/reviews`} state={{ category: category.name }}>
+                    <Link key={category.id} to={`/companies`} state={{ category: category.name }}>
                         <CategoryDisplay category={category} className={className} />
                     </Link>
                 )
                 :
                 categories.map(category =>
-                    <CategoryDisplay category={category} className={className} />
+                    <CategoryDisplay key={category.id} category={category} className={className} />
                 )
             }
         </div>

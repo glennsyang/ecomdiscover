@@ -11,13 +11,14 @@ import { getUser } from "../../utils/auth"
 const ReviewCard = ({ review }) => {
     const memberSince = review.user.created
     //const helpfulCount = review.helpful.length
-    // Get Live helpfulCount from db
+    // Get Live helpfulCount from firestore
     const [helpfulCount, setHelpfulCount] = useState(0)
     useEffect(() => {
-        firebase.firestore().collection('reviews').doc(review.id).onSnapshot(snapshot => {
+        const unsubscribe = firebase.firestore().collection('reviews').doc(review.id).onSnapshot(snapshot => {
             setHelpfulCount(snapshot.data().helpful.length)
         })
-        //unsubscribe();
+
+        return () => unsubscribe();
     }, [review.id])
 
     const imgProfile = {
