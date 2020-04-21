@@ -19,7 +19,7 @@ function IndexPage({ data }) {
 
       <div className="gradient">
         {/* Hero */}
-        <section className="hero-image flex items-center py-8 sm:py-20" id="hero">
+        <section className="hero-image flex items-center py-8 sm:py-24" id="hero">
 
           <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
@@ -36,8 +36,8 @@ function IndexPage({ data }) {
             <div className="text-white text-center font-semibold pt-6 inline-block">
               {data.allCategories.edges.map(({ node }) => (
                 <Link
-                  to={`/reviews`}
                   key={node.id}
+                  to={`/companies`}
                   state={{ category: node.name }}
                   className="mr-4 pb-4 inline-block hover:underline">
                   {node.name}
@@ -48,10 +48,6 @@ function IndexPage({ data }) {
               <Link to={`/categories`} className="block mt-2 font-semibold hover:underline">
                 SEE ALL CATEGORIES
               </Link>
-              <div className="block mt-2 font-semibold">- OR -</div>
-              <Link to={`/companies`} className="block mt-2 font-semibold hover:underline">
-                COMPANIES
-              </Link>
             </div>
 
           </div>
@@ -59,7 +55,7 @@ function IndexPage({ data }) {
 
         {/* Title cards */}
         <section className="bg-gray-100 py-8" id="title-cards">
-          <div className="container mx-auto flex flex-wrap pt-2 pb-12">
+          <div className="container mx-auto flex flex-wrap pt-2 pb-10">
             <h3 className="antialiased w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
               E-Commerce Tools & Services
             </h3>
@@ -69,6 +65,11 @@ function IndexPage({ data }) {
             {allCompanies.nodes.map(node => (
               <CompanyCard key={node.id} company={node} />
             ))}
+            <div className="w-full text-center mt-4">
+              <Link to={`/companies`} className="antialised text-center font-semibold hover:underline">
+                VIEW ALL
+            </Link>
+            </div>
           </div>
         </section>
 

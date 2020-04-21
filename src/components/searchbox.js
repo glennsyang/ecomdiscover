@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Link } from 'gatsby'
 import { Index } from 'elasticlunr'
-import Tag from "./tag"
+import SearchDisplay from "./searchdisplay"
 
 export default class SearchBox extends Component {
     constructor(props) {
@@ -41,10 +40,7 @@ export default class SearchBox extends Component {
 
                 <div className="absolute w-full bg-white">
                     {this.state.results.map(page => (
-                        <Link key={page.id} to={page.slug} className="block px-4 py-3 text-gray-800 hover:bg-gray-100 hover:text-blue-500">
-                            <h3 className="text-xl font-semibold">{page.title}</h3>
-                            <Tag tags={page.tags} />
-                        </Link>
+                        <SearchDisplay key={page.id} props={page} />
                     ))}
                 </div>
             </div>
@@ -64,7 +60,18 @@ export default class SearchBox extends Component {
             results: this.index
                 .search(query, { expand: true }) // Accept partial matches
                 // Map over each ID and return the full document
-                .map(({ ref }) => this.index.documentStore.getDoc(ref)),
+                .map(({ ref }) => {
+                    let result = this.index.documentStore.getDoc(ref);
+                    if (result.type === 'reviews') {
+                        const company = this.index.documentStore.getDoc(result.company)
+                        result = {
+                            ...result,
+                            slug: company.slug
+                        }
+                    }
+                    //console.log("result:", result)
+                    return result
+                }),
             isActive: !!query,
         })
     };

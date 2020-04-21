@@ -60,6 +60,7 @@ export default function Company({ data }) {
                                     {/* Marketplace */}
                                     <div className="flex">
                                         <h6 className="text-gray-500 text-xs tracking-tight uppercase">{company.marketplace.join(', ')}</h6>
+                                        <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-3">{company.name}</a>
                                     </div>
                                 </div>
                             </div>
