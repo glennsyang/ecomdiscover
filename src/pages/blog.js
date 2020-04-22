@@ -35,7 +35,7 @@ export default ({ data }) => {
                 {node.frontmatter.category.map((category, i) =>
                 <Link
                   key={i}
-                  to={`/reviews`}
+                  to={`/companies`}
                   state={{ category: category }}
                   className="hover:underline">
                   <span className="ml-1">{category},</span>
@@ -67,6 +67,7 @@ export const query = graphql`
     allMarkdownRemark(filter: {fileAbsolutePath: {regex: "/posts/"}}, sort: {fields: [frontmatter___date], order: DESC}) {
     edges {
       node {
+        id
         frontmatter {
           title
           date(formatString: "MMMM Do, YYYY")

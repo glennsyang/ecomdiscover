@@ -16,14 +16,12 @@ export default ({ location }) => {
     const flteredCategory = [{ id: 0, name: category }]
 
     if (category) {
-        console.log("Before filter:", allCompanies.nodes)
         filteredCompanies = allCompanies.nodes
             .filter((company) =>
                 company.categories.some((cat) => cat.name === category))
         //.map(company => {
         //    return Object.assign({}, company, { categories: company.categories.filter(cat => cat.name === category) })
         //})
-        console.log("filtered:", filteredCompanies)
     } else {
         filteredCompanies = allCompanies.nodes
     }

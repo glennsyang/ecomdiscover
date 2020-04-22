@@ -3,7 +3,7 @@ import { navigate } from "gatsby"
 import AuthenticationView from "./authenticationview"
 import ImageFluid from "../image-fluid"
 import Loader from "../loader"
-import { FaCheck, FaTimes, FaPen, FaThumbsUp } from 'react-icons/fa'
+import { FaCheck, FaTimes, FaPen, FaThumbsUp, FaCamera } from 'react-icons/fa'
 import { getUser, setUser } from "../../utils/auth"
 import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
@@ -18,8 +18,7 @@ const Profile = () => {
         }
         return profile.providerId
     })
-
-    const imgProfile = {
+    const imgBlankProfile = {
         imgName: "blank_profile_picture.png",
         imgAlt: `${displayName} Profile Photo`,
         imgClass: "h-full w-full object-cover"
@@ -28,23 +27,27 @@ const Profile = () => {
     const [isEditing, setIsEditing] = useState(false)
 
     useEffect(() => {
-        firebase.firestore().collection('users').doc(uid).get().then(doc => {
-            setUserInfo({
-                name: doc.data().displayName,
-                photo: doc.data().photoURL,
-                helpful: doc.data().helpful.length,
+        const unsubscribeUser = firebase.firestore().collection('users').doc(uid).onSnapshot(snapshotUser => {
+            //console.log("Helpful:", snapshotUser.data().helpful.length)
+            const userDocRef = firebase.firestore().collection('users').doc(uid)
+            firebase.firestore().collection('reviews').where("uid", "==", userDocRef).get().then(docs => {
+                let writtenReviews = []
+                docs.forEach(doc => {
+                    writtenReviews.push(doc.data().id);
+                })
+                //console.log("Written:", writtenReviews.length)
+                setUserInfo({
+                    name: snapshotUser.data().displayName,
+                    photo: snapshotUser.data().photoURL,
+                    helpful: snapshotUser.data().helpful.length,
+                    numReviews: writtenReviews.length,
+                })
             })
-            console.log("Helpful:", doc.data().helpful.length)
         })
-        const userDocRef = firebase.firestore().collection('users').doc(uid)
-        firebase.firestore().collection('reviews').where("uid", "==", userDocRef).onSnapshot(snapshot => {
-            var reviews = [];
-            snapshot.forEach(doc => {
-                reviews.push(doc.data().id);
-            })
-            setUserInfo({ ...userInfo, numReviews: reviews.length })
-            console.log("Written:", reviews.length)
-        })
+
+        return () => {
+            unsubscribeUser()
+        }
     }, [uid])
     /*
     useEffect(() => {
@@ -56,6 +59,20 @@ const Profile = () => {
     }, [])
     */
     // Buttons
+    const handleChangeProfilePhoto = (e) => {
+        e.preventDefault()
+
+        const fileData = e.target.value
+        console.log("change profile photo:", fileData)
+        const profileImageRef = firebase.storage().ref().child('profile-images/mountains.jpg')
+        profileImageRef.put(fileData).then(snapshot => {
+            console.log('Uploaded a blob or file!')
+            snapshot.ref.getDownloadURL().then(downloadURL => {
+                console.log('File available at', downloadURL)
+            })
+        })
+    }
+
     const handleChange = (e) => {
         e.preventDefault()
         setUserInfo({ ...userInfo, name: e.target.value })
@@ -103,30 +120,32 @@ const Profile = () => {
     }
     const handleDeleteAccount = () => {
         const currentUser = firebase.auth().currentUser
-        currentUser.delete()
-            .then(() => {
-                setUser({});
-                navigate('/app/login');
-            })
-            .catch(error => {
-                console.log("Error:", error)
-                alert('An error occured. Unable to deactivate account:' + email)
-            })
+        currentUser.delete().then(() => {
+            setUser({});
+            navigate('/app/login');
+        }).catch(error => {
+            console.log("Error:", error)
+            alert('An error occured. Unable to deactivate account:' + email)
+        })
     }
 
     return (
         <AuthenticationView title="Profile">
             {/* Card */}
             <div className="flex flex-col lg:flex-row lg:flex-grow shadow-xl rounded-lg border border-gray-100 p-10">
-                {userInfo ?
-                    <div className="flex flex-col lg:flex-row lg:flex-grow">
+                {!userInfo
+                    ? <Loader />
+                    : <div className="flex flex-col lg:flex-row lg:flex-grow">
                         {/* Avatar */}
-                        <div className="lg:w-32 flex">
+                        <div className="lg:w-32 flex flex-col">
                             <div className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
                                 {photoURL
                                     ? <img src={userInfo.photo} alt={userInfo.name} className="h-full w-full object-cover" />
-                                    : <ImageFluid props={imgProfile} />
+                                    : <ImageFluid props={imgBlankProfile} />
                                 }
+                            </div>
+                            <div className="flex justify-center pt-4 mr-8">
+                                <FaCamera onClick={handleChangeProfilePhoto} title="Change Profile Photo" className="text-gray-500 text-lg lg:text-base" />
                             </div>
                         </div>
                         {/* User Details */}
@@ -213,14 +232,13 @@ const Profile = () => {
                                     <div className="float-right">
                                         <button name="delete" onClick={handleDeleteAccount} className="bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center">
                                             Deactivate
-                                </button>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-
+                            <input accept=".jpg" type="file" name="profilePhoto" />
                         </div>
-                    </div>
-                    : <Loader />}
+                    </div>}
             </div>
         </AuthenticationView>
     )
