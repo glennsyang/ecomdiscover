@@ -119,9 +119,6 @@ export const query = graphql`
                 title
                 content
                 created(formatString: "DD MMMM, YYYY, h:mm a")
-                fields {
-                    slug
-                }
                 helpful {
                     id
                     username
