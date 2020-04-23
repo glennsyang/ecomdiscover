@@ -62,9 +62,11 @@ function IndexPage({ data }) {
             <div className="w-full mb-4">
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
             </div>
-            {allCompanies.nodes.map(node => (
-              <CompanyCard key={node.id} company={node} />
-            ))}
+            <div className="w-full justify-center flex flex-wrap">
+              {allCompanies.nodes.map(node => (
+                <CompanyCard key={node.id} company={node} />
+              ))}
+            </div>
             <div className="w-full text-center mt-4">
               <Link to={`/companies`} className="antialised py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500">
                 VIEW ALL

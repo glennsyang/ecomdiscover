@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { navigate } from "gatsby"
 import AuthenticationView from "./authenticationview"
 import ImageFluid from "../image-fluid"
@@ -8,9 +8,16 @@ import { getUser, setUser } from "../../utils/auth"
 import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
 
+function getFileNameFromUrl(urlString) {
+    return urlString
+        .substring(urlString
+            .lastIndexOf("profile-images%2F") + ("profile-images%2F").length)
+        .split('?')[0]
+}
+
 const Profile = () => {
     const user = getUser()
-    const { uid, displayName, email, emailVerified, photoURL, createdAt } = user
+    const { uid, displayName, email, emailVerified, createdAt } = user
     const memberSince = moment(+createdAt).format("D MMMM YYYY")
     const signInMethods = user.providerData.map(profile => {
         if (profile.providerId === "password") {
@@ -23,8 +30,10 @@ const Profile = () => {
         imgAlt: `${displayName} Profile Photo`,
         imgClass: "h-full w-full object-cover"
     }
+    const [isLoading, setIsLoading] = useState(true)
     const [userInfo, setUserInfo] = useState(null)
     const [isEditing, setIsEditing] = useState(false)
+    const fileInput = useRef()
 
     useEffect(() => {
         const unsubscribeUser = firebase.firestore().collection('users').doc(uid).onSnapshot(snapshotUser => {
@@ -33,7 +42,7 @@ const Profile = () => {
             firebase.firestore().collection('reviews').where("uid", "==", userDocRef).get().then(docs => {
                 let writtenReviews = []
                 docs.forEach(doc => {
-                    writtenReviews.push(doc.data().id);
+                    writtenReviews.push(doc.data().id)
                 })
                 //console.log("Written:", writtenReviews.length)
                 setUserInfo({
@@ -42,35 +51,81 @@ const Profile = () => {
                     helpful: snapshotUser.data().helpful.length,
                     numReviews: writtenReviews.length,
                 })
+                setIsLoading(false)
             })
         })
-
-        return () => {
-            unsubscribeUser()
-        }
+        return () => unsubscribeUser()
     }, [uid])
-    /*
-    useEffect(() => {
-        const gsRef = firebase.storage().refFromURL('gs://ecomdiscover.appspot.com/profile-images/sarah-fox.jpg');
-        gsRef.getDownloadURL().then(url => {
-            console.log("urlPhoto:", url)
-            setUserInfo({ ...userInfo, photo: url })
-        })
-    }, [])
-    */
-    // Buttons
-    const handleChangeProfilePhoto = (e) => {
-        e.preventDefault()
 
-        const fileData = e.target.value
-        console.log("change profile photo:", fileData)
-        const profileImageRef = firebase.storage().ref().child('profile-images/mountains.jpg')
-        profileImageRef.put(fileData).then(snapshot => {
-            console.log('Uploaded a blob or file!')
-            snapshot.ref.getDownloadURL().then(downloadURL => {
-                console.log('File available at', downloadURL)
+    const handleSelectFile = (e) => {
+        e.target.value = null
+    }
+    const handleUploadPhoto = (e) => {
+        e.preventDefault()
+        const fileData = fileInput.current.files[0]
+        const fileName = fileInput.current.files[0].name
+        if (fileData === '' || fileName === '') {
+            console.log(`No file selected: ${typeof (fileData)}`)
+            return
+        }
+        let reader = new FileReader()
+        reader.readAsDataURL(fileData)
+        reader.onload = () => {
+            setIsLoading(true)
+            const fileContent = reader.result
+            const profileImageRef = firebase.storage().ref().child(`profile-images/${fileName}`)
+            const uploadTask = profileImageRef.putString(fileContent, 'data_url')
+            // Upload Task
+            uploadTask.on('state_changed', (snapshot) => {
+                let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                console.log(`Upload is '${progress}'% done`)
+                switch (snapshot.state) {
+                    case firebase.storage.TaskState.PAUSED:
+                        console.log('Upload is paused')
+                        break
+                    case firebase.storage.TaskState.RUNNING:
+                        console.log('Upload is running')
+                        break
+                    default:
+                        break
+                }
+            }, (err) => {
+                // Handle unsuccessful uploads
+                setIsLoading(false)
+                console.log('File Upload error:', err.code)
+                alert('File Upload error:' + err.code)
+            }, () => {
+                // Handle successful uploads on complete
+                console.log('Uploaded is complete:', fileName)
+                // Get URL of new photo
+                uploadTask.snapshot.ref.getDownloadURL().then(firebaseUrl => {
+                    console.log('File available at', firebaseUrl)
+                    // Get URL of old photo from 'users' collection, 'photoURL'
+                    const oldPhoto = getFileNameFromUrl(userInfo.photo)
+                    // Set in local state
+                    setUserInfo({ ...userInfo, photo: firebaseUrl })
+                    // Update 'users' collection (and 'user') with new photoURL
+                    firebase.firestore().collection('users').doc(uid)
+                        .update({ photoURL: firebaseUrl })
+                        .then(() => {
+                            setIsLoading(false)
+                            // Delete old 'photoURL' image from storage bucket
+                            const oldPhotoRef = firebase.storage().ref().child(`profile-images/${oldPhoto}`)
+                            oldPhotoRef.delete().then(() => {
+                                console.log("Old File deleted successfully:", oldPhoto)
+                            }).catch((error) => {
+                                console.log("Error in deleting old photo:", oldPhoto, error.code)
+                                alert('An error occurred. Unable to delete old profile photo: ' + error.code)
+                            })
+                        })
+                        .catch(error => {
+                            setIsLoading(false)
+                            console.log("Error:", error)
+                            alert('An error occurred. Unable to update profile photo: ' + firebaseUrl)
+                        })
+                })
             })
-        })
+        }
     }
 
     const handleChange = (e) => {
@@ -84,7 +139,6 @@ const Profile = () => {
         e.preventDefault()
         setUserInfo({ ...userInfo, name: userInfo.name })
         setIsEditing(false)
-        console.log("userPhoto:", userInfo.photo)
         firebase.firestore().collection('users').doc(uid)
             .update({
                 displayName: userInfo.name,
@@ -98,7 +152,7 @@ const Profile = () => {
                         currentUser
                             .updateProfile({
                                 displayName: userInfo.name,
-                                photoURL: userInfo.photo
+                                //photoURL: userInfo.photo
                             })
                             .then(() => {
                                 setUser(currentUser)
@@ -121,8 +175,8 @@ const Profile = () => {
     const handleDeleteAccount = () => {
         const currentUser = firebase.auth().currentUser
         currentUser.delete().then(() => {
-            setUser({});
-            navigate('/app/login');
+            setUser({})
+            navigate('/app/login')
         }).catch(error => {
             console.log("Error:", error)
             alert('An error occured. Unable to deactivate account:' + email)
@@ -133,19 +187,23 @@ const Profile = () => {
         <AuthenticationView title="Profile">
             {/* Card */}
             <div className="flex flex-col lg:flex-row lg:flex-grow shadow-xl rounded-lg border border-gray-100 p-10">
-                {!userInfo
+                {isLoading
                     ? <Loader />
                     : <div className="flex flex-col lg:flex-row lg:flex-grow">
                         {/* Avatar */}
-                        <div className="lg:w-32 flex flex-col">
-                            <div className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
-                                {photoURL
+                        <div className="lg:w-32 flex lg:flex-col flex-row items-center mr-6">
+                            <div className="h-24 w-24 rounded-full overflow-hidden flex-shrink-0 relative">
+                                {userInfo.photo
                                     ? <img src={userInfo.photo} alt={userInfo.name} className="h-full w-full object-cover" />
                                     : <ImageFluid props={imgBlankProfile} />
                                 }
                             </div>
-                            <div className="flex justify-center pt-4 mr-8">
-                                <FaCamera onClick={handleChangeProfilePhoto} title="Change Profile Photo" className="text-gray-500 text-lg lg:text-base" />
+                            <div className="flex ml-4 lg:pt-4 lg:ml-0">
+                                <label className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
+                                    <FaCamera size={18} className="mr-2" />
+                                    <span>Upload</span>
+                                    <input type="file" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
+                                </label>
                             </div>
                         </div>
                         {/* User Details */}
@@ -236,9 +294,9 @@ const Profile = () => {
                                     </div>
                                 </div>
                             </div>
-                            <input accept=".jpg" type="file" name="profilePhoto" />
                         </div>
-                    </div>}
+                    </div>
+                }
             </div>
         </AuthenticationView>
     )

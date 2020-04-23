@@ -9,7 +9,7 @@ const StarRating = ({ totalStars, name, register, required }) => {
     const [starsSelected, selectStar] = useState(0)
 
     return (
-        <div className="relative">
+        <div className="flex relative items-center">
             <div className="flex flex-row justify-start text-2xl">
                 {[...Array(totalStars)].map((n, i) => (
                     <Star
@@ -18,7 +18,6 @@ const StarRating = ({ totalStars, name, register, required }) => {
                         onClick={() => selectStar(i + 1)}
                     />
                 ))}
-
             </div>
 
             <input
@@ -30,7 +29,7 @@ const StarRating = ({ totalStars, name, register, required }) => {
                 hidden
                 className="text-black"
             />
-            <div className="absolute flex flex-row font-bold text-xl text-blue-600">
+            <div className="flex flex-col font-bold text-xl text-blue-600 ml-4">
                 {Constants.RATING_MESSAGE[starsSelected].starMessage}
             </div>
         </div>
