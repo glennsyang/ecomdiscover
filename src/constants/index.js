@@ -22,7 +22,6 @@ export const RATING_MESSAGE = [
     { stars: 5, starMessage: "Excellent" },
 ]
 
-
 export const customStyles = {
     control: styles => ({
         ...styles,

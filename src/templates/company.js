@@ -33,7 +33,6 @@ export default function Company({ data }) {
 
                 <div className="container mx-auto bg-white">
 
-                    {/* Row */}
                     <div id="wrapper" className="flex flex-col lg:flex-row">
 
                         <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
