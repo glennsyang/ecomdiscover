@@ -16,6 +16,15 @@ A collection of e-commerce resources. Primarily related to FBA, but also touchin
 
 [Glenn Sheppard](https://glennsheppard.dev)
 
+
+<InputTag
+                                            name="tags"
+                                            label="Tags"
+                                            register={register}
+                                        />
+                                        
+
+                                        
 const components = {
     DropdownIndicator: null,
 }
@@ -24,6 +33,8 @@ const createTag = (label) => ({
     value: label,
 })
 
+
+                                                
 <CreatableSelect
                                     name="tags"
                                     label="Tags"

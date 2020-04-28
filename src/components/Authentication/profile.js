@@ -199,10 +199,10 @@ const Profile = () => {
                                 }
                             </div>
                             <div className="flex ml-4 lg:pt-4 lg:ml-0">
-                                <label className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
+                                <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                     <FaCamera size={18} className="mr-2" />
                                     <span>Upload</span>
-                                    <input type="file" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
+                                    <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
                                 </label>
                             </div>
                         </div>

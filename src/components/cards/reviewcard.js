@@ -7,10 +7,11 @@ import Loader from "../loader"
 import { FaThumbsUp } from 'react-icons/fa'
 import firebase from "gatsby-plugin-firebase"
 import { getUser, isLoggedIn } from "../../utils/auth"
+import moment from "moment"
 
 const ReviewCard = ({ review }) => {
     const memberSince = review.user.created
-    //const helpfulCount = review.helpful.length
+    const createdAt = moment.utc(review.created, "YYYY-MM-DDTHH:mm:ss.SSSZ").local().format("DD MMMM, YYYY, h:mm a")
     const imgBlankProfile = {
         imgName: "blank_profile_picture.png",
         imgAlt: `${review.user.username} Profile Photo`,
@@ -31,8 +32,9 @@ const ReviewCard = ({ review }) => {
                     photo: doc.data().photoURL,
                 })
             }).catch(error => {
-                console.log("Error getting user:", error)
-                alert('Unable to get user:' + review.user.username + '. Reason: ' + error.code)
+                console.log(`Unable to get latest data for user: ${review.user.id}. Reason: ${error.code}`)
+                // TODO: put this message in a toast notification
+                //alert(`Unable to get latest data for user: ${review.user.username}. Reason: ${error.code}`)
             })
             setIsLoading(false)
         })
@@ -41,8 +43,11 @@ const ReviewCard = ({ review }) => {
     }, [review.id, review.user.id])
 
     // User functions
-    const handleRateHelpful = (e) => {
-        if (isLoggedIn()) {
+    const handleRateHelpful = () => {
+        if (!isLoggedIn()) {
+            // TODO: put this message in a toast notification
+            console.log("User is not logged in")
+        } else {
             // get current logged-in user
             const { uid } = getUser()
             // update 'helpful' field in 'reviews' with current user id
@@ -79,7 +84,7 @@ const ReviewCard = ({ review }) => {
                     <div className="lg:w-32 flex">
                         <div className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
                             {userInfo && userInfo.photo
-                                ? <img src={userInfo.photo} alt={`${userInfo.name} Profile Photo`} className="h-full w-full object-cover" />
+                                ? <img src={userInfo.photo} alt={`${userInfo.name} Profile`} className="h-full w-full object-cover" />
                                 : <ImageFluid props={imgBlankProfile} />
                             }
                         </div>
@@ -89,7 +94,7 @@ const ReviewCard = ({ review }) => {
                             {userInfo ? userInfo.name : review.user.username}
                         </h3>
                         <div className="flex pt-2 mb-4">
-                            <span className="text-gray-400 text-sm lg:text-xs">{review.created}</span>
+                            <span className="text-gray-400 text-sm lg:text-xs">{createdAt}</span>
                             <span className="text-gray-400 text-sm lg:text-xs pl-2">|</span>
                             <span className="text-gray-400 text-sm lg:text-xs pl-2">Member Since:</span>
                             <span className="text-gray-400 text-sm lg:text-xs pl-1">{memberSince}</span>

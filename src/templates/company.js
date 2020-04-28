@@ -117,12 +117,11 @@ export const query = graphql`
                 id
                 title
                 content
-                created(formatString: "DD MMMM, YYYY, h:mm a")
+                created
                 helpful {
                     id
                     username
                 }
-                marketplace
                 rating
                 tags
                 user {
