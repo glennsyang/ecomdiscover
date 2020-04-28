@@ -132,6 +132,7 @@ module.exports = {
           database: true,
           firestore: true,
           storage: true,
+          analytics: true,
         },
         credentials: {
           apiKey: process.env.GATSBY_FIREBASE_API_KEY,
