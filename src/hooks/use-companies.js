@@ -23,7 +23,6 @@ export const useCompanies = () => {
                     title
                     content
                     created
-                    marketplace
                     rating
                     tags
                     user {

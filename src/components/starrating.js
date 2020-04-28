@@ -22,9 +22,13 @@ const StarRating = ({ totalStars, name, register, required }) => {
 
             <input
                 type="number"
-                value={starsSelected}
                 name={name}
-                ref={register}
+                value={starsSelected}
+                ref={register({
+                    required: { value: true, message: Constants.FIELD_REQUIRED },
+                    min: { value: 1, message: Constants.SELECT_RATING_1 },
+                    max: { value: 5, message: Constants.SELECT_RATING_5 },
+                })}
                 readOnly
                 hidden
                 className="text-black"

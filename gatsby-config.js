@@ -88,7 +88,6 @@ module.exports = {
               id: doc.id,
               content: doc.content,
               created: doc.created,
-              marketplace: doc.marketplace,
               rating: doc.rating,
               tags: doc.tags,
               title: doc.title,

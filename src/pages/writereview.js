@@ -3,26 +3,26 @@ import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import firebase from "gatsby-plugin-firebase"
-
 import * as Constants from '../constants'
 import SEO from "../components/seo"
 import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
 import StarRating from "../components/starrating"
-import InputTag from "../components/inputtag"
 import Category from "../components/category"
-import { useCategories } from "../hooks/use-categories"
 import { useCompanies } from "../hooks/use-companies"
 import { getUser } from "../utils/auth"
 
 const createCompany = (label) => (
     { value: label, label: label }
 )
+const components = {
+    DropdownIndicator: null,
+}
 
 export default function WriteReview() {
     const { uid, displayName } = getUser()
-
-    const { register, errors, handleSubmit, setValue } = useForm()
+    const { setValue, register, errors, handleSubmit } = useForm()
+    // Submit button
     const onSubmit = formData => {
         console.log("data:", formData)
         // check if entered new company
@@ -43,27 +43,41 @@ export default function WriteReview() {
     const updateFirestore = (dataObject, companyId) => {
         delete dataObject.website
         dataObject = Object.assign(dataObject, {
-            rating: dataObject.rating ? Number(dataObject.rating) : 0,
-            tags: dataObject.tags === 'string' ? [dataObject.tags] : dataObject.tags,
-            uid: firebase.firestore().collection('users').doc(uid),
-            created: firebase.firestore.FieldValue.serverTimestamp(),
-            company: firebase.firestore().doc(`companies/${companyId}`),
             categories: company.categories.map((category) => (
                 firebase.firestore().doc(`categories/${category.id}`)
-            ))
+            )),
+            company: firebase.firestore().doc(`companies/${companyId}`),
+            created: firebase.firestore.FieldValue.serverTimestamp(),
+            helpful: [],
+            rating: dataObject.rating ? Number(dataObject.rating) : 0,
+            tags: dataObject.tags ? dataObject.tags.map((tag) => (
+                tag.label
+            )) : [],
+            uid: firebase.firestore().collection('users').doc(uid),
         })
         firebase
             .firestore().collection('reviews')
             .add(dataObject)
             .then(ref => {
                 console.log("sent to firestore:", ref.id)
-                navigate(
-                    "/form-submitted",
-                    {
-                        state: { username: displayName },
-                        replace: true,
-                    }
-                )
+                // Update the 'companies' collection with this latest review
+                firebase.firestore().collection('companies').doc(companyId)
+                    .update({
+                        reviews: firebase.firestore.FieldValue.arrayUnion(ref),
+                    })
+                    .then(() => {
+                        console.log("updated:", companyId)
+                        navigate(
+                            "/form-submitted",
+                            {
+                                state: { username: displayName },
+                                replace: true,
+                            }
+                        )
+                    })
+                    .catch(error => {
+                        alert("Error: " + error)
+                    })
             })
             .catch(error => {
                 alert("Error: " + error)
@@ -75,76 +89,64 @@ export default function WriteReview() {
     const defaultCompanies = allCompanies.nodes.map((node) => (
         { value: node.id, label: node.name }
     ))
-    const [options, setOptions] = useState(defaultCompanies)
-    const [companies, setCompanies] = useState()
+    const [companyOptions, setCompanyOptions] = useState(defaultCompanies)
     const [company, setCompany] = useState(null)
 
-    const handleChange = selectedValue => {
-        setValue('company', selectedValue)
-        setValue('website', selectedValue ? selectedValue.website : "")
-        setCompanies(selectedValue)
-
-        const selectedCompany = allCompanies.nodes.find(x => x.id === selectedValue.value)
-        selectedCompany.imgLogo = {
-            imgName: selectedCompany.logo,
-            imgAlt: `${selectedCompany.name} Logo`,
-            imgClass: ""
-        }
-        setCompany(selectedCompany)
+    const handleChangeCompany = selectedValue => {
+        setValue('company', selectedValue, true)
+        if (selectedValue) {
+            const selectedCompany = allCompanies.nodes.find(x => x.id === selectedValue.value)
+            if (selectedCompany) {
+                selectedCompany.imgLogo = {
+                    imgName: selectedCompany.logo,
+                    imgAlt: `${selectedCompany.name} Logo`,
+                    imgClass: ""
+                }
+                setCompany(selectedCompany)
+            }
+        } else { setCompany(null) }
     }
-    const handleCreate = newValue => {
-        // add the new Company to existing list
+    const handleCreateCompany = newValue => {
         const newOption = createCompany(newValue)
-        setOptions([...options, newOption])
-        setValue('company', newOption)
-        setCompanies(newOption)
-    }
-    // Categories
-    const { allCategories } = useCategories()
-    const categories = allCategories.nodes.map((node) => (
-        { value: node.id, label: node.name }
-    ))
-    const [values, setCategories] = useState({ selectedOption: [] })
-    const handleMultiChange = selectedOption => {
-        setValue('categories', selectedOption)
-        setCategories({ selectedOption })
+        setValue('company', newOption, true)
+        console.log("handleCreateCompany() newValue:", typeof newOption, newOption)
+        // add the new Company to existing list
+        setCompanyOptions([...companyOptions, newOption])
     }
     // Tags
-    /*
-    const [tags, setTags] = useState({ inputValue: '', tagValue: [] })
-    const { inputValue, tagValue } = tags
-    const handleChangeTag = value => {
-        console.log("handleChangeTag:", value)
-        setTags({ inputValue: value, tagValue: [...tagValue] })
+    const [tags, setTags] = useState([])
+    const [inputValue, setInputValue] = useState('')
+    const handleTagChange = (value) => {
+        setValue('tags', value)
+        setTags(value)
     }
-    const handleInputChangeTag = inputTag => {
-        const { inputValue, tagValue } = tags
-        if (!inputTag) return;
-        console.log("handleInputChange:", inputTag)
-        setTags({ inputValue: inputTag, tagValue: [...tagValue] })
-        console.log("Tags:", tags)
+    const handleTagInputChange = (inputValue) => {
+        setInputValue(inputValue)
     }
-    const handleKeyDown = (event) => {
-        const { inputValue, tagValue } = tags
-        console.log("inputValue:", inputValue)
-        console.log("tagValue:", tagValue)
-        if (!inputValue) return;
+    const handleKeyDown = event => {
+        if (!inputValue) return
         switch (event.key) {
             case 'Enter':
             case 'Tab':
-                console.log(tagValue);
-                setTags({
-                    inputValue: '',
-                    tagValue: [...tagValue, createTag(inputValue)],
-                })
+                // Check if tag already exists
+                if (tags.find(tag => tag.value.toLowerCase() === inputValue.toLowerCase())) {
+                    event.preventDefault()
+                    return
+                }
+                setInputValue('')
+                const newOption = createCompany(inputValue)
+                setValue('tags', [...tags, newOption])
+                setTags([...tags, newOption])
                 event.preventDefault()
+                break
+            default:
+                break
         }
     }
-    */
+
     useEffect(() => {
-        register({ name: "company" })
-        register({ name: "categories" })
-        //register({ name: "tags" });
+        register({ name: "company" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+        register({ name: "tags" })
     }, [register])
 
     const imgAds = {
@@ -167,62 +169,51 @@ export default function WriteReview() {
 
                         <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
 
-                            {/* Company Heading */}
-                            <div className="flex flex-col lg:flex-row">
-                                <div className="lg:w-3/5 flex flex-col lg:ml-10">
-                                    {/* Categories */}
-                                    <div className="flex">
-                                        {company &&
-                                            <Category categories={company.categories} useLink={false} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-black tracking-tight mr-1" />
-                                        }
-                                    </div>
-                                    <div className="mt-2">
-                                        <CreatableSelect
-                                            name="company"
-                                            placeholder="Select Company..."
-                                            value={companies}
-                                            options={options}
-                                            styles={Constants.customStyles}
-                                            onChange={handleChange}
-                                            onCreateOption={handleCreate}
-                                            ref={() =>
-                                                register(
-                                                    { name: "company" },
-                                                    {
-                                                        validate: value => {
-                                                            // need to validate if it is undefined or empty array
-                                                            return Array.isArray(value) ? value.length > 0 : !!value || Constants.FIELD_REQUIRED;
-                                                        }
-                                                    }
-                                                )
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                {/* Company Heading */}
+                                <div className="flex flex-col lg:flex-row">
+                                    <div className="lg:w-3/5 flex flex-col lg:ml-10">
+                                        {/* Categories */}
+                                        <div className="flex">
+                                            {company &&
+                                                <Category categories={company.categories} useLink={false} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-black tracking-tight mr-1" />
                                             }
-                                            isClearable
-                                        />
-                                        {errors.company && <span className="text-red-400 text-md">{errors?.company?.message}</span>}
-                                    </div>
-                                    {/* Logo */}
-                                    <div className="flex pl-4 my-6">
-                                        {company &&
-                                            <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
-                                                <ImageFixed props={company.imgLogo} />
-                                            </a>}
-                                    </div>
-                                    {/* Marketplace & Website */}
-                                    <div className="flex">
-                                        <h6 className="text-gray-500 text-xs tracking-tight uppercase">
-                                            {company && company.marketplace.join(', ')}
-                                        </h6>
-                                        {company &&
-                                            <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-3">{company.name}</a>}
+                                        </div>
+                                        <div className="mt-2">
+                                            <CreatableSelect
+                                                name="company"
+                                                placeholder="Select Company..."
+                                                //value={companyValue}
+                                                options={companyOptions}
+                                                styles={Constants.customStyles}
+                                                onChange={handleChangeCompany}
+                                                onCreateOption={handleCreateCompany}
+                                                isClearable
+                                            />
+                                            {errors.company && <span className="text-red-400 text-md">{errors?.company?.message}</span>}
+                                        </div>
+                                        {/* Logo */}
+                                        <div className="flex pl-4 my-6">
+                                            {company &&
+                                                <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
+                                                    <ImageFixed props={company.imgLogo} />
+                                                </a>}
+                                        </div>
+                                        {/* Marketplace & Website */}
+                                        <div className="flex">
+                                            <h6 className="text-gray-500 text-xs tracking-tight uppercase">
+                                                {company && company.marketplace.join(', ')}
+                                            </h6>
+                                            {company &&
+                                                <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-3">{company.name}</a>}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <hr id="reviews" className="border-b border-gray-400 opacity-25 mt-4 py-0" />
+                                <hr id="reviews" className="border-b border-gray-400 opacity-25 mt-4 py-0" />
 
-                            {/* Reviews */}
-                            <div className="flex flex-col lg:px-10 py-4">
-                                <form onSubmit={handleSubmit(onSubmit)} >
+                                {/* Reviews */}
+                                <div className="flex flex-col lg:px-10 py-4">
                                     <div className="flex flex-col">
                                         <StarRating
                                             totalStars={5}
@@ -253,12 +244,22 @@ export default function WriteReview() {
                                         {errors.content && <span className="text-red-400 text-md">{errors?.content?.message}</span>}
 
                                         <div className="block text-black lg:text-2xl text-xl font-bold mt-4">Tags</div>
-                                        <InputTag
+                                        <CreatableSelect
                                             name="tags"
-                                            label="Tags"
-                                            register={register}
+                                            components={components}
+                                            inputValue={inputValue}
+                                            isClearable
+                                            isMulti
+                                            menuIsOpen={false}
+                                            styles={Constants.customStyles}
+                                            onChange={handleTagChange}
+                                            onInputChange={handleTagInputChange}
+                                            onKeyDown={handleKeyDown}
+                                            placeholder="Type something and press enter..."
+                                            value={tags}
                                         />
-                                        <div className="text-black mt-6">
+
+                                        <div className="text-black mt-8">
                                             <button
                                                 type="submit"
                                                 value="Submit"
@@ -267,8 +268,8 @@ export default function WriteReview() {
                                                 </button>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
 
                         {/* Ads */}
@@ -280,8 +281,7 @@ export default function WriteReview() {
                             </div>
                             <div className="flex mx-auto ml-10 lg:mt-32 fixed">
                                 <div className="flex">
-
-                                    reviews go here
+                                    reviews
                                 </div>
                             </div>
                         </div>
