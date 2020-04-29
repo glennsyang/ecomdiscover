@@ -211,11 +211,15 @@ export default function WriteReview() {
                                         </div>
                                         {/* Marketplace & Website */}
                                         <div className="flex">
-                                            <h6 className="text-gray-500 text-xs tracking-tight uppercase">
-                                                {company && company.marketplace.join(', ')}
+                                            <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">
+                                                {company &&
+                                                    company.marketplaces.map(marketplace => {
+                                                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
+                                                    })
+                                                }
                                             </h6>
                                             {company &&
-                                                <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-3">{company.name}</a>}
+                                                <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-2">{company.name}</a>}
                                         </div>
                                     </div>
                                 </div>

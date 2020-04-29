@@ -5,7 +5,7 @@ const AvgRating = (props) => {
     const { arrReviews, rating, slug, showAvgRating, showNumReviews, starSize, className } = props
 
     const avgRating = arrReviews ? arrReviews.reduce((a, b) => {
-        return b.rating == null ? a : a + b.rating
+        return b.rating === null ? a : a + b.rating
     }, 0) / arrReviews.length : rating;
 
     let starRating = [];

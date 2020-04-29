@@ -10,7 +10,12 @@ export const useCompanies = () => {
                 logo
                 website
                 blurb
-                marketplace
+                marketplaces {
+                    id
+                    flag
+                    code
+                    name
+                }
                 fields {
                     slug
                 }

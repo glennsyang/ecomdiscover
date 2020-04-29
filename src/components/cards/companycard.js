@@ -38,8 +38,10 @@ const CompanyCard = ({ company }) => {
                 <div className="text-xs text-gray-700 pb-4">
                     {company.blurb}
                 </div>
-                <div className="text-xs text-gray-500 tracking-tight uppercase pb-2">
-                    {company.marketplace.join(', ')}
+                <div className="flex text-xs text-gray-500 tracking-tight uppercase pb-2">
+                    {company.marketplaces.map(marketplace => {
+                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
+                    })}
                 </div>
                 <hr className="border-b border-gray-300 opacity-25 py-0" />
                 <Link to={company.fields.slug} className="inline-block text-blue-500 text-xs hover:underline pt-4">

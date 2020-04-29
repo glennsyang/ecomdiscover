@@ -76,7 +76,7 @@ module.exports = {
               logo: doc.logo,
               website: doc.website,
               blurb: doc.blurb,
-              marketplace: doc.marketplace,
+              marketplaces___NODE: doc.marketplaces.map(marketplace => marketplace.id),
               categories___NODE: doc.categories.map(category => category.id),
               reviews___NODE: doc.reviews.map(review => review.id),
             }),
@@ -108,6 +108,16 @@ module.exports = {
               created: doc.created,
               updated: doc.updated,
               helpful___NODE: doc.helpful.map(review => review.id),
+            }),
+          },
+          {
+            type: 'Marketplaces',
+            collection: 'marketplaces',
+            map: doc => ({
+              id: doc.id,
+              code: doc.code,
+              name: doc.name,
+              flag: doc.flag,
             }),
           },
           {

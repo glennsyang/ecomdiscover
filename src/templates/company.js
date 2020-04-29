@@ -58,8 +58,10 @@ export default function Company({ data }) {
                                     </div>
                                     {/* Marketplace */}
                                     <div className="flex">
-                                        <h6 className="text-gray-500 text-xs tracking-tight uppercase">{company.marketplace.join(', ')}</h6>
-                                        <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-3">{company.name}</a>
+                                        <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">{company.marketplaces.map(marketplace => {
+                                            return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
+                                        })}</h6>
+                                        <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-2">{company.name}</a>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +107,12 @@ export const query = graphql`
             logo
             website
             blurb
-            marketplace
+            marketplaces {
+                id
+                flag
+                code
+                name
+            }
             fields {
                 slug
             }

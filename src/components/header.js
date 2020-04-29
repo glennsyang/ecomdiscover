@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
 import { useSiteMetadata } from "../hooks/use-site-metadata"
-import Logo from "../components/logo"
+import SVGImage from "../components/svgimage"
 import Status from "./authentication/status"
 
 function Header() {
@@ -14,7 +14,7 @@ function Header() {
         <div className="flex items-center justify-between px-4 py-3 sm:p-0">
           {/* Logo */}
           <div>
-            <Link to={`/`} title={title}><Logo width="100%" height="100%" viewBox="0 0 1450 400" className="lg:h-16 h-12 object-cover" /></Link>
+            <Link to={`/`} title={title}><SVGImage name="logo" width="100%" height="100%" viewBox="0 0 1450 400" className="lg:h-16 h-12 object-cover" /></Link>
           </div>
           <div className="sm:hidden">
             <button onClick={() => setIsOpen(!isOpen)} type="button" className="block text-gray-500 hover:text-white focus:text-white focus:outline-none">
