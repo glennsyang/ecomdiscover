@@ -4,6 +4,7 @@
 .custom-blue {
   background-color: #6190E8;
 }
+
 .hero-image {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../images/woman_computer.jpg");
     height: 50%;
@@ -19,6 +20,10 @@
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+}
+
+.ql-editor {
+  min-height: 18em;
 }
 
 /* Accordiion */

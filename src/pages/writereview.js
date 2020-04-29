@@ -3,12 +3,14 @@ import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import firebase from "gatsby-plugin-firebase"
-import * as Constants from '../constants'
+import ReactQuill from 'react-quill'
+
 import SEO from "../components/seo"
+import Category from "../components/category"
 import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
 import StarRating from "../components/starrating"
-import Category from "../components/category"
+import * as Constants from '../constants'
 import { useCompanies } from "../hooks/use-companies"
 import { getUser } from "../utils/auth"
 
@@ -18,6 +20,9 @@ const createCompany = (label) => (
 const components = {
     DropdownIndicator: null,
 }
+
+// https://restcountries.eu/rest/v2/alpha?codes=can&fields=flag
+
 
 export default function WriteReview() {
     const { uid, displayName } = getUser()
@@ -41,7 +46,6 @@ export default function WriteReview() {
     }
     // save the Review in the database
     const updateFirestore = (dataObject, companyId) => {
-        delete dataObject.website
         dataObject = Object.assign(dataObject, {
             categories: company.categories.map((category) => (
                 firebase.firestore().doc(`categories/${category.id}`)
@@ -83,6 +87,12 @@ export default function WriteReview() {
                 alert("Error: " + error)
             })
     }
+    // React-quill Editor
+    const [content, setContent] = useState('')
+    const handleChangeContent = newValue => {
+        setValue('content', newValue)
+        setContent(newValue)
+    }
 
     // Companies
     const { allCompanies } = useCompanies()
@@ -109,7 +119,6 @@ export default function WriteReview() {
     const handleCreateCompany = newValue => {
         const newOption = createCompany(newValue)
         setValue('company', newOption, true)
-        console.log("handleCreateCompany() newValue:", typeof newOption, newOption)
         // add the new Company to existing list
         setCompanyOptions([...companyOptions, newOption])
     }
@@ -146,6 +155,7 @@ export default function WriteReview() {
 
     useEffect(() => {
         register({ name: "company" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+        register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
         register({ name: "tags" })
     }, [register])
 
@@ -234,12 +244,14 @@ export default function WriteReview() {
                                         {errors.title && <span className="text-red-400 text-md">{errors?.title?.message}</span>}
 
                                         <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Review</div>
-                                        <textarea
-                                            type="text"
+                                        <ReactQuill
                                             name="content"
                                             placeholder="By sharing your experiences you're helping businesses make better choices. Thank you!"
-                                            ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                                            className="text-black text-lg w-full block box-border rounded-md border border-gray-400 shadow-inner py-2 px-2 h-40 placeholder-gray-400"
+                                            value={content}
+                                            onChange={handleChangeContent}
+                                            modules={Constants.editorModules}
+                                            formats={Constants.editorFormats}
+                                            theme="snow"
                                         />
                                         {errors.content && <span className="text-red-400 text-md">{errors?.content?.message}</span>}
 
