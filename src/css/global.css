@@ -86,3 +86,25 @@ input[name='panel']:checked ~ .accordion__content {
             transform: rotate(359deg);
   }
 }
+
+/* Alert: Toast notifications */
+.notification-container {
+	position: fixed;
+	z-index: 999999
+}
+
+.bottom-right {
+	bottom: 30px;
+	right: 30px;
+	transition: transform .12s ease-in-out;
+	animation: toast-in-right .15s;
+}
+
+@keyframes toast-in-right {
+	from {
+    transform: translateX(100%);
+	}
+	to {
+    transform: translateX(0);
+	}
+}

@@ -10,6 +10,7 @@ import Category from "../components/category"
 import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
 import StarRating from "../components/starrating"
+import Toast from "../components/toast"
 import * as Constants from '../constants'
 import { useCompanies } from "../hooks/use-companies"
 import { getUser } from "../utils/auth"
@@ -21,11 +22,9 @@ const components = {
     DropdownIndicator: null,
 }
 
-// https://restcountries.eu/rest/v2/alpha?codes=can&fields=flag
-
-
 export default function WriteReview() {
     const { uid, displayName } = getUser()
+    const [toast, setToast] = useState()
     const { setValue, register, errors, handleSubmit } = useForm()
     // Submit button
     const onSubmit = formData => {
@@ -35,17 +34,25 @@ export default function WriteReview() {
             firebase.firestore().collection('companies')
                 .add({ name: formData.company.label, logo: '', website: '' })
                 .then(ref => {
-                    updateFirestore(formData, ref.id)
+                    updateFirestore(formData, ref.id, formData.company.label)
                 })
                 .catch(error => {
-                    alert("Error: " + error)
+                    const id = Math.floor((Math.random() * 101) + 1);
+                    const toastProperties = {
+                        id,
+                        title: 'Error',
+                        description: `There was an error in creating new Company: ${formData.company.label}. Reason: ${error}`,
+                        backgroundColor: '#d9534f',
+                        className: 'bg-red-100 border-red-400 text-red-700'
+                    }
+                    setToast(toastProperties)
                 })
         } else {
-            updateFirestore(formData, formData.company.value)
+            updateFirestore(formData, formData.company.value, formData.company.label)
         }
     }
     // save the Review in the database
-    const updateFirestore = (dataObject, companyId) => {
+    const updateFirestore = (dataObject, companyId, companyName) => {
         dataObject = Object.assign(dataObject, {
             categories: company.categories.map((category) => (
                 firebase.firestore().doc(`categories/${category.id}`)
@@ -80,11 +87,27 @@ export default function WriteReview() {
                         )
                     })
                     .catch(error => {
-                        alert("Error: " + error)
+                        const id = Math.floor((Math.random() * 101) + 1);
+                        const toastProperties = {
+                            id,
+                            title: 'Error',
+                            description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}`,
+                            backgroundColor: '#d9534f',
+                            className: 'bg-red-100 border-red-400 text-red-700'
+                        }
+                        setToast(toastProperties)
                     })
             })
             .catch(error => {
-                alert("Error: " + error)
+                const id = Math.floor((Math.random() * 101) + 1);
+                const toastProperties = {
+                    id,
+                    title: 'Error',
+                    description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}`,
+                    backgroundColor: '#d9534f',
+                    className: 'bg-red-100 border-red-400 text-red-700'
+                }
+                setToast(toastProperties)
             })
     }
     // React-quill Editor
@@ -302,6 +325,12 @@ export default function WriteReview() {
                             </div>
                         </div>
                     </div>
+                    <Toast
+                        toastProps={toast}
+                        position="bottom-right"
+                        autoDelete={true}
+                        autoDeleteTime={2500}
+                    />
                 </div>
             </div>
         </>

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "gatsby"
+import firebase from "gatsby-plugin-firebase"
+import { FaThumbsUp } from 'react-icons/fa'
+import moment from "moment"
 import ImageFluid from "../image-fluid"
 import Tag from "../tag"
+import Toast from "../toast"
 import AvgRating from "../avgrating"
 import Loader from "../loader"
-import { FaThumbsUp } from 'react-icons/fa'
-import firebase from "gatsby-plugin-firebase"
 import { getUser, isLoggedIn } from "../../utils/auth"
-import moment from "moment"
 
 const ReviewCard = ({ review }) => {
     const memberSince = review.user.created
@@ -21,6 +22,7 @@ const ReviewCard = ({ review }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [userInfo, setUserInfo] = useState(null)
     const [helpfulCount, setHelpfulCount] = useState(0)
+    const [toast, setToast] = useState()
     useEffect(() => {
         // Get Helpful count for each review
         const unsubscribe = firebase.firestore().collection('reviews').doc(review.id).onSnapshot(snapshot => {
@@ -32,9 +34,15 @@ const ReviewCard = ({ review }) => {
                     photo: doc.data().photoURL,
                 })
             }).catch(error => {
-                console.log(`Unable to get latest data for user: ${review.user.id}. Reason: ${error.code}`)
-                // TODO: put this message in a toast notification
-                //alert(`Unable to get latest data for user: ${review.user.username}. Reason: ${error.code}`)
+                const id = Math.floor((Math.random() * 101) + 1);
+                const toastProperties = {
+                    id,
+                    title: 'Warning',
+                    description: 'You are not signed in. Please sign-in for more details',
+                    backgroundColor: '#d9534f',
+                    className: 'bg-yellow-100 border-yellow-400 text-yellow-700'
+                }
+                setToast(toastProperties)
             })
             setIsLoading(false)
         })
@@ -45,11 +53,19 @@ const ReviewCard = ({ review }) => {
     // User functions
     const handleRateHelpful = () => {
         if (!isLoggedIn()) {
-            // TODO: put this message in a toast notification
-            console.log("User is not logged in")
+            const id = Math.floor((Math.random() * 101) + 1);
+            const toastProperties = {
+                id,
+                title: 'Error',
+                description: 'Please sign-in to rate helpful',
+                backgroundColor: '#d9534f',
+                className: 'bg-red-100 border-red-400 text-red-700'
+            }
+            setToast(toastProperties)
+
         } else {
             // get current logged-in user
-            const { uid } = getUser()
+            const { uid, displayName } = getUser()
             // update 'helpful' field in 'reviews' with current user id
             firebase.firestore().collection('reviews').doc(review.id)
                 .update({
@@ -62,16 +78,40 @@ const ReviewCard = ({ review }) => {
                             helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('reviews').doc(review.id)),
                         })
                         .then(() => {
-                            console.log("Success!")
+                            const id = Math.floor((Math.random() * 101) + 1);
+                            const toastProperties = {
+                                id,
+                                title: 'Info',
+                                description: `Thank you ${displayName} for your rating!`,
+                                backgroundColor: '#d9534f',
+                                className: 'bg-green-100 border-green-400 text-green-700'
+                            }
+                            setToast(toastProperties)
                         })
                         .catch(error => {
                             console.log("Error:", error)
-                            alert('An error occurred. Unable to update user: ' + uid + '. Reason: ' + error)
+                            const id = Math.floor((Math.random() * 101) + 1);
+                            const toastProperties = {
+                                id,
+                                title: 'Error',
+                                description: `Couldn't update user record. Reason: ${error}`,
+                                backgroundColor: '#d9534f',
+                                className: 'bg-red-100 border-red-400 text-red-700'
+                            }
+                            setToast(toastProperties)
                         })
                 })
                 .catch(error => {
                     console.log("Error:", error)
-                    alert('An error occurred. Unable to update review: ' + review.id + '. Reason: ' + error)
+                    const id = Math.floor((Math.random() * 101) + 1);
+                    const toastProperties = {
+                        id,
+                        title: 'Error',
+                        description: `Couldn't update review record for ${review.title}. Reason: ${error}`,
+                        backgroundColor: '#d9534f',
+                        className: 'bg-red-100 border-red-400 text-red-700'
+                    }
+                    setToast(toastProperties)
                 })
         }
     }
@@ -115,6 +155,7 @@ const ReviewCard = ({ review }) => {
                         <div className="text-base font-normal text-gray-800"
                             dangerouslySetInnerHTML={{ __html: review.content }}
                         />
+
                         <div className="bg-white">
                             <div className="float-right mt-12 lg:mr-6">
                                 <button name="submit" onClick={handleRateHelpful} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
@@ -132,6 +173,12 @@ const ReviewCard = ({ review }) => {
                     </div>
                 </div>
             }
+            <Toast
+                toastProps={toast}
+                position="bottom-right"
+                autoDelete={true}
+                autoDeleteTime={2500}
+            />
         </div>
     )
 }
