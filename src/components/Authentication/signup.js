@@ -1,14 +1,17 @@
-import React from "react"
+import React, { useState } from "react"
 import { navigate } from '@reach/router'
 import { Link } from 'gatsby'
-import AuthenticationView from "./authenticationview"
 import { useForm } from 'react-hook-form';
-import { setUser, isLoggedIn } from "../../utils/auth"
 import firebase from "gatsby-plugin-firebase"
+import AuthenticationView from "./authenticationview"
+import { setUser, isLoggedIn } from "../../utils/auth"
 import * as Constants from '../../constants'
+import Toast from "../toast"
 
 const SignUp = () => {
+    const [toast, setToast] = useState()
     const { register, errors, setError, handleSubmit } = useForm()
+
     const onSubmit = data => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
             .then(result => {
@@ -34,12 +37,28 @@ const SignUp = () => {
                             })
                             .catch(error => {
                                 console.log("Error:", error)
-                                alert('An error occurred. Unable to update Name:' + result.user)
+                                const id = Math.floor((Math.random() * 101) + 1);
+                                const toastProperties = {
+                                    id,
+                                    title: 'Error',
+                                    description: 'There was an error in updating your Name in your Profile',
+                                    backgroundColor: '#d9534f',
+                                    className: 'bg-red-100 border-red-400 text-red-700'
+                                }
+                                setToast(toastProperties)
                             })
                     })
                     .catch(error => {
                         console.log("Error:", error)
-                        alert('An error occurred. Unable to create user:' + data.email)
+                        const id = Math.floor((Math.random() * 101) + 1);
+                        const toastProperties = {
+                            id,
+                            title: 'Error',
+                            description: `Could not create Profile for user ${data.email}`,
+                            backgroundColor: '#d9534f',
+                            className: 'bg-red-100 border-red-400 text-red-700'
+                        }
+                        setToast(toastProperties)
                     })
             })
             .catch(error => {
@@ -119,7 +138,14 @@ const SignUp = () => {
                             </button>
                         </div>
                     </form>
-                </div>}
+                </div>
+            }
+            <Toast
+                toastProps={toast}
+                position="bottom-right"
+                autoDelete={true}
+                autoDeleteTime={2500}
+            />
         </AuthenticationView>
     );
 }
