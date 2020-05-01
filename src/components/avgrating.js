@@ -4,9 +4,12 @@ import { Link } from "gatsby"
 const AvgRating = (props) => {
     const { arrReviews, rating, slug, showAvgRating, showNumReviews, starSize, className } = props
 
-    const avgRating = arrReviews ? arrReviews.reduce((a, b) => {
-        return b.rating === null ? a : a + b.rating
-    }, 0) / arrReviews.length : rating;
+    let avgRating = arrReviews
+        ? arrReviews.reduce((a, b) => {
+            return b.rating === null ? a : a + b.rating
+        }, 0) / arrReviews.length
+        : rating
+    avgRating = Math.round(avgRating * 100 + Number.EPSILON) / 100
 
     let starRating = [];
     for (let i = 0; i < Math.round(avgRating); i++) {
