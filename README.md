@@ -12,6 +12,8 @@ A collection of e-commerce resources. Primarily related to FBA, but also touchin
 
 [Tailwind-CSS](https://tailwindcss.com)
 
+[Firebase](https://firebase.io)
+
 ## Author
 
 [Glenn Sheppard](https://glennsheppard.dev)
