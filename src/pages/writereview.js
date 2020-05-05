@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
+import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
 import ReactQuill from 'react-quill'
 
@@ -11,6 +12,7 @@ import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
 import StarRating from "../components/starrating"
 import Toast from "../components/toast"
+import CompanyModal from "../components/companyModal"
 import * as Constants from '../constants'
 import { useCompanies } from "../hooks/use-companies"
 import { getUser } from "../utils/auth"
@@ -24,6 +26,7 @@ const components = {
 
 export default function WriteReview() {
     const { uid, displayName } = getUser()
+    const [showModal, setShowModal] = useState(false)
     const [toast, setToast] = useState()
     const { setValue, register, errors, handleSubmit } = useForm()
     // Submit button
@@ -70,14 +73,14 @@ export default function WriteReview() {
             .firestore().collection('reviews')
             .add(dataObject)
             .then(ref => {
-                console.log("sent to firestore:", ref.id)
+                console.log("created new review:", ref.id)
                 // Update the 'companies' collection with this latest review
                 firebase.firestore().collection('companies').doc(companyId)
                     .update({
                         reviews: firebase.firestore.FieldValue.arrayUnion(ref),
                     })
                     .then(() => {
-                        console.log("updated:", companyId)
+                        console.log("updated Company:", companyId)
                         navigate(
                             "/form-submitted",
                             {
@@ -117,18 +120,36 @@ export default function WriteReview() {
         setContent(newValue)
     }
 
+    // Modal
+    const showCompanyModal = () => {
+        //e.preventDefault()
+        setShowModal(!showModal)
+    }
+    const createCompanyModal = (modalData) => {
+        setShowModal(!showModal)
+        const newOption = { value: modalData.id, label: modalData.name }
+        setValue('company', newOption, true)
+        setCompanyValue(newOption)
+        setCompanyOptions([...companyOptions, newOption])
+        setCompany(modalData)
+        setCompanyList([...companyList, modalData])
+    }
+
     // Companies
     const { allCompanies } = useCompanies()
     const defaultCompanies = allCompanies.nodes.map((node) => (
         { value: node.id, label: node.name }
     ))
+    const [companyList, setCompanyList] = useState(allCompanies.nodes)
     const [companyOptions, setCompanyOptions] = useState(defaultCompanies)
+    const [companyValue, setCompanyValue] = useState()
     const [company, setCompany] = useState(null)
 
     const handleChangeCompany = selectedValue => {
         setValue('company', selectedValue, true)
+        setCompanyValue(selectedValue)
         if (selectedValue) {
-            const selectedCompany = allCompanies.nodes.find(x => x.id === selectedValue.value)
+            const selectedCompany = companyList.find(x => x.id === selectedValue.value)
             if (selectedCompany) {
                 selectedCompany.imgLogo = {
                     imgName: selectedCompany.logo,
@@ -139,12 +160,7 @@ export default function WriteReview() {
             }
         } else { setCompany(null) }
     }
-    const handleCreateCompany = newValue => {
-        const newOption = createCompany(newValue)
-        setValue('company', newOption, true)
-        // add the new Company to existing list
-        setCompanyOptions([...companyOptions, newOption])
-    }
+
     // Tags
     const [tags, setTags] = useState([])
     const [inputValue, setInputValue] = useState('')
@@ -205,26 +221,29 @@ export default function WriteReview() {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 {/* Company Heading */}
                                 <div className="flex flex-col lg:flex-row">
-                                    <div className="lg:w-3/5 flex flex-col lg:ml-10">
+                                    <div className="lg:w-3/4 flex flex-col lg:ml-10">
                                         {/* Categories */}
                                         <div className="flex">
                                             {company &&
                                                 <Category categories={company.categories} useLink={false} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-black tracking-tight mr-1" />
                                             }
                                         </div>
-                                        <div className="mt-2">
-                                            <CreatableSelect
+                                        <div className="flex flex-col items-start md:flex-row">
+                                            <Select
                                                 name="company"
                                                 placeholder="Select Company..."
-                                                //value={companyValue}
-                                                options={companyOptions}
                                                 styles={Constants.customStyles}
+                                                options={companyOptions}
+                                                value={companyValue}
                                                 onChange={handleChangeCompany}
-                                                onCreateOption={handleCreateCompany}
                                                 isClearable
+                                                className="flex-1 w-full mt-2"
                                             />
-                                            {errors.company && <span className="text-red-400 text-md">{errors?.company?.message}</span>}
+                                            <button type="button" onClick={showCompanyModal} className="flex-none outline-none focus:outline-none py-3 px-1 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500 underline sm:no-underline sm:mx-4">
+                                                New Company
+                                            </button>
                                         </div>
+                                        {errors.company && <span className="text-red-400 text-md">{errors?.company?.message}</span>}
                                         {/* Logo */}
                                         <div className="flex pl-4 my-6">
                                             {company &&
@@ -247,9 +266,9 @@ export default function WriteReview() {
                                     </div>
                                 </div>
 
-                                <hr id="reviews" className="border-b border-gray-400 opacity-25 mt-4 py-0" />
+                                <hr id="review" className="border-b border-gray-400 opacity-25 mt-4 py-0" />
 
-                                {/* Reviews */}
+                                {/* Review */}
                                 <div className="flex flex-col lg:px-10 py-4">
                                     <div className="flex flex-col">
                                         <StarRating
@@ -304,7 +323,7 @@ export default function WriteReview() {
                                                 value="Submit"
                                                 className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient">
                                                 Submit
-                                                </button>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -325,6 +344,11 @@ export default function WriteReview() {
                             </div>
                         </div>
                     </div>
+                    <CompanyModal
+                        show={showModal}
+                        onClose={showCompanyModal}
+                        onCreate={createCompanyModal}
+                    />
                     <Toast
                         toastProps={toast}
                         position="bottom-right"

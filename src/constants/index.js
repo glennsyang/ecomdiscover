@@ -12,7 +12,7 @@ export const SELECT_RATING_5 = "*Please select at most 5 stars."
 export const MARKETPLACE_OPTIONS = [
     { id: 1, value: "USA", isChecked: false },
     { id: 2, value: "Canada", isChecked: false },
-    { id: 3, value: "Other", isChecked: false }
+    { id: 3, value: "International", isChecked: false }
 ]
 
 export const RATING_MESSAGE = [
