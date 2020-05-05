@@ -151,10 +151,10 @@ export default function WriteReview() {
         if (selectedValue) {
             const selectedCompany = companyList.find(x => x.id === selectedValue.value)
             if (selectedCompany) {
-                selectedCompany.imgLogo = {
-                    imgName: selectedCompany.logo,
-                    imgAlt: `${selectedCompany.name} Logo`,
-                    imgClass: ""
+                if (selectedCompany.logo) {
+                    selectedCompany.imgLogo = {
+                        imgName: selectedCompany.logo, imgAlt: `${selectedCompany.name} Logo`, imgClass: ""
+                    }
                 }
                 setCompany(selectedCompany)
             }
@@ -248,7 +248,9 @@ export default function WriteReview() {
                                         <div className="flex pl-4 my-6">
                                             {company &&
                                                 <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
-                                                    <ImageFixed props={company.imgLogo} />
+                                                    {company && company.imgLogo
+                                                        ? <ImageFixed props={company.imgLogo} />
+                                                        : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-16 w-2/5 object-contain" />}
                                                 </a>}
                                         </div>
                                         {/* Marketplace & Website */}

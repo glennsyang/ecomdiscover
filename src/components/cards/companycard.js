@@ -17,7 +17,10 @@ const CompanyCard = ({ company }) => {
             {/* Logo */}
             <div className="flex justify-center items-center h-24 md:h-32 lg:h-32">
                 <Link to={company.fields.slug}>
-                    <ImageFixed props={props} />
+                    {company.logo
+                        ? <ImageFixed props={props} />
+                        : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-20 w-full object-contain" />
+                    }
                 </Link>
             </div>
             <hr className="border-b border-gray-300 opacity-25 py-0" />

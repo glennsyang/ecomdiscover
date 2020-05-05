@@ -8,8 +8,10 @@ export const useCompanies = () => {
                 id
                 name
                 logo
+                logoURL
                 website
                 blurb
+                created
                 marketplaces {
                     id
                     flag

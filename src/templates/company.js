@@ -11,16 +11,16 @@ import ReviewCard from "../components/cards/reviewcard"
 export default function Company({ data }) {
     const company = data.companies
     const reviews = data.companies.reviews
+    const imgLogo = {
+        imgName: company.logo,
+        imgAlt: `${company.name} Logo`,
+        imgClass: ""
+    }
 
     const imgAds = {
         imgName: "ads_digital_ocean.png",
         imgAlt: "Digital Ocean Ad",
         imgClass: "w-64 h-full"
-    }
-    const imgLogo = {
-        imgName: company.logo,
-        imgAlt: `${company.name} Logo`,
-        imgClass: ""
     }
 
     return (
@@ -53,14 +53,19 @@ export default function Company({ data }) {
                                     {/* Logo */}
                                     <div className="flex pl-4 my-6">
                                         <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
-                                            <ImageFixed props={imgLogo} />
+                                            {company.logo
+                                                ? <ImageFixed props={imgLogo} />
+                                                : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-16 w-2/5 object-contain" />
+                                            }
                                         </a>
                                     </div>
                                     {/* Marketplace */}
                                     <div className="flex">
-                                        <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">{company.marketplaces.map(marketplace => {
-                                            return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
-                                        })}</h6>
+                                        <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">
+                                            {company.marketplaces.map(marketplace => {
+                                                return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
+                                            })}
+                                        </h6>
                                         <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-2">{company.name}</a>
                                     </div>
                                 </div>
@@ -105,8 +110,10 @@ export const query = graphql`
             id
             name
             logo
+            logoURL
             website
             blurb
+            created
             marketplaces {
                 id
                 flag

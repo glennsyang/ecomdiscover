@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -9,6 +9,15 @@ import { isLoggedIn } from "../utils/auth"
 
 function IndexPage({ data }) {
   const { allCompanies } = useCompanies()
+  const [companies, setCompanies] = useState(allCompanies.nodes)
+
+  useEffect(() => {
+    setCompanies(companies.sort((a, b) => {
+      var dateA = new Date(a.created), dateB = new Date(b.created)
+      return dateA - dateB
+    }))
+    //console.log("sorted:", companies)
+  }, [companies])
 
   return (
     <Layout>
@@ -63,7 +72,7 @@ function IndexPage({ data }) {
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
             </div>
             <div className="w-full justify-center flex flex-wrap">
-              {allCompanies.nodes.map(node => (
+              {companies.slice(0, 3).map(node => (
                 <CompanyCard key={node.id} company={node} />
               ))}
             </div>

@@ -2,18 +2,14 @@ export const DJISYMBOL = "&symbol=DJI"
 
 export const ONE_DAY_MS = 24 * 3600 * 1000
 
+export const IMAGE_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/gif']
+
 export const FIELD_REQUIRED = "*This field is required."
 export const VALID_EMAIL = "*Please enter a valid e-mail address."
 export const VALID_PASSWORD = "*Password must be at least 12 characters long."
 export const SELECT_MARKETPLACE = "*Please select at least one Marketplace."
 export const SELECT_RATING_1 = "*Please select at least one star."
 export const SELECT_RATING_5 = "*Please select at most 5 stars."
-
-export const MARKETPLACE_OPTIONS = [
-    { id: 1, value: "USA", isChecked: false },
-    { id: 2, value: "Canada", isChecked: false },
-    { id: 3, value: "International", isChecked: false }
-]
 
 export const RATING_MESSAGE = [
     { stars: 0, starMessage: "" },
@@ -24,6 +20,9 @@ export const RATING_MESSAGE = [
     { stars: 5, starMessage: "Excellent" },
 ]
 
+/*
+ * React-Select custom styles
+ */
 export const customStyles = {
     control: styles => ({
         ...styles,

@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
 import { useSiteMetadata } from "../hooks/use-site-metadata"
-import logo_image from "../images/logo_1.svg"
+import logo_image from "../images/logo_ecomdiscover.svg"
 
 const Footer = () => {
     const { title } = useSiteMetadata()

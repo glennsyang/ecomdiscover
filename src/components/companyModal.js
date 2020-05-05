@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import Select from "react-select"
 import firebase from "gatsby-plugin-firebase"
@@ -13,8 +13,10 @@ export default function CompanyModal(props) {
     const { setValue, register, errors, handleSubmit } = useForm()
     const [isLoading, setIsLoading] = useState(false)
     const [toast, setToast] = useState()
+    const [selectedFile, setSelectedFile] = useState()
     const { allMarketplaces } = useMarketplaces()
     const { allCategories } = useCategories()
+    const fileInput = useRef()
 
     const defaultCategories = allCategories.nodes.map((node) => (
         { value: node.id, label: node.name }
@@ -25,12 +27,89 @@ export default function CompanyModal(props) {
     const onClose = () => {
         props.onClose && props.onClose()
     }
-
+    // File Upload
+    const handleSelectFile = (e) => {
+        e.target.value = null
+    }
+    const handleUploadPhoto = (e) => {
+        e.preventDefault()
+        const fileData = fileInput.current.files[0]
+        const fileName = fileInput.current.files[0].name
+        const fileType = fileInput.current.files[0].type
+        if (Constants.IMAGE_FILE_TYPES.lastIndexOf(fileType) === -1) {
+            const id = Math.floor((Math.random() * 101) + 1)
+            const toastProperties = {
+                id,
+                title: 'Error',
+                description: `File ${fileName} is not a valid image.`,
+                backgroundColor: '#d9534f',
+                className: 'bg-red-100 border-red-400 text-red-700'
+            }
+            setToast(toastProperties)
+            return
+        }
+        if (fileData === '' || fileName === '') {
+            console.log(`No file selected: ${typeof (fileData)}`)
+            return
+        }
+        setSelectedFile(fileData)
+    }
     // Submit button
     const onSubmit = modalData => {
         console.log("modalData:", modalData)
         setIsLoading(true)
-
+        // Upload the logo to the Storage bucket, if exists
+        if (selectedFile) {
+            const fileData = selectedFile
+            const fileName = selectedFile.name
+            let reader = new FileReader()
+            reader.readAsDataURL(fileData)
+            reader.onload = () => {
+                const fileContent = reader.result
+                const imageRef = firebase.storage().ref().child(`company-images/${fileName}`)
+                const uploadTask = imageRef.putString(fileContent, 'data_url')
+                // Upload Task
+                uploadTask.on('state_changed', (snapshot) => {
+                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    console.log(`Upload is '${progress}'% done`)
+                    switch (snapshot.state) {
+                        case firebase.storage.TaskState.PAUSED:
+                            console.log('Upload is paused')
+                            break
+                        case firebase.storage.TaskState.RUNNING:
+                            console.log('Upload is running')
+                            break
+                        default:
+                            break
+                    }
+                }, (err) => {
+                    // Handle Unsuccessful uploads
+                    setIsLoading(false)
+                    //console.log('File Upload error:', err.code)
+                    const id = Math.floor((Math.random() * 101) + 1)
+                    const toastProperties = {
+                        id,
+                        title: 'Error',
+                        description: `There was an error in uploading the file. Reason: ${err.code}`,
+                        backgroundColor: '#d9534f',
+                        className: 'bg-red-100 border-red-400 text-red-700'
+                    }
+                    setToast(toastProperties)
+                }, () => {
+                    // Handle successful uploads on complete
+                    // Get URL of new photo
+                    uploadTask.snapshot.ref.getDownloadURL().then(companyLogoURL => {
+                        createCompanyInFirestore(modalData, companyLogoURL)
+                    })
+                })
+            }
+        } else {
+            console.log("No Logo uploaded")
+            createCompanyInFirestore(modalData, "")
+        }
+    }
+    // Create the Company in the Firestore db
+    const createCompanyInFirestore = (modalData, companyLogoURL) => {
         firebase.firestore().collection('companies')
             .add({
                 created: firebase.firestore.FieldValue.serverTimestamp(),
@@ -38,8 +117,11 @@ export default function CompanyModal(props) {
                 categories: modalData.categories.map((category) => (
                     firebase.firestore().doc(`categories/${category.value}`)
                 )),
-                logo: '',
-                marketplaces: modalData.marketplaces,
+                logo: "",
+                logoURL: companyLogoURL,
+                marketplaces: modalData.marketplaces.map((marketplace) => (
+                    firebase.firestore().doc(`marketplaces/${marketplace}`)
+                )),
                 name: modalData.name,
                 reviews: [],
                 website: modalData.website,
@@ -59,12 +141,8 @@ export default function CompanyModal(props) {
                 modalData.categories = modalData.categories.map(category => (
                     { id: category.value, name: category.label }
                 ))
-                modalData.logo = "logo_2.png"
-                modalData.imgLogo = {
-                    imgName: "logo_2.png",
-                    imgAlt: `${modalData.name} Logo`,
-                    imgClass: ""
-                }
+                modalData.logo = ""
+                modalData.logoURL = companyLogoURL
                 props.onCreate(modalData)
             })
             .catch(error => {
@@ -85,6 +163,7 @@ export default function CompanyModal(props) {
     useEffect(() => {
         register({ name: "categories" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
     }, [register])
+
 
     if (!props.show) { return null }
     return (
@@ -169,7 +248,7 @@ export default function CompanyModal(props) {
                                         <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                             <FaCamera size={18} className="mr-2" />
                                             <span>Upload Logo</span>
-                                            <input type="file" id="fileInput" className="hidden" />
+                                            <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
                                         </label>
                                     </div>
                                 </div>
@@ -180,7 +259,7 @@ export default function CompanyModal(props) {
                                         onClick={onClose}
                                         className="py-2 px-1 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500 mx-4">
                                         Close
-                            </button>
+                                    </button>
                                     <button
                                         type="submit"
                                         value="Submit"
@@ -193,12 +272,7 @@ export default function CompanyModal(props) {
                     </div>
                 }
             </div>
-            <Toast
-                toastProps={toast}
-                position="bottom-right"
-                autoDelete={true}
-                autoDeleteTime={2500}
-            />
+            <Toast toastProps={toast} />
             <div className="opacity-50 fixed inset-0 z-40 bg-black"></div>
         </>
     )
