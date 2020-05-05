@@ -3,6 +3,7 @@ import { navigate } from "gatsby"
 import { FaCheck, FaTimes, FaPen, FaThumbsUp, FaCamera } from 'react-icons/fa'
 import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
+import * as Constants from '../../constants'
 import AuthenticationView from "./authenticationview"
 import ImageFluid from "../image-fluid"
 import Loader from "../loader"
@@ -66,6 +67,17 @@ const Profile = () => {
         e.preventDefault()
         const fileData = fileInput.current.files[0]
         const fileName = fileInput.current.files[0].name
+        const fileType = fileInput.current.files[0].type
+        if (Constants.IMAGE_FILE_TYPES.lastIndexOf(fileType) === -1) {
+            const toastProperties = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Error',
+                description: `File ${fileName} is not a valid image.`,
+                color: 'red',
+            }
+            setToast(toastProperties)
+            return
+        }
         if (fileData === '' || fileName === '') {
             console.log(`No file selected: ${typeof (fileData)}`)
             return
@@ -95,24 +107,20 @@ const Profile = () => {
                 // Handle unsuccessful uploads
                 setIsLoading(false)
                 //console.log('File Upload error:', err.code)
-                const id = Math.floor((Math.random() * 101) + 1)
                 const toastProperties = {
-                    id,
+                    id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
                     description: `There was an error in uploading the file. Reason: ${err.code}`,
-                    backgroundColor: '#d9534f',
-                    className: 'bg-red-100 border-red-400 text-red-700'
+                    color: 'red',
                 }
                 setToast(toastProperties)
             }, () => {
                 // Handle successful uploads on complete
-                const id = Math.floor((Math.random() * 101) + 1)
                 const toastProperties = {
-                    id,
-                    title: 'Info',
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Success',
                     description: `Upload Complete!`,
-                    backgroundColor: '#d9534f',
-                    className: 'bg-green-100 border-green-400 text-green-700'
+                    color: 'green',
                 }
                 setToast(toastProperties)
                 // Get URL of new photo
@@ -132,13 +140,11 @@ const Profile = () => {
                                 console.log("Old File deleted successfully:", oldPhoto)
                             }).catch((error) => {
                                 console.log("Error in deleting old photo:", oldPhoto, error.code)
-                                const id = Math.floor((Math.random() * 101) + 1)
                                 const toastProperties = {
-                                    id,
+                                    id: Math.floor((Math.random() * 101) + 1),
                                     title: 'Error',
                                     description: `There was an error in deleting your old profile photo. Reason: ${error.code}`,
-                                    backgroundColor: '#d9534f',
-                                    className: 'bg-red-100 border-red-400 text-red-700'
+                                    color: 'red',
                                 }
                                 setToast(toastProperties)
                             })
@@ -146,13 +152,11 @@ const Profile = () => {
                         .catch(error => {
                             setIsLoading(false)
                             console.log("Error:", error)
-                            const id = Math.floor((Math.random() * 101) + 1)
                             const toastProperties = {
-                                id,
+                                id: Math.floor((Math.random() * 101) + 1),
                                 title: 'Error',
                                 description: `There was an error in updating your profile photo ${firebaseUrl}. Reason: ${error.code}`,
-                                backgroundColor: '#d9534f',
-                                className: 'bg-red-100 border-red-400 text-red-700'
+                                color: 'red',
                             }
                             setToast(toastProperties)
                         })
@@ -192,13 +196,11 @@ const Profile = () => {
                             })
                             .catch(error => {
                                 console.log("Error:", error)
-                                const id = Math.floor((Math.random() * 101) + 1)
                                 const toastProperties = {
-                                    id,
+                                    id: Math.floor((Math.random() * 101) + 1),
                                     title: 'Error',
                                     description: `There was an error in updating your profile. Reason: ${error.code}`,
-                                    backgroundColor: '#d9534f',
-                                    className: 'bg-red-100 border-red-400 text-red-700'
+                                    color: 'red',
                                 }
                                 setToast(toastProperties)
                             })
@@ -207,25 +209,21 @@ const Profile = () => {
             })
             .catch(error => {
                 console.log("Error:", error)
-                const id = Math.floor((Math.random() * 101) + 1)
                 const toastProperties = {
-                    id,
+                    id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
                     description: `There was an error in updating your profile. Reason: ${error.code}`,
-                    backgroundColor: '#d9534f',
-                    className: 'bg-red-100 border-red-400 text-red-700'
+                    color: 'red',
                 }
                 setToast(toastProperties)
             })
     }
     const handleChangeSignIn = () => {
-        const id = Math.floor((Math.random() * 101) + 1)
         const toastProperties = {
-            id,
+            id: Math.floor((Math.random() * 101) + 1),
             title: 'Warning',
-            description: `Not available`,
-            backgroundColor: '#d9534f',
-            className: 'bg-yellow-100 border-yellow-400 text-yellow-700'
+            description: `Not available yet`,
+            color: 'yellow',
         }
         setToast(toastProperties)
     }
@@ -236,13 +234,11 @@ const Profile = () => {
             navigate('/app/login')
         }).catch(error => {
             console.log("Error:", error)
-            const id = Math.floor((Math.random() * 101) + 1)
             const toastProperties = {
-                id,
+                id: Math.floor((Math.random() * 101) + 1),
                 title: 'Error',
                 description: `There was an error in deactivating your account. Reason: ${error}`,
-                backgroundColor: '#d9534f',
-                className: 'bg-red-100 border-red-400 text-red-700'
+                color: 'red',
             }
             setToast(toastProperties)
         })
@@ -362,12 +358,7 @@ const Profile = () => {
                         </div>
                     </div>
                 }
-                <Toast
-                    toastProps={toast}
-                    position="bottom-right"
-                    autoDelete={true}
-                    autoDeleteTime={2500}
-                />
+                <Toast toastProps={toast} />
             </div>
         </AuthenticationView>
     )

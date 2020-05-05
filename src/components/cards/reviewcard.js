@@ -34,13 +34,11 @@ const ReviewCard = ({ review }) => {
                     photo: doc.data().photoURL,
                 })
             }).catch(error => {
-                const id = Math.floor((Math.random() * 101) + 1);
                 const toastProperties = {
-                    id,
+                    id: Math.floor((Math.random() * 101) + 1),
                     title: 'Warning',
                     description: 'You are not signed in. Please sign-in for more details',
-                    backgroundColor: '#d9534f',
-                    className: 'bg-yellow-100 border-yellow-400 text-yellow-700'
+                    color: 'yellow',
                 }
                 setToast(toastProperties)
             })
@@ -53,13 +51,11 @@ const ReviewCard = ({ review }) => {
     // User functions
     const handleRateHelpful = () => {
         if (!isLoggedIn()) {
-            const id = Math.floor((Math.random() * 101) + 1);
             const toastProperties = {
-                id,
+                id: Math.floor((Math.random() * 101) + 1),
                 title: 'Error',
                 description: 'Please sign-in to rate helpful',
-                backgroundColor: '#d9534f',
-                className: 'bg-red-100 border-red-400 text-red-700'
+                color: 'red',
             }
             setToast(toastProperties)
 
@@ -78,38 +74,32 @@ const ReviewCard = ({ review }) => {
                             helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('reviews').doc(review.id)),
                         })
                         .then(() => {
-                            const id = Math.floor((Math.random() * 101) + 1);
                             const toastProperties = {
-                                id,
+                                id: Math.floor((Math.random() * 101) + 1),
                                 title: 'Info',
                                 description: `Thank you ${displayName} for your rating!`,
-                                backgroundColor: '#d9534f',
-                                className: 'bg-green-100 border-green-400 text-green-700'
+                                color: 'green',
                             }
                             setToast(toastProperties)
                         })
                         .catch(error => {
                             console.log("Error:", error)
-                            const id = Math.floor((Math.random() * 101) + 1);
                             const toastProperties = {
-                                id,
+                                id: Math.floor((Math.random() * 101) + 1),
                                 title: 'Error',
                                 description: `Couldn't update user record. Reason: ${error}`,
-                                backgroundColor: '#d9534f',
-                                className: 'bg-red-100 border-red-400 text-red-700'
+                                color: 'red',
                             }
                             setToast(toastProperties)
                         })
                 })
                 .catch(error => {
                     console.log("Error:", error)
-                    const id = Math.floor((Math.random() * 101) + 1);
                     const toastProperties = {
-                        id,
+                        id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
                         description: `Couldn't update review record for ${review.title}. Reason: ${error}`,
-                        backgroundColor: '#d9534f',
-                        className: 'bg-red-100 border-red-400 text-red-700'
+                        color: 'red',
                     }
                     setToast(toastProperties)
                 })
@@ -173,12 +163,7 @@ const ReviewCard = ({ review }) => {
                     </div>
                 </div>
             }
-            <Toast
-                toastProps={toast}
-                position="bottom-right"
-                autoDelete={true}
-                autoDeleteTime={2500}
-            />
+            <Toast toastProps={toast} />
         </div>
     )
 }
