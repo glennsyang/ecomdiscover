@@ -28,35 +28,29 @@ const SignUp = () => {
                     .then(() => {
                         // Update the user profile with 'displayName'
                         result.user
-                            .updateProfile({
-                                displayName: data.name,
-                            })
+                            .updateProfile({ displayName: data.name, })
                             .then(() => {
                                 setUser(result.user)
                                 navigate('/app/profile')
                             })
                             .catch(error => {
                                 console.log("Error:", error)
-                                const id = Math.floor((Math.random() * 101) + 1);
                                 const toastProperties = {
-                                    id,
+                                    id: Math.floor((Math.random() * 101) + 1),
                                     title: 'Error',
                                     description: 'There was an error in updating your Name in your Profile',
-                                    backgroundColor: '#d9534f',
-                                    className: 'bg-red-100 border-red-400 text-red-700'
+                                    color: 'red',
                                 }
                                 setToast(toastProperties)
                             })
                     })
                     .catch(error => {
                         console.log("Error:", error)
-                        const id = Math.floor((Math.random() * 101) + 1);
                         const toastProperties = {
-                            id,
+                            id: Math.floor((Math.random() * 101) + 1),
                             title: 'Error',
                             description: `Could not create Profile for user ${data.email}`,
-                            backgroundColor: '#d9534f',
-                            className: 'bg-red-100 border-red-400 text-red-700'
+                            color: 'red',
                         }
                         setToast(toastProperties)
                     })
