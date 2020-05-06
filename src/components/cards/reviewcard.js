@@ -37,7 +37,7 @@ const ReviewCard = ({ review }) => {
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Warning',
-                    description: 'You are not signed in. Please sign-in for more details',
+                    description: 'You are not signed in. Please sign-in for more details.',
                     color: 'yellow',
                 }
                 setToast(toastProperties)

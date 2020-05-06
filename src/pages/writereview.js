@@ -40,13 +40,11 @@ export default function WriteReview() {
                     updateFirestore(formData, ref.id, formData.company.label)
                 })
                 .catch(error => {
-                    const id = Math.floor((Math.random() * 101) + 1);
                     const toastProperties = {
-                        id,
+                        id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
                         description: `There was an error in creating new Company: ${formData.company.label}. Reason: ${error}`,
-                        backgroundColor: '#d9534f',
-                        className: 'bg-red-100 border-red-400 text-red-700'
+                        color: 'red',
                     }
                     setToast(toastProperties)
                 })
@@ -80,7 +78,7 @@ export default function WriteReview() {
                         reviews: firebase.firestore.FieldValue.arrayUnion(ref),
                     })
                     .then(() => {
-                        console.log("updated Company:", companyId)
+                        console.log("Updated Company:", companyId)
                         navigate(
                             "/form-submitted",
                             {
@@ -90,25 +88,21 @@ export default function WriteReview() {
                         )
                     })
                     .catch(error => {
-                        const id = Math.floor((Math.random() * 101) + 1);
                         const toastProperties = {
-                            id,
+                            id: Math.floor((Math.random() * 101) + 1),
                             title: 'Error',
                             description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}`,
-                            backgroundColor: '#d9534f',
-                            className: 'bg-red-100 border-red-400 text-red-700'
+                            color: 'red',
                         }
                         setToast(toastProperties)
                     })
             })
             .catch(error => {
-                const id = Math.floor((Math.random() * 101) + 1);
                 const toastProperties = {
-                    id,
+                    id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
                     description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}`,
-                    backgroundColor: '#d9534f',
-                    className: 'bg-red-100 border-red-400 text-red-700'
+                    color: 'red',
                 }
                 setToast(toastProperties)
             })

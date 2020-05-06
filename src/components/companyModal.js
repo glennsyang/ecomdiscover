@@ -31,19 +31,17 @@ export default function CompanyModal(props) {
     const handleSelectFile = (e) => {
         e.target.value = null
     }
-    const handleUploadPhoto = (e) => {
+    const handleUploadLogo = (e) => {
         e.preventDefault()
         const fileData = fileInput.current.files[0]
         const fileName = fileInput.current.files[0].name
         const fileType = fileInput.current.files[0].type
         if (Constants.IMAGE_FILE_TYPES.lastIndexOf(fileType) === -1) {
-            const id = Math.floor((Math.random() * 101) + 1)
             const toastProperties = {
-                id,
+                id: Math.floor((Math.random() * 101) + 1),
                 title: 'Error',
                 description: `File ${fileName} is not a valid image.`,
-                backgroundColor: '#d9534f',
-                className: 'bg-red-100 border-red-400 text-red-700'
+                color: 'red',
             }
             setToast(toastProperties)
             return
@@ -86,13 +84,11 @@ export default function CompanyModal(props) {
                     // Handle Unsuccessful uploads
                     setIsLoading(false)
                     //console.log('File Upload error:', err.code)
-                    const id = Math.floor((Math.random() * 101) + 1)
                     const toastProperties = {
-                        id,
+                        id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
                         description: `There was an error in uploading the file. Reason: ${err.code}`,
-                        backgroundColor: '#d9534f',
-                        className: 'bg-red-100 border-red-400 text-red-700'
+                        color: 'red',
                     }
                     setToast(toastProperties)
                 }, () => {
@@ -148,13 +144,11 @@ export default function CompanyModal(props) {
             .catch(error => {
                 setIsLoading(false)
                 console.log("Error:", error)
-                const id = Math.floor((Math.random() * 101) + 1);
                 const toastProperties = {
-                    id,
+                    id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
                     description: `There was an error in creating new Company: ${modalData.name}. Reason: ${error}`,
-                    backgroundColor: '#d9534f',
-                    className: 'bg-red-100 border-red-400 text-red-700'
+                    color: 'red',
                 }
                 setToast(toastProperties)
             })
@@ -248,7 +242,7 @@ export default function CompanyModal(props) {
                                         <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                             <FaCamera size={18} className="mr-2" />
                                             <span>Upload Logo</span>
-                                            <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
+                                            <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadLogo} onClick={handleSelectFile} />
                                         </label>
                                     </div>
                                 </div>
