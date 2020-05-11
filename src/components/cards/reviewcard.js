@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "gatsby"
 import firebase from "gatsby-plugin-firebase"
+import rehypeReact from "rehype-react"
 import { FaThumbsUp } from 'react-icons/fa'
 import moment from "moment"
 import ImageFluid from "../image-fluid"
@@ -9,6 +10,13 @@ import Toast from "../toast"
 import AvgRating from "../avgrating"
 import Loader from "../loader"
 import { getUser, isLoggedIn } from "../../utils/auth"
+import { Paragraph, ExternalLink, List } from "../rehype/elements"
+
+const renderAst = new rehypeReact({
+    createElement: React.createElement,
+    components: { p: Paragraph, a: ExternalLink, ul: List }
+}).Compiler
+
 
 const ReviewCard = ({ review }) => {
     const memberSince = review.user.created
@@ -120,15 +128,15 @@ const ReviewCard = ({ review }) => {
                         </div>
                     </div>
                     <div className="lg:w-full flex flex-col">
-                        <h3 className="flex text-base font-bold text-black">
+                        <h1 className="flex text-base font-bold text-black">
                             {userInfo ? userInfo.name : review.user.username}
-                        </h3>
-                        <div className="flex pt-2 mb-4">
+                        </h1>
+                        <h4 className="flex pt-2 mb-4">
                             <span className="text-gray-400 text-sm lg:text-xs">{createdAt}</span>
                             <span className="text-gray-400 text-sm lg:text-xs pl-2">|</span>
                             <span className="text-gray-400 text-sm lg:text-xs pl-2">Member Since:</span>
                             <span className="text-gray-400 text-sm lg:text-xs pl-1">{memberSince}</span>
-                        </div>
+                        </h4>
                         <div className="flex flex-col lg:flex-row flex-auto mb-4">
                             <div className="flex mb-4 lg:mb-0">
                                 <AvgRating arrReviews={null} rating={review.rating} slug="" showAvgRating={false} showNumReviews={false} starSize="5" className="" />
@@ -139,12 +147,13 @@ const ReviewCard = ({ review }) => {
                             </div>
                         </div>
                         {/* Title */}
-                        <p className="text-black text-base font-bold mb-4">
+                        <h2 className="text-black text-base font-bold mb-4">
                             {review.title}
-                        </p>
-                        <div className="text-base font-normal text-gray-800"
-                            dangerouslySetInnerHTML={{ __html: review.content }}
-                        />
+                        </h2>
+                        {/* Content */}
+                        <div className="text-base font-normal text-gray-800">
+                            {renderAst(review.childHtmlRehype.htmlAst)}
+                        </div>
 
                         <div className="bg-white">
                             <div className="float-right mt-12 lg:mr-6">

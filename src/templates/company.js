@@ -192,6 +192,9 @@ export const query = graphql`
                 id
                 title
                 content
+                childHtmlRehype {
+                    htmlAst
+                }
                 created
                 helpful {
                     id
