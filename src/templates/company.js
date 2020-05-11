@@ -12,9 +12,7 @@ import ReviewCard from "../components/cards/reviewcard"
 
 const SortByButton = (props) => {
     const { buttonName, sortType, selected } = props
-    const onClick = () => {
-        props.onSort(props)
-    }
+    const onClick = () => { props.onSort(props) }
     return (
         <button
             className="px-2 cursor-pointer focus:bg-gray-400 focus:text-white focus:outline-none outline-none inline-flex items-baseline"
@@ -25,7 +23,7 @@ const SortByButton = (props) => {
                     : <FaChevronUp size={12} className="mr-1" />
                 : ''
             }
-            <span className="">{buttonName}</span>
+            <span>{buttonName}</span>
         </button>
     )
 }
@@ -45,6 +43,7 @@ export default function Company({ data }) {
     ])
     const [currentSort, setCurrentSort] = useState('helpfuldown')
     const [sortHeadingText, setSortHeadingText] = useState("Most Helpful Reviews")
+
     // method called every time the sort button is clicked
     // it will change the currentSort value to the next one
     const onSortByChange = (props) => {
@@ -58,7 +57,7 @@ export default function Company({ data }) {
         })
         setSortButtons(sortButtons)
         setCurrentSort(`${buttonName.toLowerCase()}${nextSort}`)
-        setSortHeadingText(Constants.SORT_BY_HEADING_MESSAGE[`${buttonName.toLowerCase()}${sortType}`])
+        setSortHeadingText(Constants.SORT_TYPES[`${buttonName.toLowerCase()}${sortType}`].message)
     }
 
     const imgAds = {
@@ -143,10 +142,6 @@ export default function Company({ data }) {
                                 {[...reviews].sort(Constants.SORT_TYPES[currentSort].fn).map(review => (
                                     <ReviewCard key={review.id} review={review} />
                                 ))}
-
-                                {/*{reviews.map(review => (
-                                    <ReviewCard key={review.id} review={review} />
-                                ))}*/}
                             </div>
                         </div>
 
