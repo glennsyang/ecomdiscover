@@ -21,11 +21,24 @@ export const RATING_MESSAGE = [
 ]
 
 export const SORT_TYPES = {
-    helpfulup: { fn: (a, b) => a.helpful.length - b.helpful.length },
-    helpfuldown: { fn: (a, b) => b.helpful.length - a.helpful.length },
-    ratingup: { fn: (a, b) => a.rating - b.rating },
-    ratingdown: { fn: (a, b) => b.rating - a.rating },
+    helpfulup: {
+        message: 'Most Helpful Reviews',
+        fn: (a, b) => a.helpful.length - b.helpful.length
+    },
+    helpfuldown: {
+        message: 'Least Helpful Reviews',
+        fn: (a, b) => b.helpful.length - a.helpful.length
+    },
+    ratingup: {
+        message: 'Highest Rated Reviews',
+        fn: (a, b) => a.rating - b.rating
+    },
+    ratingdown: {
+        message: 'Lowest Rated Reviews',
+        fn: (a, b) => b.rating - a.rating
+    },
     newestup: {
+        message: 'Newest Reviews',
         fn: (a, b) => {
             a = new Date(a.created)
             b = new Date(b.created)
@@ -33,22 +46,13 @@ export const SORT_TYPES = {
         }
     },
     newestdown: {
+        message: 'Oldest Reviews',
         fn: (a, b) => {
             a = new Date(a.created)
             b = new Date(b.created)
             return b - a
         }
     },
-}
-
-export const SORT_BY_HEADING_MESSAGE =
-{
-    'helpfuldown': "Least Helpful Reviews",
-    'helpfulup': "Most Helpful Reviews",
-    'ratingdown': "Lowest Rated Reviews",
-    'ratingup': "Highest Rated Reviews",
-    'newestdown': "Oldest Reviews",
-    'newestup': "Newest Reviews",
 }
 
 /*
