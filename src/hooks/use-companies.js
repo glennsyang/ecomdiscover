@@ -32,6 +32,13 @@ export const useCompanies = () => {
                     created
                     rating
                     tags
+                    helpful {
+                        username
+                        email
+                        photoURL
+                        created
+                        updated
+                    }
                     user {
                         username
                         email
