@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import firebase from "gatsby-plugin-firebase"
 import rehypeReact from "rehype-react"
 import { FaThumbsUp } from 'react-icons/fa'
+import Popper from "popper.js"
 import moment from "moment"
 import ImageFluid from "../image-fluid"
 import Tag from "../tag"
@@ -17,7 +18,6 @@ const renderAst = new rehypeReact({
     components: { p: Paragraph, a: ExternalLink, ul: List }
 }).Compiler
 
-
 const ReviewCard = ({ review }) => {
     const memberSince = review.user.created
     const createdAt = moment.utc(review.created, "YYYY-MM-DDTHH:mm:ss.SSSZ").local().format("DD MMMM, YYYY, h:mm a")
@@ -31,6 +31,10 @@ const ReviewCard = ({ review }) => {
     const [userInfo, setUserInfo] = useState(null)
     const [helpfulCount, setHelpfulCount] = useState(0)
     const [toast, setToast] = useState()
+    const [tooltipShow, setTooltipShow] = useState(false)
+    const btnRef = React.createRef()
+    const tooltipRef = React.createRef()
+
     useEffect(() => {
         // Get Helpful count for each review
         const unsubscribe = firebase.firestore().collection('reviews').doc(review.id).onSnapshot(snapshot => {
@@ -56,6 +60,23 @@ const ReviewCard = ({ review }) => {
         return () => unsubscribe()
     }, [review.id, review.user.id])
 
+    // Tooltip functions
+    const openLeftTooltip = () => {
+        if (!isLoggedIn()) {
+            new Popper(btnRef.current, tooltipRef.current, {
+                placement: "top"
+            })
+            setTooltipShow(true)
+        }
+    }
+    const closeLeftTooltip = () => {
+        if (!isLoggedIn()) {
+            const interval = setInterval(() => {
+                setTooltipShow(false)
+                clearInterval(interval)
+            }, 400)
+        }
+    }
     // User functions
     const handleRateHelpful = () => {
         if (!isLoggedIn()) {
@@ -157,16 +178,30 @@ const ReviewCard = ({ review }) => {
 
                         <div className="bg-white">
                             <div className="float-right mt-12 lg:mr-6">
-                                <button name="submit" onClick={handleRateHelpful} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
+                                <button
+                                    name="helpful"
+                                    type="button"
+                                    style={{ transition: "all .15s ease" }}
+                                    onClick={handleRateHelpful}
+                                    onMouseEnter={openLeftTooltip}
+                                    onMouseLeave={closeLeftTooltip}
+                                    ref={btnRef}
+                                    className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
+                                >
                                     <FaThumbsUp size={18} className="mr-2" />
-                                    <span className="tooltip">
-                                        Helpful <span className="ml-1">{helpfulCount}</span> {!isLoggedIn()
-                                            ? <span className='tooltip-text bg-black text-white text-xs p-3 -mt-8 -ml-16 rounded'>
-                                                Please <Link to={`/app/login`} className="text-blue-500">sign-in</Link> to rate helpful.
-                                        </span>
-                                            : ''}
-                                    </span>
+                                    Helpful<span className="ml-2">{helpfulCount}</span>
                                 </button>
+                                <div className={
+                                    (tooltipShow ? "" : "hidden ") +
+                                    "bg-black text-white text-xs border-0 block mb-1 z-50 max-w-xs no-underline break-words rounded"}
+                                    ref={tooltipRef}
+                                >
+                                    <div>
+                                        <div className="text-white p-1">
+                                            Please <Link to={`/app/login`} className="text-blue-500">sign-in</Link> to rate helpful.
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
