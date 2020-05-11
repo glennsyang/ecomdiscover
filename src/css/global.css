@@ -22,10 +22,6 @@
     position: relative;
 }
 
-.ql-editor {
-  min-height: 18em;
-}
-
 /* Accordiion */
 label:after {
     content: '+';
@@ -44,19 +40,6 @@ input:checked + label:after {
 input[name='panel']:checked ~ .accordion__content {
   /* Get this as close to what height you expect */
     max-height: 50em;
-}
-
-/* Tooltip */
-.tooltip .tooltip-text {
-  visibility: hidden;
-  text-align: center;
-  padding: 2px 6px;
-  position: absolute;
-  z-index: 100;
-  transition-duration: 300ms;
-}
-.tooltip:hover .tooltip-text {
-  visibility: visible;
 }
 
 /* Icons */
@@ -108,5 +91,3 @@ input[name='panel']:checked ~ .accordion__content {
     transform: translateX(0);
 	}
 }
-
-/* Company Modal */

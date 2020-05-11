@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
-import ReactQuill from 'react-quill'
+//import ReactQuill from 'react-quill'
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
 import Category from "../components/category"
@@ -17,12 +18,8 @@ import * as Constants from '../constants'
 import { useCompanies } from "../hooks/use-companies"
 import { getUser } from "../utils/auth"
 
-const createCompany = (label) => (
-    { value: label, label: label }
-)
-const components = {
-    DropdownIndicator: null,
-}
+const components = { DropdownIndicator: null, }
+const createCompany = (label) => ({ value: label, label: label })
 
 export default function WriteReview() {
     const { uid, displayName } = getUser()
@@ -337,7 +334,7 @@ export default function WriteReview() {
                             </div>
                             <div className="flex mx-auto ml-10 lg:mt-32 fixed">
                                 <div className="flex">
-                                    reviews
+
                                 </div>
                             </div>
                         </div>
