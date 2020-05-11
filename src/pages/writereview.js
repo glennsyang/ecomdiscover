@@ -132,14 +132,16 @@ export default function WriteReview() {
     // Companies
     const { allCompanies } = useCompanies()
     const defaultCompanies = allCompanies.nodes.map((node) => (
-        { value: node.id, label: node.name }
+        { value: node.id, label: node.name, created: node.created }
     ))
+
     const [companyList, setCompanyList] = useState(allCompanies.nodes)
     const [companyOptions, setCompanyOptions] = useState(defaultCompanies)
     const [companyValue, setCompanyValue] = useState()
     const [company, setCompany] = useState(null)
 
     const handleChangeCompany = selectedValue => {
+        console.log("selectedValue", selectedValue)
         setValue('company', selectedValue, true)
         setCompanyValue(selectedValue)
         if (selectedValue) {

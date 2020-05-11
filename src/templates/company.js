@@ -1,5 +1,7 @@
-import React from "react"
+import React, { useState } from "react"
 import { graphql } from "gatsby"
+import { FaChevronDown, FaChevronUp } from "react-icons/fa"
+import * as Constants from '../constants'
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
@@ -8,6 +10,26 @@ import Category from "../components/category"
 import AvgRating from "../components/avgrating"
 import ReviewCard from "../components/cards/reviewcard"
 
+const SortByButton = (props) => {
+    const { buttonName, sortType, selected } = props
+    const onClick = () => {
+        props.onSort(props)
+    }
+    return (
+        <button
+            className="px-2 cursor-pointer focus:bg-gray-400 focus:text-white focus:outline-none outline-none inline-flex items-baseline"
+            onClick={() => onClick()}>
+            {selected
+                ? sortType === 'down'
+                    ? <FaChevronDown size={12} className="mr-1" />
+                    : <FaChevronUp size={12} className="mr-1" />
+                : ''
+            }
+            <span className="">{buttonName}</span>
+        </button>
+    )
+}
+
 export default function Company({ data }) {
     const company = data.companies
     const reviews = data.companies.reviews
@@ -15,6 +37,28 @@ export default function Company({ data }) {
         imgName: company.logo,
         imgAlt: `${company.name} Logo`,
         imgClass: ""
+    }
+    const [sortButtons, setSortButtons] = useState([
+        { id: 1, buttonName: "Helpful", sortType: "down", selected: true },
+        { id: 2, buttonName: "Rating", sortType: "down", selected: false },
+        { id: 3, buttonName: "Newest", sortType: "down", selected: false },
+    ])
+    const [currentSort, setCurrentSort] = useState('helpfuldown')
+    const [sortHeadingText, setSortHeadingText] = useState("Most Helpful Reviews")
+    // method called every time the sort button is clicked
+    // it will change the currentSort value to the next one
+    const onSortByChange = (props) => {
+        const { buttonName, sortType } = props
+        let nextSort
+        if (sortType === 'down') nextSort = 'up'
+        else if (sortType === 'up') nextSort = 'down'
+        sortButtons.forEach(sortButton => {
+            sortButton.selected = sortButton.buttonName === buttonName ? true : false
+            sortButton.sortType = sortButton.buttonName === buttonName ? nextSort : sortButton.sortType
+        })
+        setSortButtons(sortButtons)
+        setCurrentSort(`${buttonName.toLowerCase()}${nextSort}`)
+        setSortHeadingText(Constants.SORT_BY_HEADING_MESSAGE[`${buttonName.toLowerCase()}${sortType}`])
     }
 
     const imgAds = {
@@ -75,12 +119,34 @@ export default function Company({ data }) {
 
                             {/* Reviews */}
                             <div className="flex flex-col lg:px-10 py-4">
-                                <h3 className="text-2xl sm:text-2xl font-bold text-black mb-3">
-                                    Reviews
-                                </h3>
-                                {reviews.map(review => (
+                                <div className="mb-3">
+                                    <span className="text-2xl sm:text-2xl font-bold text-black">
+                                        {sortHeadingText}
+                                    </span>
+                                    <div className="flex my-2">
+                                        <span className="text-sm text-gray-700">
+                                            Sort by:
+                                        </span>
+                                        <span className="ml-2 text-sm text-gray-400 border rounded border-gray-500 inline-block">
+                                            {sortButtons.map(sortButton => (
+                                                <SortByButton
+                                                    key={sortButton.id}
+                                                    buttonName={sortButton.buttonName}
+                                                    sortType={sortButton.sortType}
+                                                    selected={sortButton.selected}
+                                                    onSort={onSortByChange}
+                                                />
+                                            ))}
+                                        </span>
+                                    </div>
+                                </div>
+                                {[...reviews].sort(Constants.SORT_TYPES[currentSort].fn).map(review => (
                                     <ReviewCard key={review.id} review={review} />
                                 ))}
+
+                                {/*{reviews.map(review => (
+                                    <ReviewCard key={review.id} review={review} />
+                                ))}*/}
                             </div>
                         </div>
 

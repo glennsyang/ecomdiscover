@@ -20,6 +20,37 @@ export const RATING_MESSAGE = [
     { stars: 5, starMessage: "Excellent" },
 ]
 
+export const SORT_TYPES = {
+    helpfulup: { fn: (a, b) => a.helpful.length - b.helpful.length },
+    helpfuldown: { fn: (a, b) => b.helpful.length - a.helpful.length },
+    ratingup: { fn: (a, b) => a.rating - b.rating },
+    ratingdown: { fn: (a, b) => b.rating - a.rating },
+    newestup: {
+        fn: (a, b) => {
+            a = new Date(a.created)
+            b = new Date(b.created)
+            return a - b
+        }
+    },
+    newestdown: {
+        fn: (a, b) => {
+            a = new Date(a.created)
+            b = new Date(b.created)
+            return b - a
+        }
+    },
+}
+
+export const SORT_BY_HEADING_MESSAGE =
+{
+    'helpfuldown': "Least Helpful Reviews",
+    'helpfulup': "Most Helpful Reviews",
+    'ratingdown': "Lowest Rated Reviews",
+    'ratingup': "Highest Rated Reviews",
+    'newestdown': "Oldest Reviews",
+    'newestup': "Newest Reviews",
+}
+
 /*
  * React-Select custom styles
  */
