@@ -38,7 +38,7 @@ const SignUp = () => {
                                 const toastProperties = {
                                     id: Math.floor((Math.random() * 101) + 1),
                                     title: 'Error',
-                                    description: 'There was an error in updating your Name in your Profile',
+                                    description: 'There was an error in updating your Name in your Profile.',
                                     color: 'red',
                                 }
                                 setToast(toastProperties)
@@ -49,7 +49,7 @@ const SignUp = () => {
                         const toastProperties = {
                             id: Math.floor((Math.random() * 101) + 1),
                             title: 'Error',
-                            description: `Could not create Profile for user ${data.email}`,
+                            description: `Could not create Profile for user ${data.email}.`,
                             color: 'red',
                         }
                         setToast(toastProperties)

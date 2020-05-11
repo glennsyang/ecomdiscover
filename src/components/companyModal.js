@@ -87,7 +87,7 @@ export default function CompanyModal(props) {
                     const toastProperties = {
                         id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
-                        description: `There was an error in uploading the file. Reason: ${err.code}`,
+                        description: `There was an error in uploading the file. Reason: ${err.code}.`,
                         color: 'red',
                     }
                     setToast(toastProperties)
@@ -147,7 +147,7 @@ export default function CompanyModal(props) {
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in creating new Company: ${modalData.name}. Reason: ${error}`,
+                    description: `There was an error in creating new Company: ${modalData.name}. Reason: ${error}.`,
                     color: 'red',
                 }
                 setToast(toastProperties)
