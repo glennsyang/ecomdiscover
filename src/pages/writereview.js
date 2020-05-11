@@ -43,7 +43,7 @@ export default function WriteReview() {
                     const toastProperties = {
                         id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
-                        description: `There was an error in creating new Company: ${formData.company.label}. Reason: ${error}`,
+                        description: `There was an error in creating new Company: ${formData.company.label}. Reason: ${error}.`,
                         color: 'red',
                     }
                     setToast(toastProperties)
@@ -91,7 +91,7 @@ export default function WriteReview() {
                         const toastProperties = {
                             id: Math.floor((Math.random() * 101) + 1),
                             title: 'Error',
-                            description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}`,
+                            description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}.`,
                             color: 'red',
                         }
                         setToast(toastProperties)
@@ -101,7 +101,7 @@ export default function WriteReview() {
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}`,
+                    description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}.`,
                     color: 'red',
                 }
                 setToast(toastProperties)

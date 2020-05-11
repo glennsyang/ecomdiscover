@@ -62,7 +62,7 @@ const ReviewCard = ({ review }) => {
             const toastProperties = {
                 id: Math.floor((Math.random() * 101) + 1),
                 title: 'Error',
-                description: 'Please sign-in to rate helpful',
+                description: 'Please sign-in to rate helpful.',
                 color: 'red',
             }
             setToast(toastProperties)
@@ -95,7 +95,7 @@ const ReviewCard = ({ review }) => {
                             const toastProperties = {
                                 id: Math.floor((Math.random() * 101) + 1),
                                 title: 'Error',
-                                description: `Couldn't update user record. Reason: ${error}`,
+                                description: `Couldn't update user record. Reason: ${error}.`,
                                 color: 'red',
                             }
                             setToast(toastProperties)
@@ -106,7 +106,7 @@ const ReviewCard = ({ review }) => {
                     const toastProperties = {
                         id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
-                        description: `Couldn't update review record for ${review.title}. Reason: ${error}`,
+                        description: `Couldn't update review record for ${review.title}. Reason: ${error}.`,
                         color: 'red',
                     }
                     setToast(toastProperties)

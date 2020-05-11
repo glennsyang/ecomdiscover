@@ -110,7 +110,7 @@ const Profile = () => {
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in uploading the file. Reason: ${err.code}`,
+                    description: `There was an error in uploading the file. Reason: ${err.code}.`,
                     color: 'red',
                 }
                 setToast(toastProperties)
@@ -143,7 +143,7 @@ const Profile = () => {
                                 const toastProperties = {
                                     id: Math.floor((Math.random() * 101) + 1),
                                     title: 'Error',
-                                    description: `There was an error in deleting your old profile photo. Reason: ${error.code}`,
+                                    description: `There was an error in deleting your old profile photo. Reason: ${error.code}.`,
                                     color: 'red',
                                 }
                                 setToast(toastProperties)
@@ -155,7 +155,7 @@ const Profile = () => {
                             const toastProperties = {
                                 id: Math.floor((Math.random() * 101) + 1),
                                 title: 'Error',
-                                description: `There was an error in updating your profile photo ${firebaseUrl}. Reason: ${error.code}`,
+                                description: `There was an error in updating your profile photo ${firebaseUrl}. Reason: ${error.code}.`,
                                 color: 'red',
                             }
                             setToast(toastProperties)
@@ -199,7 +199,7 @@ const Profile = () => {
                                 const toastProperties = {
                                     id: Math.floor((Math.random() * 101) + 1),
                                     title: 'Error',
-                                    description: `There was an error in updating your profile. Reason: ${error.code}`,
+                                    description: `There was an error in updating your profile. Reason: ${error.code}.`,
                                     color: 'red',
                                 }
                                 setToast(toastProperties)
@@ -212,7 +212,7 @@ const Profile = () => {
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in updating your profile. Reason: ${error.code}`,
+                    description: `There was an error in updating your profile. Reason: ${error.code}.`,
                     color: 'red',
                 }
                 setToast(toastProperties)
@@ -222,7 +222,7 @@ const Profile = () => {
         const toastProperties = {
             id: Math.floor((Math.random() * 101) + 1),
             title: 'Warning',
-            description: `Not available yet`,
+            description: `Not available yet.`,
             color: 'yellow',
         }
         setToast(toastProperties)
@@ -237,7 +237,7 @@ const Profile = () => {
             const toastProperties = {
                 id: Math.floor((Math.random() * 101) + 1),
                 title: 'Error',
-                description: `There was an error in deactivating your account. Reason: ${error}`,
+                description: `There was an error in deactivating your account. Reason: ${error}.`,
                 color: 'red',
             }
             setToast(toastProperties)
