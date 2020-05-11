@@ -87,6 +87,9 @@ export const customStyles = {
     placeholder: styles => ({ ...styles, color: '#cbd5e0' }),
 }
 
+export const quillStyle = {
+    qlEditor: styles => ({ ...styles, minHeight: '18em' })
+}
 /* 
  * Quill modules to attach to editor
  * See https://quilljs.com/docs/modules/ for complete options
