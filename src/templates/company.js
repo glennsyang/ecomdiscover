@@ -81,7 +81,7 @@ export default function Company({ data }) {
                         <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
 
                             {/* Company Heading */}
-                            <div className="flex flex-col lg:flex-row lg:flex-grow">
+                            <div id="company-heading" className="flex flex-col lg:flex-row lg:flex-grow">
                                 <div className="lg:w-3/4 flex flex-col lg:ml-10">
                                     {/* Categories */}
                                     <div className="flex">
@@ -94,7 +94,7 @@ export default function Company({ data }) {
                                         <h4 className="text-xl font-normal tracking-tight text-black">{company.blurb}</h4>
                                     </div>
                                     {/* Logo */}
-                                    <div className="flex pl-4 my-6">
+                                    <div id="logo" className="flex pl-4 my-6">
                                         <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
                                             {company.logo
                                                 ? <ImageFixed props={imgLogo} />
