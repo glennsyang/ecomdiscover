@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
+import { navigate } from '@reach/router'
 
 const AvgRating = (props) => {
     const { arrReviews, rating, slug, showAvgRating, showNumReviews, starSize, className } = props
@@ -23,15 +24,24 @@ const AvgRating = (props) => {
             {starRating}
             {showAvgRating
                 ? <span className="text-sm text-black font-bold pl-2">{avgRating}/5</span>
-                : <span></span>
+                : ''
             }
             {showNumReviews
                 ? <span className={className}>
-                    <Link to={slug} className="hover:underline">
-                        {arrReviews.length} Reviews
+                    {showAvgRating
+                        ? <Link to={slug} className="hover:underline">
+                            {arrReviews.length} Reviews
                     </Link>
+                        : <button
+                            className="hover:underline outline-none focus:outline-none"
+                            onClick={event => {
+                                event.preventDefault()
+                                navigate('#logo')
+                            }}>{arrReviews.length} Reviews
+                        </button>
+                    }
                 </span>
-                : <span></span>
+                : ''
             }
         </>
     )

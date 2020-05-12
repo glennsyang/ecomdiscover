@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
-//import ReactQuill from 'react-quill'
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+import ReactQuill from 'react-quill'
+//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
 import Category from "../components/category"
