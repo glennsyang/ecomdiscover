@@ -35,5 +35,3 @@ function Header() {
 }
 
 export default Header
-
-//<hr className="border-b border-gray-100 opacity-25 my-0 py-0" />

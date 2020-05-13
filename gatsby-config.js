@@ -52,7 +52,9 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/app/*`] }
+      options: {
+        prefixes: [`/app/*`, `/dashboard/*`]
+      }
     },
     {
       resolve: 'gatsby-source-firestore',
