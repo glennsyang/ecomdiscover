@@ -74,7 +74,7 @@ const ReviewCard = ({ review }) => {
             const interval = setInterval(() => {
                 setTooltipShow(false)
                 clearInterval(interval)
-            }, 400)
+            }, 550)
         }
     }
     // User functions
