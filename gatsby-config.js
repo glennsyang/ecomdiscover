@@ -109,6 +109,7 @@ module.exports = {
               username: doc.displayName,
               email: doc.email,
               photoURL: doc.photoURL,
+              role: doc.role,
               created: doc.created,
               updated: doc.updated,
               helpful___NODE: doc.helpful.map(review => review.id),

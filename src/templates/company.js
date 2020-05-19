@@ -206,6 +206,7 @@ export const query = graphql`
                     id
                     username
                     photoURL
+                    role
                     created(formatString: "DD MMMM YYYY")
                 }
             }

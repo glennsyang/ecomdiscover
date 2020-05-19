@@ -48,7 +48,7 @@ const Footer = () => {
                         <p className="uppercase text-black font-bold mb-6 md:mb-6">Company</p>
                         <ul className="list-reset mb-6">
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <Link to={`/dashboard/login`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Official Blog</Link>
+                                <Link to={`/blog`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Official Blog</Link>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/about`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">About Us</Link>

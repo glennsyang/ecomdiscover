@@ -21,9 +21,10 @@ const SignUp = () => {
                         created: firebase.firestore.FieldValue.serverTimestamp(),
                         displayName: data.name,
                         email: data.email,
+                        helpful: [],
                         photoURL: '',
+                        role: 'user',
                         updated: firebase.firestore.FieldValue.serverTimestamp(),
-                        helpful: []
                     })
                     .then(() => {
                         // Update the user profile with 'displayName'

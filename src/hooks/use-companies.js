@@ -43,6 +43,7 @@ export const useCompanies = () => {
                         username
                         email
                         photoURL
+                        role
                         created
                         updated
                     }
