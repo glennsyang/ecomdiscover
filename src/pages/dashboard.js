@@ -1,15 +1,21 @@
 import React from "react"
 import { Router } from "@reach/router"
 import Layout from "../components/dashboard/layout"
-import Index from "../components/dashboard/index"
-import Login from "../components/dashboard/login"
-import DashboardRoute from "../components/dashboard/dashboardroute"
+import PublishReviews from "../components/dashboard/publishreviews"
+import Companies from "../components/dashboard/companies"
+import Categories from "../components/dashboard/categories"
+import Users from "../components/dashboard/users"
+import Login from "../components/authentication/login"
+import PrivateRoute from "../components/authentication/privateroute"
 
 const Dashboard = () => (
     <Layout>
         <Router>
-            <DashboardRoute path="/dashboard/index" component={Index} />
-            <Login path="/dashboard/login" />
+            <PrivateRoute path="/dashboard/publishreviews" component={PublishReviews} />
+            <PrivateRoute path="/dashboard/companies" component={Companies} />
+            <PrivateRoute path="/dashboard/categories" component={Categories} />
+            <PrivateRoute path="/dashboard/users" component={Users} />
+            <Login path="/app/login" />
         </Router>
     </Layout>
 )

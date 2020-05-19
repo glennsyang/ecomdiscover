@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import { navigate } from "gatsby"
+import { Link, navigate } from "gatsby"
 import { FaCheck, FaTimes, FaPen, FaThumbsUp, FaCamera } from 'react-icons/fa'
 import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
@@ -52,6 +52,7 @@ const Profile = () => {
                     name: snapshotUser.data().displayName,
                     photo: snapshotUser.data().photoURL,
                     helpful: snapshotUser.data().helpful.length,
+                    role: snapshotUser.data().role,
                     numReviews: writtenReviews.length,
                 })
                 setIsLoading(false)
@@ -355,6 +356,24 @@ const Profile = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            <hr className="border-b border-gray-400 opacity-25 py-0" />
+
+                            {userInfo.role === 'admin'
+                                ? <div className="flex flex-col lg:flex-row lg:flex-grow py-6">
+                                    <div className="lg:w-3/5">
+
+                                    </div>
+                                    <div className="lg:w-2/5">
+                                        <div className="float-right">
+                                            <Link to={`/dashboard/publishreviews`} className="bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded inline-flex items-center">
+                                                Dashboard
+                                        </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                                : ''
+                            }
                         </div>
                     </div>
                 }
