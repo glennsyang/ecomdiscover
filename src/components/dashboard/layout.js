@@ -12,9 +12,6 @@ function Layout({ children }) {
     const { title } = useSiteMetadata()
     const { uid } = getUser()
     const [userInfo, setUserInfo] = useState(null)
-    const [showSidebar, setShowSidebar] = useState(true)
-
-    const toggleSidebar = () => { setShowSidebar(!showSidebar) }
 
     useEffect(() => {
         const unsubscribeUser = firebase.firestore().collection('users').doc(uid).onSnapshot(snapshotUser => {
@@ -23,7 +20,6 @@ function Layout({ children }) {
                 photo: snapshotUser.data().photoURL,
                 role: snapshotUser.data().role,
             })
-            //setIsLoading(false)
         })
         return () => unsubscribeUser()
     }, [uid])
@@ -34,13 +30,13 @@ function Layout({ children }) {
                 title="Dashboard"
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
-            <div className="min-h-screen flex flex-col">
-                <Header title={title} userInfo={userInfo} onToggle={toggleSidebar} />
-                <div className="flex flex-1">
-                    {showSidebar ? <Sidebar fold={false} /> : <Sidebar fold={true} />}
-                    <main className="bg-gray-100 flex-1 p-4 overflow-hidden">{children}</main>
+            <div className="min-h-screen flex flex-row">
+                <Sidebar />
+                <div className="flex flex-1 flex-col">
+                    <Header title={title} userInfo={userInfo} />
+                    <main className="flex-1 bg-gray-100 p-4 overflow-hidden">{children}</main>
+                    <Footer title={title} />
                 </div>
-                <Footer title={title} />
             </div>
         </div>
     )
@@ -48,6 +44,6 @@ function Layout({ children }) {
 
 Layout.propTypes = {
     children: PropTypes.node.isRequired
-};
+}
 
-export default Layout;
+export default Layout
