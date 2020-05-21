@@ -1,6 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import { Link } from "gatsby"
-import { FaAngleRight, FaPen, FaThList, FaBuilding, FaUser } from "react-icons/fa"
+import { FaPen, FaThList, FaBuilding, FaUser, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa"
 
 const MenuChoice = (props) => {
     const { name, linkTo, icon, fold } = props
@@ -11,20 +11,23 @@ const MenuChoice = (props) => {
     if (icon === "FaUser") { iconDisplay = <FaUser size={16} className="mr-2" /> }
 
     return (
-        <div className="px-2 py-4 text-sm text-gray-500 hover:text-white">
+        <div className={`text-base text-gray-500 hover:text-white ${fold ? 'ml-2 px-4 py-2 mt-4' : 'px-4 py-2 mx-6 mt-4'}`}>
             <Link to={linkTo} title={name} className="flex justify-between items-center">
                 {fold
                     ? <span className="flex items-center">{iconDisplay}</span>
                     : <span className="flex items-center">{iconDisplay}{name}</span>
                 }
             </Link>
-        </div >
+        </div>
     )
 }
 
-function Sidebar(props) {
-    const { fold } = props
-    const classFold = fold ? 'lg:w-16' : 'lg:w-1/6'
+function Sidebar() {
+    const [showSidebar, setShowSidebar] = useState(false)
+    const toggleSidebar = () => { setShowSidebar(!showSidebar) }
+
+    const classShow = "md:w-16 lg:w-16"
+    const classHide = "md:w-1/6 lg:w-1/6"
     const menuChoices = [
         { name: "Reviews", linkTo: "/dashboard/publishreviews", icon: "FaPen" },
         { name: "Categories", linkTo: "/dashboard/categories", icon: "FaThList" },
@@ -33,13 +36,19 @@ function Sidebar(props) {
     ]
 
     return (
-        <aside id="sidebar" className={`bg-gray-800 text-white w-1/2 md:w-1/6 ${classFold} hidden md:block lg:block`}>
-            <div className="flex flex-col ml-6 mt-8">
-                {
-                    menuChoices.map((menuChoice, id) => {
-                        return (<MenuChoice key={id} name={menuChoice.name} linkTo={menuChoice.linkTo} icon={menuChoice.icon} fold={fold} />)
-                    })
-                }
+        <aside id="sidebar" className={`bg-gray-800 text-white w-1/2 ${showSidebar ? classShow : classHide} hidden md:block lg:block`}>
+            <div className="flex flex-col">
+                <div className="flex justify-between items-center text-gray-300 p-6">
+                    {showSidebar ? '' : <Link to={`/dashboard`} className="text-lg font-bold antialiased">Dashboard</Link>}
+                    <button type="button" className="outline-none focus:outline-none" onClick={toggleSidebar}>
+                        {showSidebar ? <FaAngleDoubleRight size={16} /> : <FaAngleDoubleLeft size={16} />}
+                    </button>
+                </div>
+                {menuChoices.map((menuChoice, id) => {
+                    return (
+                        <MenuChoice key={id} name={menuChoice.name} linkTo={menuChoice.linkTo} icon={menuChoice.icon} fold={showSidebar} />
+                    )
+                })}
             </div>
         </aside >
     )

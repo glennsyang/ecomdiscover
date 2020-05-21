@@ -1,22 +1,21 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
 import Loader from "../loader"
+import Table from "./table"
 
-const RowDisplay = (props) => {
-    const { user, created, company, title, rating, tags, helpful } = props.review
-    //console.log("display:", props.review)
+const Tags = ({ values }) => {
+    // Loop through the array and create a badge-like component instead of a comma-separated string
     return (
-        <tr>
-            <td className="border px-4 py-2">{user}</td>
-            <td className="border px-4 py-2">{created}</td>
-            <td className="border px-4 py-2">{company}</td>
-            <td className="border px-4 py-2">{title}</td>
-            <td className="border px-4 py-2">{rating}</td>
-            <td className="border px-4 py-2">{tags.join(', ')}</td>
-            <td className="border px-4 py-2">{helpful}</td>
-            <td className="border px-4 py-2">Yes</td>
-        </tr>
+        <>
+            {values.map((tag, idx) => {
+                return (
+                    <span key={idx} className="inline-block bg-gray-200 rounded-full px-2 text-xs font-semibold text-gray-700 mr-1">
+                        {tag}
+                    </span>
+                );
+            })}
+        </>
     )
 }
 
@@ -33,51 +32,65 @@ const PublishReviews = () => {
                 review.user = doc.get("uid").id
                 review.company = doc.get("company").id
                 review.helpful = review.helpful.length
-                review.created = `${moment.utc(review.created.toDate()).format("DD-MMM-YYYY hh:mm a")}`
-                review.categories = ""
+                review.created = review.created.toDate()
+                review.categories = review.categories.length
+                review.published = 'Yes'
                 allReviews.push(review)
             })
-            //console.log("allReviews:", allReviews)
             setReviews(allReviews);
             setIsLoading(false);
         })
         return () => unsubscribe()
     }, [])
 
+    const columns = useMemo(
+        () => [
+            {
+                Header: "User",
+                accessor: "user"
+            },
+            {
+                Header: "Created",
+                accessor: "created",
+                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                sortType: 'datetime'
+            },
+            {
+                Header: "Company",
+                accessor: "company"
+            },
+            {
+                Header: "Title",
+                accessor: "title",
+            },
+            {
+                Header: "Tags",
+                accessor: "tags",
+                Cell: ({ cell: { value } }) => <Tags values={value} />
+            },
+            {
+                Header: "Rating",
+                accessor: "rating",
+                sortType: 'basic'
+            },
+            {
+                Header: "Liked",
+                accessor: "helpful",
+                sortType: 'basic'
+            },
+            {
+                Header: "Published?",
+                accessor: "published"
+            }
+        ],
+        []
+    )
+
     return (
         <div className="flex flex-col">
             {isLoading
                 ? <Loader />
-                : <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-2 bg-white">
-                    <div className="mb-2 border-solid border-gray-300 rounded shadow-lg w-full">
-                        <div className="bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b">
-                            Reviews
-                    </div>
-                        <div className="p-3 bg-white">
-                            <table className="table-responsive w-full rounded bg-white">
-                                <thead>
-                                    <tr>
-                                        <th className="border w-1/6 px-4 py-2">User</th>
-                                        <th className="border w-1/6 px-4 py-2">Created</th>
-                                        <th className="border w-1/6 px-4 py-2">Company</th>
-                                        <th className="border w-1/6 px-4 py-2">Title</th>
-                                        <th className="border w-1/6 px-4 py-2">Rating</th>
-                                        <th className="border w-1/6 px-4 py-2">Tags</th>
-                                        <th className="border w-1/6 px-4 py-2">Helpful</th>
-                                        <th className="border w-1/12 px-4 py-2">Published</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {reviews && reviews.map(review => {
-                                        return (
-                                            <RowDisplay key={review.id} review={review} />
-                                        )
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                : <Table columns={columns} data={reviews} filterName={'title'} />
             }
         </div>
     )

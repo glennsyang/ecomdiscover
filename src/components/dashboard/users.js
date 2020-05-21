@@ -1,25 +1,51 @@
-import React, { useState, useEffect } from "react"
+import React, { useMemo, useState, useEffect } from "react"
 import firebase from "gatsby-plugin-firebase"
+import { FaPen, FaTimesCircle } from "react-icons/fa"
 import moment from "moment"
 import Loader from "../loader"
+import Toast from "../toast"
+import Table from "./table"
 
-const RowDisplay = (props) => {
-    const { displayName, email, photoURL, role, created, updated } = props.user
-    return (
-        <tr>
-            <td className="border px-4 py-2"><img src={photoURL} alt={displayName} className="h-12 w-12 object-cover rounded-full" /></td>
-            <td className="border px-4 py-2">{displayName}</td>
-            <td className="border px-4 py-2">{email}</td>
-            <td className="border px-4 py-2">{role}</td>
-            <td className="border px-4 py-2">{created}</td>
-            <td className="border px-4 py-2">{updated}</td>
-        </tr>
-    )
+const Actions = (props) => {
+    const { rowProps } = props
+    const onClose = (toastProps) => { props.onClose && props.onClose(toastProps) }
+
+    const handleDelete = (row) => {
+        console.log("delete:", row.id)
+        firebase.firestore().collection('users').doc(row.id).delete().then(() => {
+            console.log("User successfully deleted!")
+            const toastProps = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Success',
+                description: `User successfully deleted!`,
+                color: 'green',
+            }
+            onClose(toastProps)
+        }).catch((error) => {
+            console.error("Error deleting user: ", error)
+            const toastProps = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Error',
+                description: `There was an error in deleting the account ${row.displayName}. Reason: ${error}.`,
+                color: 'red',
+            }
+            onClose(toastProps)
+        })
+    }
+    const handleEdit = (row) => {
+        console.log("edit:", row.id)
+    }
+    return (<>
+        <button type="button" onClick={() => handleEdit(rowProps)} className="text-green-500"><FaPen size={16} /></button>
+        <button type="button" onClick={() => handleDelete(rowProps)} className="text-red-500 ml-2"><FaTimesCircle size={16} /></button>
+    </>)
 }
 
 const Users = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [users, setUsers] = useState([])
+    const [toast, setToast] = useState()
+    const showToast = (toastProps) => { setToast(toastProps) }
 
     useEffect(() => {
         const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
@@ -27,50 +53,84 @@ const Users = () => {
             querySnapshot.forEach(doc => {
                 const user = doc.data()
                 user.id = doc.id
-                user.created = `${moment.utc(user.created.toDate()).format("DD-MMM-YYYY hh:mm a")}`
-                user.updated = `${moment.utc(user.updated.toDate()).format("DD-MMM-YYYY hh:mm a")}`
+                user.created = user.created.toDate()
+                user.updated = user.updated.toDate()
+                user.helpful = user.helpful.length
                 allUsers.push(user)
             })
-
             setUsers(allUsers)
             setIsLoading(false)
         })
         return () => unsubscribe()
     }, [])
 
+    const columns = useMemo(
+        () => [
+            {
+                Header: "",
+                accessor: "photoURL",
+                disableSortBy: true,
+                // Cell method will provide the cell value; we pass it to render a custom component
+                Cell: ({ cell: { value } }) => <img src={value} alt={value} className="h-12 w-12 object-cover rounded-full" />
+            },
+            {
+                Header: "Name",
+                accessor: "displayName"
+            },
+            {
+                Header: "Email",
+                accessor: "email"
+            },
+            {
+                Header: "Liked",
+                accessor: "helpful",
+                sortType: 'basic'
+            },
+            {
+                Header: "Role",
+                accessor: "role"
+            },
+            {
+                Header: "Created",
+                accessor: "created",
+                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                sortType: 'datetime'
+            },
+            {
+                Header: "Updated",
+                accessor: "updated",
+                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                sortType: 'datetime'
+            },
+            {
+                Header: "Actions",
+                disableSortBy: true,
+                id: 'actions',
+                accessor: 'actions',
+                Cell: ({ row }) => (<Actions rowProps={row.original} onClose={showToast} />)
+                //accessor: (str) => 'delete',
+                // Cell: ({ row }) => (
+                //     <div>
+                //         <button onClick={() => handleDelete(row.original)}>Delete</button>
+                //     </div>
+                // )
+            },
+        ],
+        []
+    )
+
     return (
         <div className="flex flex-col">
             {isLoading
                 ? <Loader />
-                : <div className="flex flex-1 flex-col md:flex-row lg:flex-row mx-2">
-                    <div className="mb-2 border-solid border-gray-300 rounded shadow-lg w-full">
-                        <div className="bg-gray-200 px-2 py-3 border-solid border-gray-200 border-b">
-                            Users
-                    </div>
-                        <div className="p-3 bg-white">
-                            <table className="table-responsive w-full rounded">
-                                <thead>
-                                    <tr>
-                                        <th className="border w-1/6 px-4 py-2">Photo</th>
-                                        <th className="border w-1/6 px-4 py-2">User</th>
-                                        <th className="border w-1/6 px-4 py-2">Email</th>
-                                        <th className="border w-1/6 px-4 py-2">Role</th>
-                                        <th className="border w-1/6 px-4 py-2">Created</th>
-                                        <th className="border w-1/6 px-4 py-2">Updated</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {users && users.map(user => {
-                                        return (
-                                            <RowDisplay key={user.id} user={user} />
-                                        )
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                : <Table columns={columns} data={users} filterName={'displayName'} />
             }
+            <Toast
+                toastProps={toast}
+                position="bottom-right"
+                autoDelete={true}
+                autoDeleteTime={2500}
+            />
         </div>
     )
 }
