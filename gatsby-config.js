@@ -144,7 +144,6 @@ module.exports = {
       options: {
         features: {
           auth: true,
-          database: true,
           firestore: true,
           storage: true,
           analytics: true,

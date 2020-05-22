@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useTable, useFilters, useSortBy, usePagination } from "react-table"
 import { FaSearch, FaCaretDown, FaCaretUp, FaChevronLeft, FaChevronRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa"
 
-export default function Table({ columns, data, filterName }) {
+export default function Table({ columns, data, filterName, updateData, skipPageReset }) {
     const [filterInput, setFilterInput] = useState("")
     // Use the state and functions returned from useTable to build your UI
     const {
@@ -27,6 +27,8 @@ export default function Table({ columns, data, filterName }) {
         columns,
         data,
         initialState: { pageIndex: 0 },
+        updateData,
+        autoResetPage: !skipPageReset,
     },
         useFilters,
         useSortBy,
