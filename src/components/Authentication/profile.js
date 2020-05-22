@@ -119,8 +119,8 @@ const Profile = () => {
                 // Handle successful uploads on complete
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
-                    title: 'Success',
-                    description: `Upload Complete!`,
+                    title: 'Success!',
+                    description: `Upload Complete.`,
                     color: 'green',
                 }
                 setToast(toastProperties)
