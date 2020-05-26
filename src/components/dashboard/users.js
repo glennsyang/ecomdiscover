@@ -1,51 +1,12 @@
 import React, { useMemo, useState, useEffect } from "react"
 import firebase from "gatsby-plugin-firebase"
-import { FaPen, FaTimesCircle } from "react-icons/fa"
 import moment from "moment"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
+import Actions from "./actions"
 import EditableCell from "./editablecell"
-
-const Actions = (props) => {
-    const { rowProps, component } = props
-    const onClose = (toastProps) => { props.onClose && props.onClose(toastProps) }
-
-    const handleDelete = (row) => {
-        firebase.firestore().collection(component).doc(row.id).delete().then(() => {
-            console.log("User successfully deleted!")
-            const toastProps = {
-                id: Math.floor((Math.random() * 101) + 1),
-                title: 'Success!',
-                description: `User successfully deleted.`,
-                color: 'green',
-            }
-            onClose(toastProps)
-        }).catch((error) => {
-            console.error("Error deleting user: ", error)
-            const toastProps = {
-                id: Math.floor((Math.random() * 101) + 1),
-                title: 'Error',
-                description: `There was an error in deleting the account ${row.displayName}. Reason: ${error}.`,
-                color: 'red',
-            }
-            onClose(toastProps)
-        })
-    }
-    const handleEdit = (row) => {
-        const toastProps = {
-            id: Math.floor((Math.random() * 101) + 1),
-            title: 'Warning',
-            description: `Please click the cell for '${row.displayName}' to edit.`,
-            color: 'yellow',
-        }
-        onClose(toastProps)
-    }
-    return (<>
-        <button type="button" onClick={() => handleEdit(rowProps)} className="text-green-500"><FaPen size={16} /></button>
-        <button type="button" onClick={() => handleDelete(rowProps)} className="text-red-500 ml-2"><FaTimesCircle size={16} /></button>
-    </>)
-}
+import * as Constants from '../../constants'
 
 const Users = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -61,7 +22,7 @@ const Users = () => {
         const old = users[rowIndex].displayName
         if (value !== old) {
             // Update displayName
-            firebase.firestore().collection('users').doc(uid)
+            firebase.firestore().collection(Constants.DASHBOARD_TABLE_USERS).doc(uid)
                 .update({ displayName: value })
                 .then(() => {
                     const toastProps = {
@@ -85,7 +46,7 @@ const Users = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
+        const unsubscribe = firebase.firestore().collection(Constants.DASHBOARD_TABLE_USERS).onSnapshot(querySnapshot => {
             let allUsers = []
             querySnapshot.forEach(doc => {
                 const user = doc.data()
@@ -146,7 +107,7 @@ const Users = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} component={"users"} onClose={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_USERS} component={'User'} onCloseToast={showToast} />)
                 //accessor: (str) => 'delete',
                 // Cell: ({ row }) => (
                 //     <div>

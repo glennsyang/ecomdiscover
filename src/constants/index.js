@@ -1,5 +1,3 @@
-export const DJISYMBOL = "&symbol=DJI"
-
 export const ONE_DAY_MS = 24 * 3600 * 1000
 
 export const IMAGE_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png', 'image/bmp', 'image/gif']
@@ -19,6 +17,11 @@ export const RATING_MESSAGE = [
     { stars: 4, starMessage: "Very Good" },
     { stars: 5, starMessage: "Excellent" },
 ]
+
+export const DASHBOARD_TABLE_REVIEWS = 'reviews'
+export const DASHBOARD_TABLE_CATEGORIES = 'categories'
+export const DASHBOARD_TABLE_COMPANIES = 'companies'
+export const DASHBOARD_TABLE_USERS = 'users'
 
 export const SORT_TYPES = {
     helpfulup: {
