@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-import { FaPen, FaThList, FaBuilding, FaUser, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa"
+import { FaPen, FaThList, FaBuilding, FaUser, FaAngleDoubleLeft, FaAngleDoubleRight, FaGlobeAmericas, FaQuestion } from "react-icons/fa"
 
 const MenuChoice = (props) => {
     const { name, linkTo, icon, fold } = props
@@ -9,6 +9,8 @@ const MenuChoice = (props) => {
     if (icon === "FaThList") { iconDisplay = <FaThList size={16} className="mr-2" /> }
     if (icon === "FaBuilding") { iconDisplay = <FaBuilding size={16} className="mr-2" /> }
     if (icon === "FaUser") { iconDisplay = <FaUser size={16} className="mr-2" /> }
+    if (icon === "FaGlobeAmericas") { iconDisplay = <FaGlobeAmericas size={16} className="mr-2" /> }
+    if (icon === "FaQuestion") { iconDisplay = <FaQuestion size={16} className="mr-2" /> }
 
     return (
         <div className={`text-base text-gray-500 hover:text-white ${fold ? 'ml-2 px-4 py-2 mt-4' : 'px-4 py-2 mx-6 mt-4'}`}>
@@ -33,6 +35,8 @@ function Sidebar() {
         { name: "Companies", linkTo: "/dashboard/companies", icon: "FaBuilding" },
         { name: "Categories", linkTo: "/dashboard/categories", icon: "FaThList" },
         { name: "Users", linkTo: "/dashboard/users", icon: "FaUser" },
+        { name: "Marketplaces", linkTo: "/dashboard/marketplaces", icon: "FaGlobeAmericas" },
+        { name: "FAQ", linkTo: "/dashboard/faq", icon: "FaQuestion" },
     ]
 
     return (
