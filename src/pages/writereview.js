@@ -58,6 +58,7 @@ export default function WriteReview() {
             company: firebase.firestore().doc(`companies/${companyId}`),
             created: firebase.firestore.FieldValue.serverTimestamp(),
             helpful: [],
+            published: false,
             rating: dataObject.rating ? Number(dataObject.rating) : 0,
             tags: dataObject.tags ? dataObject.tags.map((tag) => (
                 tag.label

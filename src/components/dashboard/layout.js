@@ -32,7 +32,7 @@ function Layout({ children }) {
             />
             <div className="min-h-screen flex flex-row">
                 <Sidebar />
-                <div className="flex flex-1 flex-col">
+                <div className="flex-1 flex flex-col">
                     <Header title={title} userInfo={userInfo} />
                     <main className="flex-1 bg-gray-100 p-4 overflow-hidden">{children}</main>
                     <Footer title={title} />

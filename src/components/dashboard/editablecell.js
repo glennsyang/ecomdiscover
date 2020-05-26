@@ -23,7 +23,7 @@ const EditableCell = ({
         setValue(initialValue)
     }, [initialValue])
 
-    return <input value={value} onChange={onChange} onBlur={onBlur} />
+    return <input value={value} onChange={onChange} onBlur={onBlur} className="w-full whitespace-normal bg-white text-gray-600 text-sm antialiased font-light focus:outline-none focus:shadow-outline rounded leading-normal py-1" />
 }
 
 export default EditableCell

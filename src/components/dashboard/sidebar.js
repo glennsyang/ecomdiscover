@@ -30,8 +30,8 @@ function Sidebar() {
     const classHide = "md:w-1/6 lg:w-1/6"
     const menuChoices = [
         { name: "Reviews", linkTo: "/dashboard/publishreviews", icon: "FaPen" },
-        { name: "Categories", linkTo: "/dashboard/categories", icon: "FaThList" },
         { name: "Companies", linkTo: "/dashboard/companies", icon: "FaBuilding" },
+        { name: "Categories", linkTo: "/dashboard/categories", icon: "FaThList" },
         { name: "Users", linkTo: "/dashboard/users", icon: "FaUser" },
     ]
 

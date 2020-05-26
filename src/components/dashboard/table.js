@@ -1,9 +1,10 @@
 import React, { useState } from "react"
-import { useTable, useFilters, useSortBy, usePagination } from "react-table"
+import { useTable, useFilters, useSortBy, usePagination, useExpanded } from "react-table"
 import { FaSearch, FaCaretDown, FaCaretUp, FaChevronLeft, FaChevronRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa"
 
-export default function Table({ columns, data, filterName, updateData, skipPageReset }) {
+export default function Table({ columns, data, renderRowSubComponent, filterName, updateData, skipPageReset }) {
     const [filterInput, setFilterInput] = useState("")
+    const [filterPublish, setFilterPublish] = useState()
     // Use the state and functions returned from useTable to build your UI
     const {
         getTableProps, // table props from react-table
@@ -12,6 +13,7 @@ export default function Table({ columns, data, filterName, updateData, skipPageR
         prepareRow, // Prepare the row (this function needs to be called for each row before getting the row props)
         page, // rows for the table based on the data passed, which has only the rows for the active page
         rows,
+        visibleColumns,
         // The rest of these things are super handy, too ;)
         canPreviousPage,
         canNextPage,
@@ -26,40 +28,68 @@ export default function Table({ columns, data, filterName, updateData, skipPageR
     } = useTable({
         columns,
         data,
-        initialState: { pageIndex: 0 },
+        initialState: { pageIndex: 0, hiddenColumns: ['content'] },
         updateData,
         autoResetPage: !skipPageReset,
     },
         useFilters,
         useSortBy,
+        useExpanded,
         usePagination
     )
+
     const handleFilterChange = e => {
         const value = e.target.value || undefined
         setFilter(filterName, value)
         setFilterInput(value)
     }
 
+    const handleFilterPublish = e => {
+        const value = e.target.value || undefined
+        setFilter('published', value)
+        setFilterPublish(value)
+    }
+
     // Render the UI for your table
     return (
         <>
             <div className="text-gray-600 bg-white mb-4 px-4 py-2 flex justify-between items-center">
-                <div className="text-sm antialiased font-semibold">
-                    Display
+                <div className="flex justify-between items-center">
+                    <div className="text-sm antialiased font-semibold">
+                        Display
                     <select
-                        className="outline-none mx-2 p-2"
-                        value={pageSize}
-                        onChange={e => {
-                            setPageSize(Number(e.target.value))
-                        }}
-                    >
-                        {[10, 20, 30, 40, 50].map(pageSize => (
-                            <option key={pageSize} value={pageSize}>
-                                {pageSize}
-                            </option>
-                        ))}
-                    </select>
-                    results
+                            className="outline-none appearance-none mx-2 py-2 px-4"
+                            value={pageSize}
+                            onChange={e => {
+                                setPageSize(Number(e.target.value))
+                            }}
+                        >
+                            {[10, 20, 30, 40, 50].map(pageSize => (
+                                <option key={pageSize} value={pageSize}>
+                                    {pageSize}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {filterName === 'title' ?
+                        <div className="text-sm antialiased font-semibold ml-3">
+                            Published
+                            <select
+                                className="outline-none appearance-none mx-2 py-2 px-4"
+                                value={filterPublish}
+                                onChange={e => {
+                                    handleFilterPublish(e)
+                                }}
+                            >
+                                <option value="">All</option>
+                                {['Yes', 'No'].map((option, i) => (
+                                    <option key={i} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        : ''}
                 </div>
                 <div className="flex flex-row items-center border p-2">
                     <FaSearch size={16} />
@@ -79,7 +109,7 @@ export default function Table({ columns, data, filterName, updateData, skipPageR
                             {headerGroup.headers.map(column => (
                                 <th
                                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                                    className="text-gray-600 text-sm font-semibold antialiased text-left p-2 sort-desc"
+                                    className={`${column.className} text-gray-600 text-sm font-semibold antialiased text-left p-2`}
                                 >
                                     <span className="inline-block">{column.render("Header")}</span>
                                     {column.isSorted
@@ -96,11 +126,27 @@ export default function Table({ columns, data, filterName, updateData, skipPageR
                     {page.map((row, i) => {
                         prepareRow(row)
                         return (
-                            <tr {...row.getRowProps()}>
-                                {row.cells.map(cell => {
-                                    return <td className="bg-white text-gray-600 text-sm antialiased font-light border-b p-2" {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                                })}
-                            </tr>
+                            // Use a React.Fragment here so the table markup is still valid
+                            <React.Fragment key={i}>
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map(cell => {
+                                        return (
+                                            <td className={`${cell.column.className} bg-white text-gray-600 text-sm antialiased font-light border-b p-2`}
+                                                {...cell.getCellProps()}
+                                            >
+                                                {cell.render('Cell')}
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                                {row.isExpanded ? (
+                                    <tr>
+                                        <td colSpan={visibleColumns.length}>
+                                            {renderRowSubComponent({ row })}
+                                        </td>
+                                    </tr>
+                                ) : null}
+                            </React.Fragment>
                         )
                     })}
                 </tbody>
