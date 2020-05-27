@@ -4,12 +4,10 @@ import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
-import EditableCell from "./editablecell"
-import * as Constants from '../../constants'
 
-const Categories = () => {
+const Marketplaces = () => {
     const [isLoading, setIsLoading] = useState(true)
-    const [categories, setCategories] = useState([])
+    const [marketplaces, setMarketplaces] = useState([])
     const [toast, setToast] = useState()
     const showToast = (toastProps) => { setToast(toastProps) }
     const [skipPageReset, setSkipPageReset] = useState(false)
@@ -17,14 +15,18 @@ const Categories = () => {
     const createData = (modalData) => {
         setSkipPageReset(true)
         setIsLoading(true)
-        firebase.firestore().collection('categories')
-            .add({ name: modalData.name, })
+        firebase.firestore().collection('marketplaces').doc(modalData.code)
+            .set({
+                code: modalData.code,
+                flag: modalData.flag,
+                name: modalData.name,
+            })
             .then(ref => {
                 setIsLoading(false)
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Success!',
-                    description: `Successfully added new Category: ${modalData.name}.`,
+                    description: `Successfully added new Marketplace: ${modalData.name}.`,
                     color: 'green',
                 }
                 setToast(toastProps)
@@ -35,7 +37,7 @@ const Categories = () => {
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in creating new Category: ${modalData.name}. Reason: ${error}.`,
+                    description: `There was an error in creating new Marketplace: ${modalData.name}. Reason: ${error}.`,
                     color: 'red',
                 }
                 setToast(toastProps)
@@ -44,17 +46,17 @@ const Categories = () => {
     const updateData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
-        const id = categories[rowIndex].id
-        const old = categories[rowIndex].name
+        const id = marketplaces[rowIndex].id
+        const old = marketplaces[rowIndex].name
         if (value !== old) {
             // Update name
-            firebase.firestore().collection(Constants.DASHBOARD_TABLE_CATEGORIES).doc(id)
+            firebase.firestore().collection('marketplaces').doc(id)
                 .update({ name: value })
                 .then(() => {
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
                         title: 'Success!',
-                        description: `Category successfully updated.`,
+                        description: `Marketplace successfully updated.`,
                         color: 'green',
                     }
                     setToast(toastProps)
@@ -63,7 +65,7 @@ const Categories = () => {
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
-                        description: `There was an error in updating the category '${value}'. Reason: ${error.code}.`,
+                        description: `There was an error in updating the marketplace '${value}'. Reason: ${error.code}.`,
                         color: 'red',
                     }
                     setToast(toastProps)
@@ -72,14 +74,14 @@ const Categories = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection(Constants.DASHBOARD_TABLE_CATEGORIES).onSnapshot(querySnapshot => {
-            let allCategories = []
+        const unsubscribe = firebase.firestore().collection('marketplaces').onSnapshot(querySnapshot => {
+            let allMarketplaces = []
             querySnapshot.forEach(doc => {
                 const category = doc.data()
                 category.id = doc.id
-                allCategories.push(category)
+                allMarketplaces.push(category)
             })
-            setCategories(allCategories)
+            setMarketplaces(allMarketplaces)
             setIsLoading(false)
         })
         return () => unsubscribe()
@@ -88,16 +90,25 @@ const Categories = () => {
     const columns = useMemo(
         () => [
             {
+                Header: "Code",
+                accessor: "code",
+            },
+            {
                 Header: "Name",
                 accessor: "name",
-                Cell: EditableCell,
+            },
+            {
+                Header: "Flag",
+                accessor: "flag",
+                disableSortBy: true,
+                Cell: ({ cell: { value } }) => <img src={value} alt={value} className="h-4" />
             },
             {
                 Header: "Actions",
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_CATEGORIES} component={'Category'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'marketplaces'} component={'Marketplace'} onCloseToast={showToast} />)
             },
         ],
         []
@@ -109,11 +120,11 @@ const Categories = () => {
                 ? <Loader />
                 : <Table
                     columns={columns}
-                    data={categories}
-                    tableName={'categories'}
+                    data={marketplaces}
+                    tableName={'marketplaces'}
                     filterName={'name'}
-                    createData={createData}
                     updateData={updateData}
+                    createData={createData}
                     skipPageReset={skipPageReset}
                 />
             }
@@ -127,4 +138,4 @@ const Categories = () => {
     )
 }
 
-export default Categories
+export default Marketplaces

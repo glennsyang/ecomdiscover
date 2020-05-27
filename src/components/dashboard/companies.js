@@ -133,6 +133,7 @@ const Companies = () => {
                 : <Table
                     columns={columns}
                     data={companies}
+                    tableName={'companies'}
                     filterName={'name'}
                     updateData={updateData}
                     skipPageReset={skipPageReset}

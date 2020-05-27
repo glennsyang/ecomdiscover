@@ -1,30 +1,35 @@
 import React, { useState, useEffect, useMemo } from "react"
 import firebase from "gatsby-plugin-firebase"
+import moment from "moment"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
-import EditableCell from "./editablecell"
-import * as Constants from '../../constants'
+//import EditableCell from "./editablecell"
 
-const Categories = () => {
+const Faqs = () => {
     const [isLoading, setIsLoading] = useState(true)
-    const [categories, setCategories] = useState([])
+    const [faqs, setFaqs] = useState([])
     const [toast, setToast] = useState()
     const showToast = (toastProps) => { setToast(toastProps) }
     const [skipPageReset, setSkipPageReset] = useState(false)
 
     const createData = (modalData) => {
+        console.log("modalData:", modalData)
         setSkipPageReset(true)
         setIsLoading(true)
-        firebase.firestore().collection('categories')
-            .add({ name: modalData.name, })
+        firebase.firestore().collection('faq')
+            .add({
+                date: firebase.firestore.FieldValue.serverTimestamp(),
+                question: modalData.question,
+                answer: modalData.answer,
+            })
             .then(ref => {
                 setIsLoading(false)
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Success!',
-                    description: `Successfully added new Category: ${modalData.name}.`,
+                    description: `Successfully added new FAQ: ${modalData.question}.`,
                     color: 'green',
                 }
                 setToast(toastProps)
@@ -35,7 +40,7 @@ const Categories = () => {
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in creating new Category: ${modalData.name}. Reason: ${error}.`,
+                    description: `There was an error in creating new FAQ: ${modalData.question}. Reason: ${error}.`,
                     color: 'red',
                 }
                 setToast(toastProps)
@@ -44,26 +49,29 @@ const Categories = () => {
     const updateData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
-        const id = categories[rowIndex].id
-        const old = categories[rowIndex].name
+        setIsLoading(true)
+        const id = faqs[rowIndex].id
+        const old = faqs[rowIndex].answer
         if (value !== old) {
             // Update name
-            firebase.firestore().collection(Constants.DASHBOARD_TABLE_CATEGORIES).doc(id)
-                .update({ name: value })
+            firebase.firestore().collection('faq').doc(id)
+                .update({ answer: value })
                 .then(() => {
+                    setIsLoading(false)
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
                         title: 'Success!',
-                        description: `Category successfully updated.`,
+                        description: `FAQ successfully updated.`,
                         color: 'green',
                     }
                     setToast(toastProps)
                 })
                 .catch(error => {
+                    setIsLoading(false)
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
                         title: 'Error',
-                        description: `There was an error in updating the category '${value}'. Reason: ${error.code}.`,
+                        description: `There was an error in updating the faq '${value}'. Reason: ${error.code}.`,
                         color: 'red',
                     }
                     setToast(toastProps)
@@ -72,14 +80,15 @@ const Categories = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection(Constants.DASHBOARD_TABLE_CATEGORIES).onSnapshot(querySnapshot => {
-            let allCategories = []
+        const unsubscribe = firebase.firestore().collection('faq').onSnapshot(querySnapshot => {
+            let allFaqs = []
             querySnapshot.forEach(doc => {
-                const category = doc.data()
-                category.id = doc.id
-                allCategories.push(category)
+                const faq = doc.data()
+                faq.id = doc.id
+                faq.date = faq.date ? faq.date.toDate() : new Date()
+                allFaqs.push(faq)
             })
-            setCategories(allCategories)
+            setFaqs(allFaqs)
             setIsLoading(false)
         })
         return () => unsubscribe()
@@ -88,16 +97,27 @@ const Categories = () => {
     const columns = useMemo(
         () => [
             {
-                Header: "Name",
-                accessor: "name",
-                Cell: EditableCell,
+                Header: "Question",
+                accessor: "question",
+                className: "w-1/4"
+            },
+            {
+                Header: "Answer",
+                accessor: "answer",
+                className: "w-1/2"
+            },
+            {
+                Header: "Date",
+                accessor: "date",
+                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                sortType: 'datetime'
             },
             {
                 Header: "Actions",
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_CATEGORIES} component={'Category'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'faq'} component={'FAQ'} onCloseToast={showToast} />)
             },
         ],
         []
@@ -109,11 +129,11 @@ const Categories = () => {
                 ? <Loader />
                 : <Table
                     columns={columns}
-                    data={categories}
-                    tableName={'categories'}
-                    filterName={'name'}
-                    createData={createData}
+                    data={faqs}
+                    tableName={'faq'}
+                    filterName={'question'}
                     updateData={updateData}
+                    createData={createData}
                     skipPageReset={skipPageReset}
                 />
             }
@@ -127,4 +147,4 @@ const Categories = () => {
     )
 }
 
-export default Categories
+export default Faqs
