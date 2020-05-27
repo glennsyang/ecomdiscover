@@ -37,8 +37,8 @@ export const query = graphql`
     allFaq(sort: {fields: [date], order: ASC}) {
     edges {
       node {
-        content
-        title
+        answer
+        question
         date
         id
       }

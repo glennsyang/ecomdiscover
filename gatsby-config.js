@@ -130,9 +130,8 @@ module.exports = {
             collection: 'faq',
             map: doc => ({
               id: doc.id,
-              title: doc.title,
-              content: doc.content,
-              published: doc.published,
+              question: doc.question,
+              answer: doc.answer,
               date: doc.date
             }),
           }
