@@ -36,7 +36,7 @@ function Sidebar() {
         { name: "Categories", linkTo: "/dashboard/categories", icon: "FaThList" },
         { name: "Users", linkTo: "/dashboard/users", icon: "FaUser" },
         { name: "Marketplaces", linkTo: "/dashboard/marketplaces", icon: "FaGlobeAmericas" },
-        { name: "FAQ", linkTo: "/dashboard/faq", icon: "FaQuestion" },
+        { name: "FAQ", linkTo: "/dashboard/faqs", icon: "FaQuestion" },
     ]
 
     return (

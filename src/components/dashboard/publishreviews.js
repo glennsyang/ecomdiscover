@@ -56,18 +56,18 @@ const PublishReviews = () => {
         }
     }
 
-    const getReview = async docId => {
-        return firebase.firestore()
-            .collection('reviews')
-            .doc(docId)
-            .get()
-            .then(async documentSnapshot => {
-                const data = documentSnapshot.data()
-                data.id = documentSnapshot.id
-                await hydrate(data, ['uid', 'company'])
-                return data
-            })
-    }
+    // const getReview = async docId => {
+    //     return firebase.firestore()
+    //         .collection('reviews')
+    //         .doc(docId)
+    //         .get()
+    //         .then(async documentSnapshot => {
+    //             const data = documentSnapshot.data()
+    //             data.id = documentSnapshot.id
+    //             await hydrate(data, ['uid', 'company'])
+    //             return data
+    //         })
+    // }
 
     useEffect(() => {
         let allReviews = []
@@ -189,6 +189,7 @@ const PublishReviews = () => {
                 : <Table
                     columns={columns}
                     data={reviews}
+                    tableName={'reviews'}
                     renderRowSubComponent={renderRowSubComponent}
                     filterName={'title'}
                     updateData={updateData}

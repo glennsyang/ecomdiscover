@@ -173,7 +173,7 @@ export default function CompanyModal(props) {
                                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
                                     <h3 className="lg:text-3xl text-xl font-semibold pr-2 md:pr-10">
                                         New Company, Tool or Service
-                                </h3>
+                                    </h3>
                                     <button
                                         type="button"
                                         className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -259,7 +259,7 @@ export default function CompanyModal(props) {
                                         value="Submit"
                                         className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient transition ease-in-out duration-700">
                                         Create
-                            </button>
+                                    </button>
                                 </div>
                             </form>
                         </div>

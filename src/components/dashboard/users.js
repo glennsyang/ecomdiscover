@@ -126,6 +126,7 @@ const Users = () => {
                 : <Table
                     columns={columns}
                     data={users}
+                    tableName={'users'}
                     filterName={'displayName'}
                     updateData={updateData}
                     skipPageReset={skipPageReset}

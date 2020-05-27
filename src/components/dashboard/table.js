@@ -1,10 +1,12 @@
 import React, { useState } from "react"
 import { useTable, useFilters, useSortBy, usePagination, useExpanded } from "react-table"
-import { FaSearch, FaCaretDown, FaCaretUp, FaChevronLeft, FaChevronRight, FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa"
+import { FaSearch, FaCaretDown, FaCaretUp, FaChevronLeft, FaChevronRight, FaAngleDoubleLeft, FaAngleDoubleRight, FaPlus } from "react-icons/fa"
+import NewModal from "./modals/newModal"
 
-export default function Table({ columns, data, renderRowSubComponent, filterName, updateData, skipPageReset }) {
+export default function Table({ columns, data, renderRowSubComponent, tableName, filterName, createData, updateData, skipPageReset }) {
     const [filterInput, setFilterInput] = useState("")
     const [filterPublish, setFilterPublish] = useState()
+    const [showModal, setShowModal] = useState(false)
     // Use the state and functions returned from useTable to build your UI
     const {
         getTableProps, // table props from react-table
@@ -29,6 +31,7 @@ export default function Table({ columns, data, renderRowSubComponent, filterName
         columns,
         data,
         initialState: { pageIndex: 0, hiddenColumns: ['content'] },
+        createData,
         updateData,
         autoResetPage: !skipPageReset,
     },
@@ -43,11 +46,16 @@ export default function Table({ columns, data, renderRowSubComponent, filterName
         setFilter(filterName, value)
         setFilterInput(value)
     }
-
     const handleFilterPublish = e => {
         const value = e.target.value || undefined
         setFilter('published', value)
         setFilterPublish(value)
+    }
+    // Modal
+    const handleToggleModal = () => { setShowModal(!showModal) }
+    const handleCreateModal = (modalData) => {
+        setShowModal(!showModal)
+        createData(modalData)
     }
 
     // Render the UI for your table
@@ -91,15 +99,26 @@ export default function Table({ columns, data, renderRowSubComponent, filterName
                         </div>
                         : ''}
                 </div>
-                <div className="flex flex-row items-center border p-2">
-                    <FaSearch size={16} />
-                    <input
-                        value={filterInput}
-                        onChange={handleFilterChange}
-                        placeholder={"Search..."}
-                        type='text'
-                        className="px-4 outline-none text-sm antialiased font-light"
-                    />
+                <div className="flex justify-between items-center">
+                    {tableName === 'faq' || tableName === 'marketplaces' || tableName === 'categories' ?
+                        <button
+                            type="button"
+                            title="Add New"
+                            onClick={handleToggleModal}
+                            className="text-gray-600 p-2 mr-4">
+                            <FaPlus size={24} />
+                        </button>
+                        : ''}
+                    <div className="flex flex-row items-center border p-2">
+                        <FaSearch size={16} />
+                        <input
+                            value={filterInput}
+                            onChange={handleFilterChange}
+                            placeholder={"Search..."}
+                            type='text'
+                            className="px-4 outline-none text-sm antialiased font-light"
+                        />
+                    </div>
                 </div>
             </div>
             <table className="rounded-md shadow-lg" {...getTableProps()}>
@@ -175,6 +194,12 @@ export default function Table({ columns, data, renderRowSubComponent, filterName
                     </button>
                 </div>
             </div>
+            <NewModal
+                show={showModal}
+                tableName={tableName}
+                onClose={handleToggleModal}
+                onCreate={handleCreateModal}
+            />
         </>
     )
 }
