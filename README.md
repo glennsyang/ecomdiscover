@@ -1,4 +1,4 @@
-<img src="/src/images/logo_ecomdiscover.png" alt="EcomDiscover Logo" width="400" height="60" />
+<img src="/src/images/logo_ecomdiscover.png" alt="EcomDiscover Logo" height="128" />
 
 # EcomDiscover - Ecommerce Tools & Services Reviews
 
