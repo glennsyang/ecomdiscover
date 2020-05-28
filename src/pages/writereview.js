@@ -5,6 +5,7 @@ import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
 import ReactQuill from 'react-quill'
+// Don't forget to add: min-height: 18em; to quill.snow.css
 //const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
