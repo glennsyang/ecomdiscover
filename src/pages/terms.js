@@ -1,12 +1,15 @@
 import React from "react"
-import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
+import { useSiteMetadata } from "../hooks/use-site-metadata"
 
-export default ({ data }) => {
-
-    const props = { title: "Terms Of Service", subtitle: `We offer you the web sites, applications, services and content on ${data.site.siteMetadata.website} (“${data.site.siteMetadata.title}”) on the condition that you agree to the following terms.` };
+export default () => {
+    const { title, website } = useSiteMetadata()
+    const props = {
+        title: "Terms Of Service",
+        subtitle: `We offer you the web sites, applications, services and content on ${website} (“${title}”) on the condition that you agree to the following terms.`
+    }
 
     return (
         <Layout>
@@ -24,7 +27,7 @@ export default ({ data }) => {
                         OVERVIEW
                     </h3>
                     <p className="text-black text-md mt-2">
-                        This website is operated by {data.site.siteMetadata.title}. Throughout the site, the terms “we”, “us” and “our” refer to {data.site.siteMetadata.title}. {data.site.siteMetadata.title} offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
+                        This website is operated by {title}. Throughout the site, the terms “we”, “us” and “our” refer to {title}. {title} offers this website, including all information, tools and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies and notices stated here.
                     </p>
                     <p className="text-black text-md mt-2">
                         By visiting our site and/ or purchasing something from us, you engage in our “Service” and agree to be bound by the following terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. These Terms of Service apply to all users of the site, including without limitation users who are browsers, vendors, customers, merchants, and/ or contributors of content.
@@ -104,16 +107,3 @@ export default ({ data }) => {
         </Layout>
     )
 }
-
-export const query = graphql`
-query {
-    site {
-    siteMetadata {
-      author
-      description
-      title
-      website
-    }
-  }
-}
-`

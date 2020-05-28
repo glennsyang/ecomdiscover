@@ -1,10 +1,9 @@
 import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
 
 export default () => {
-
     const props = { title: "About Us", subtitle: "A collection of ecommerce resources primarily related to FBA, but also touching on many other aspects of ecommerce software and resources." };
 
     return (

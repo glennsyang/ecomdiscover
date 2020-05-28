@@ -1,8 +1,12 @@
 .gradient {
     background: linear-gradient(90deg,  #6190E8 0%, #A7BFE8 100%);
 }  
+.custom-blue {
+  background-color: #6190E8;
+}
+
 .hero-image {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/hero_image.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../images/hero_image_2.jpg");
     height: 50%;
     background-position: 50% 60%;
     background-repeat: no-repeat;
@@ -10,7 +14,7 @@
     position: relative;
 }
 .header-image {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/hero_image.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/page_header_cart.jpg");
     height: 50%;
     background-position: 50% 45%;
     background-repeat: no-repeat;
@@ -38,37 +42,52 @@ input[name='panel']:checked ~ .accordion__content {
     max-height: 50em;
 }
 
-.star {
-  cursor: pointer;
-  width: 2em;
-  height: 2em;
-  background-color: grey;
-  -webkit-clip-path: polygon(
-    50% 0%,
-    63% 38%,
-    100% 38%,
-    69% 59%,
-    82% 100%,
-    50% 75%,
-    18% 100%,
-    31% 59%,
-    0% 38%,
-    37% 38%
-  );
-  clip-path: polygon(
-    50% 0%,
-    63% 38%,
-    100% 38%,
-    69% 59%,
-    82% 100%,
-    50% 75%,
-    18% 100%,
-    31% 59%,
-    0% 38%,
-    37% 38%
-  );
+/* Icons */
+.icon-spin {
+  -webkit-animation: icon-spin 2s infinite linear;
+          animation: icon-spin 2s infinite linear;
 }
 
-.star.selected {
-  background-color: red;
+@-webkit-keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+/* Alert: Toast notifications */
+.notification-container {
+	position: fixed;
+	z-index: 999999
+}
+
+.bottom-right {
+	bottom: 30px;
+	right: 30px;
+	transition: transform .12s ease-in-out;
+	animation: toast-in-right .15s;
+}
+
+@keyframes toast-in-right {
+	from {
+    transform: translateX(100%);
+	}
+	to {
+    transform: translateX(0);
+	}
 }
