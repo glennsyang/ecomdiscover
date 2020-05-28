@@ -13,6 +13,9 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
+    `gatsby-transformer-sharp`,
+    `gatsby-transformer-remark`,
+    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -20,9 +23,6 @@ module.exports = {
         path: `${__dirname}/src/posts/`,
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-transformer-remark`,
-    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -51,6 +51,12 @@ module.exports = {
       }
     },
     {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: {
+        prefixes: [`/app/*`, `/dashboard/*`]
+      }
+    },
+    {
       resolve: 'gatsby-source-firestore',
       options: {
         credential: require("./firebase.json"),
@@ -70,22 +76,53 @@ module.exports = {
               id: doc.id,
               name: doc.name,
               logo: doc.logo,
-              website: doc.website
+              logoURL: doc.logoURL,
+              website: doc.website,
+              blurb: doc.blurb,
+              created: doc.created,
+              marketplaces___NODE: doc.marketplaces.map(marketplace => marketplace.id),
+              categories___NODE: doc.categories.map(category => category.id),
+              reviews___NODE: doc.reviews.map(review => review.id),
             }),
           },
           {
             type: 'Reviews',
             collection: 'reviews',
             map: doc => ({
+              id: doc.id,
               content: doc.content,
               created: doc.created,
-              marketplace: doc.marketplace,
               rating: doc.rating,
               tags: doc.tags,
               title: doc.title,
-              username: doc.username,
-              categories___NODE: doc.categories.map(category => category.id),
+              helpful___NODE: doc.helpful.map(user => user.id),
+              user___NODE: doc.uid.id,
               company___NODE: doc.company.id,
+              categories___NODE: doc.categories.map(category => category.id),
+            }),
+          },
+          {
+            type: 'Users',
+            collection: 'users',
+            map: doc => ({
+              id: doc.id,
+              username: doc.displayName,
+              email: doc.email,
+              photoURL: doc.photoURL,
+              role: doc.role,
+              created: doc.created,
+              updated: doc.updated,
+              helpful___NODE: doc.helpful.map(review => review.id),
+            }),
+          },
+          {
+            type: 'Marketplaces',
+            collection: 'marketplaces',
+            map: doc => ({
+              id: doc.id,
+              code: doc.code,
+              name: doc.name,
+              flag: doc.flag,
             }),
           },
           {
@@ -93,9 +130,8 @@ module.exports = {
             collection: 'faq',
             map: doc => ({
               id: doc.id,
-              title: doc.title,
-              content: doc.content,
-              published: doc.published,
+              question: doc.question,
+              answer: doc.answer,
               date: doc.date
             }),
           }
@@ -106,8 +142,10 @@ module.exports = {
       resolve: "gatsby-plugin-firebase",
       options: {
         features: {
-          database: true,
+          auth: true,
           firestore: true,
+          storage: true,
+          analytics: true,
         },
         credentials: {
           apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -122,17 +160,48 @@ module.exports = {
       }
     },
     {
+      resolve: `gatsby-transformer-rehype`,
+      options: {
+        // Condition for selecting an existing GrapghQL node (optional)
+        // If not set, the transformer operates on file nodes.
+        filter: node => node.internal.type === `Reviews`,
+        // Only needed when using filter (optional, default: node.html)
+        // Source location of the html to be transformed
+        source: node => node.content,
+        // Additional fields of the sourced node can be added here (optional)
+        // These fields are then available on the htmlNode on `htmlNode.context`
+        //contextFields: [],
+        // Fragment mode (optional, default: true)
+        fragment: true,
+        // Space mode (optional, default: `html`)
+        space: `html`,
+        // EmitParseErrors mode (optional, default: false)
+        emitParseErrors: false,
+        // Verbose mode (optional, default: false)
+        verbose: false,
+        // Plugins configs (optional but most likely you need one)
+        //plugins: [],
+      },
+    },
+    {
       resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
       options: {
         // Fields to index
-        fields: [`title`, `tags`],
+        fields: [`name`, `categories`, `title`, `tags`],
         // How to resolve each field`s value for a supported node type
         resolvers: {
           // For any node of type Reviews, list how to resolve the fields` values
+          Companies: {
+            type: node => "companies",
+            name: node => node.name,
+            categories: (node, getNode) => node.categories___NODE.map(catNode => getNode(catNode).name),
+            slug: node => node.fields.slug,
+          },
           Reviews: {
+            type: node => "reviews",
             title: node => node.title,
             tags: node => node.tags,
-            slug: node => node.fields.slug,
+            company: node => node.company___NODE,
           },
         },
         // Optional filter to limit indexed nodes

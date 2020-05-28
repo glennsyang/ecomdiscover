@@ -1,46 +1,37 @@
-import React from "react"
-import PropTypes from 'prop-types'
+import React, { useState } from "react"
 import { Link } from "gatsby"
-import logo_image from "../images/logo_1.svg"
+import { useSiteMetadata } from "../hooks/use-site-metadata"
+import SVGImage from "../components/svgimage"
+import Status from "./authentication/status"
 
-function Header({ siteTitle }) {
+function Header() {
+  const [isOpen, setIsOpen] = useState(false)
+  const { title } = useSiteMetadata()
+
   return (
-    <nav id="header" className="fixed w-full z-30 top-0 text-white bg-white shadow">
-
-      <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
-
-        <div className="flex pl-4">
+    <header className="w-full sticky shadow top-0 z-30 bg-white">
+      <div className="w-full container mx-auto sm:flex sm:justify-between sm:items-center sm:px-4 sm:py-3 sticky">
+        <div className="flex items-center justify-between px-4 py-3 sm:p-0">
           {/* Logo */}
-          <Link to={`/`} className="flex items-center">
-            <img src={logo_image} alt={`${siteTitle} Logo`} className="flex-1 h-12 w-32 fill-current inline" />
-            <div className="flex-1">
-              <span className="text-4xl font-light text-blue-500">Ecom</span>
-              <span className="text-4xl font-light text-black">Discover</span>
-            </div>
-          </Link>
+          <div>
+            <Link to={`/`} title={title}><SVGImage name="logo" width="100%" height="100%" viewBox="0 0 1450 400" className="lg:h-16 h-12 object-cover" /></Link>
+          </div>
+          <div className="sm:hidden">
+            <button onClick={() => setIsOpen(!isOpen)} type="button" className="block text-gray-500 hover:text-white focus:text-white focus:outline-none">
+              <svg className="h-6 w-6 fill-current text-blue-500" viewBox="0 0 24 24">
+                {isOpen &&
+                  <path fillRule="evenodd" d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z" />
+                }
+                {!isOpen &&
+                  <path fillRule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z" />}
+              </svg>
+            </button>
+          </div>
         </div>
-
-        <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20 justify-end flex-1" id="nav-content">
-          <Link to={`/login`} className="mr-5 py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500">
-            Log In
-          </Link>
-          <Link to={`/signup`} className="mx-auto lg:mx-0 hover:underline bg-blue-500 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 text-white gradient">
-            Sign Up
-          </Link>
-        </div>
+        <Status isOpen={isOpen} />
       </div>
-
-      <hr className="border-b border-gray-100 opacity-25 my-0 py-0" />
-    </nav>
-  );
+    </header>
+  )
 }
 
-Header.propTypes = {
-  siteTitle: PropTypes.string
-};
-
-Header.defaultProps = {
-  siteTitle: ``
-};
-
-export default Header;
+export default Header

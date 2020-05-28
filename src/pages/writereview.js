@@ -1,342 +1,358 @@
 import React, { useEffect, useState } from "react"
-import { Link, graphql, navigate } from "gatsby"
+import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
-import Select from "react-select"
-import CreatableSelect from 'react-select/creatable';
+import CreatableSelect from 'react-select/creatable'
+import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
+import ReactQuill from 'react-quill'
+//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
-import * as Constants from '../constants'
-import Layout from '../components/layout'
 import SEO from "../components/seo"
+import Category from "../components/category"
 import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
-import StarRating from "../components/star-rating"
-import InputTag from "../components/inputtag"
+import StarRating from "../components/starrating"
+import Toast from "../components/toast"
+import CompanyModal from "../components/companyModal"
+import * as Constants from '../constants'
+import { useCompanies } from "../hooks/use-companies"
+import { getUser } from "../utils/auth"
 
-// returns a date like Fri Jun 14
-function getMDY(ts) {
-    return ts.toDateString().split(' ').slice(0, 3).join(' ')
-}
-// makeDate takes a TS and returns a date like Fri Jun 14
-// if it's today or yesterday, it returns that instead
-function currentDate() {
-    const date = new Date();
-    const dateStr = getMDY(date);
-    const todayStr = getMDY(new Date());
-    const yesterdayStr = getMDY(new Date(Date.now() - Constants.ONE_DAY_MS));
-    if (dateStr === todayStr) {
-        return 'today';
-    } else if (dateStr === yesterdayStr) {
-        return 'yesterday';
-    } else {
-        return dateStr;
-    }
-}
-const customStyles = {
-    control: styles => ({
-        ...styles,
-        backgroundColor: 'white',
-        boxShadow: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-        padding: '1px',
-        borderColor: '#cbd5e0'
-    }),
-    option: (provided, state) => ({
-        ...provided,
-        borderBottom: '1px gray',
-        backgroundColor: state.isSelected ? 'white' : 'white',
-        color: '#2d3748',
-        ':hover': {
-            backgroundColor: '#f7fafc',
-            color: '#4299e1',
-        },
-        padding: 10,
-        fontSize: '14px',
-    }),
-    singleValue: ((provided, state) => {
-        const opacity = state.isDisabled ? 0.5 : 1;
-        const transition = 'opacity 300ms';
+const components = { DropdownIndicator: null, }
+const createCompany = (label) => ({ value: label, label: label })
 
-        return { ...provided, opacity, transition };
-    }),
-    placeholder: styles => ({ ...styles, color: '#cbd5e0' }),
-}
-
-const createOption = (label) => (
-    { value: label, label: label, website: "" }
-)
-
-export default function WriteReview({ data }) {
-    const { register, errors, handleSubmit, setValue } = useForm()
+export default function WriteReview() {
+    const { uid, displayName } = getUser()
+    const [showModal, setShowModal] = useState(false)
+    const [toast, setToast] = useState()
+    const { setValue, register, errors, handleSubmit } = useForm()
+    // Submit button
     const onSubmit = formData => {
         console.log("data:", formData)
         // check if entered new company
         if (formData.company.value === formData.company.label) {
-            firebase
-                .firestore()
-                .collection('companies')
-                .add({ name: formData.company.label, logo: '', website: formData.website })
+            firebase.firestore().collection('companies')
+                .add({ name: formData.company.label, logo: '', website: '' })
                 .then(ref => {
-                    updateFirestore(formData, ref.id)
+                    updateFirestore(formData, ref.id, formData.company.label)
+                })
+                .catch(error => {
+                    const toastProperties = {
+                        id: Math.floor((Math.random() * 101) + 1),
+                        title: 'Error',
+                        description: `There was an error in creating new Company: ${formData.company.label}. Reason: ${error}.`,
+                        color: 'red',
+                    }
+                    setToast(toastProperties)
                 })
         } else {
-            updateFirestore(formData, formData.company.value)
+            updateFirestore(formData, formData.company.value, formData.company.label)
+        }
+    }
+    // save the Review in the database
+    const updateFirestore = (dataObject, companyId, companyName) => {
+        dataObject = Object.assign(dataObject, {
+            categories: company.categories.map((category) => (
+                firebase.firestore().doc(`categories/${category.id}`)
+            )),
+            company: firebase.firestore().doc(`companies/${companyId}`),
+            created: firebase.firestore.FieldValue.serverTimestamp(),
+            helpful: [],
+            published: false,
+            rating: dataObject.rating ? Number(dataObject.rating) : 0,
+            tags: dataObject.tags ? dataObject.tags.map((tag) => (
+                tag.label
+            )) : [],
+            uid: firebase.firestore().collection('users').doc(uid),
+        })
+        firebase
+            .firestore().collection('reviews')
+            .add(dataObject)
+            .then(ref => {
+                console.log("created new review:", ref.id)
+                // Update the 'companies' collection with this latest review
+                firebase.firestore().collection('companies').doc(companyId)
+                    .update({
+                        reviews: firebase.firestore.FieldValue.arrayUnion(ref),
+                    })
+                    .then(() => {
+                        console.log("Updated Company:", companyId)
+                        navigate(
+                            "/form-submitted",
+                            {
+                                state: { username: displayName },
+                                replace: true,
+                            }
+                        )
+                    })
+                    .catch(error => {
+                        const toastProperties = {
+                            id: Math.floor((Math.random() * 101) + 1),
+                            title: 'Error',
+                            description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}.`,
+                            color: 'red',
+                        }
+                        setToast(toastProperties)
+                    })
+            })
+            .catch(error => {
+                const toastProperties = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Error',
+                    description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}.`,
+                    color: 'red',
+                }
+                setToast(toastProperties)
+            })
+    }
+    // React-quill Editor
+    const [content, setContent] = useState('')
+    const handleChangeContent = newValue => {
+        setValue('content', newValue)
+        setContent(newValue)
+    }
+
+    // Modal
+    const showCompanyModal = () => {
+        //e.preventDefault()
+        setShowModal(!showModal)
+    }
+    const createCompanyModal = (modalData) => {
+        setShowModal(!showModal)
+        const newOption = { value: modalData.id, label: modalData.name }
+        setValue('company', newOption, true)
+        setCompanyValue(newOption)
+        setCompanyOptions([...companyOptions, newOption])
+        setCompany(modalData)
+        setCompanyList([...companyList, modalData])
+    }
+
+    // Companies
+    const { allCompanies } = useCompanies()
+    const defaultCompanies = allCompanies.nodes.map((node) => (
+        { value: node.id, label: node.name, created: node.created }
+    ))
+
+    const [companyList, setCompanyList] = useState(allCompanies.nodes)
+    const [companyOptions, setCompanyOptions] = useState(defaultCompanies)
+    const [companyValue, setCompanyValue] = useState()
+    const [company, setCompany] = useState(null)
+
+    const handleChangeCompany = selectedValue => {
+        console.log("selectedValue", selectedValue)
+        setValue('company', selectedValue, true)
+        setCompanyValue(selectedValue)
+        if (selectedValue) {
+            const selectedCompany = companyList.find(x => x.id === selectedValue.value)
+            if (selectedCompany) {
+                if (selectedCompany.logo) {
+                    selectedCompany.imgLogo = {
+                        imgName: selectedCompany.logo, imgAlt: `${selectedCompany.name} Logo`, imgClass: ""
+                    }
+                }
+                setCompany(selectedCompany)
+            }
+        } else { setCompany(null) }
+    }
+
+    // Tags
+    const [tags, setTags] = useState([])
+    const [inputValue, setInputValue] = useState('')
+    const handleTagChange = (value) => {
+        setValue('tags', value)
+        setTags(value)
+    }
+    const handleTagInputChange = (inputValue) => {
+        setInputValue(inputValue)
+    }
+    const handleKeyDown = event => {
+        if (!inputValue) return
+        switch (event.key) {
+            case 'Enter':
+            case 'Tab':
+                // Check if tag already exists
+                if (tags.find(tag => tag.value.toLowerCase() === inputValue.toLowerCase())) {
+                    event.preventDefault()
+                    return
+                }
+                setInputValue('')
+                const newOption = createCompany(inputValue)
+                setValue('tags', [...tags, newOption])
+                setTags([...tags, newOption])
+                event.preventDefault()
+                break
+            default:
+                break
         }
     }
 
-    const updateFirestore = (dataObject, companyId) => {
-        delete dataObject.website
-        dataObject = Object.assign(dataObject, {
-            rating: Number(dataObject.rating),
-            username: "Glenn Sheppard",
-            created: firebase.firestore.FieldValue.serverTimestamp(),
-            company: firebase.firestore().doc(`companies/${companyId}`),
-            categories: dataObject.categories.map((category) => (
-                firebase.firestore().doc(`categories/${category.value}`)
-            ))
-        })
-        firebase
-            .firestore()
-            .collection('reviews')
-            .add(dataObject)
-            .then(ref => {
-                console.log("sent to firestore:", ref.id)
-            })
-        navigate(
-            "/form-submitted",
-            {
-                state: { username: dataObject.username },
-                replace: true,
-            }
-        )
-    }
-    console.log(`errors: ${errors.title}`)
-
-    // Companies
-    const defaultCompanies = data.allCompanies.edges.map(({ node }) => (
-        { value: node.id, label: node.name, website: node.website }
-    ))
-    const [options, setOptions] = useState(defaultCompanies)
-    const [companies, setCompanies] = useState({});
-    const handleChange = selectedValue => {
-        setValue('company', selectedValue)
-        setValue('website', selectedValue ? selectedValue.website : "")
-        setCompanies(selectedValue);
-    }
-    const handleCreate = newValue => {
-        // add the new Company to existing list
-        const newOption = createOption(newValue)
-        setOptions([...options, newOption])
-        setValue('company', newOption)
-        setCompanies(newOption);
-    }
-    // Categories
-    const categories = data.allCategories.edges.map(({ node }) => (
-        { value: node.id, label: node.name }
-    ))
-    const [values, setCategories] = useState({ selectedOption: [] })
-    const handleMultiChange = selectedOption => {
-        setValue('categories', selectedOption)
-        setCategories({ selectedOption })
-    }
-
     useEffect(() => {
-        register({ name: "company" })
-        register({ name: "categories" })
+        register({ name: "company" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+        register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+        register({ name: "tags" })
     }, [register])
 
-    const imgProfile = {
-        imgName: "blank_profile_picture.png",
-        imgAlt: `My Profile`,
-        imgClass: "h-full w-full object-cover"
-    };
     const imgAds = {
         imgName: "ads_digital_ocean.png",
         imgAlt: "Digital Ocean Ad",
-        imgClass: ""
-    };
+        imgClass: "w-64 h-full"
+    }
 
     return (
-        <Layout>
+        <>
             <SEO
                 title="Write Review"
                 keywords={[`amazon`, `seller`, `tools`, `FBA`]}
             />
-            <section className="pt-4 bg-white">
+            <div className="bg-gray-200">
 
-                <div className="bg-gray-100 py-2">
+                <div className="container mx-auto bg-white">
 
-                    <div className="container mx-auto px-18 flex items-center">
+                    <div id="wrapper" className="flex flex-col lg:flex-row">
 
-                        <div className="flex sm:w-2/3">
-                            <Link title="User reviews" to={`/`} className="h-20 w-20 rounded-full overflow-hidden mr-4 flex-shrink-0 relative">
-                                <ImageFluid props={imgProfile} />
-                            </Link>
-                            <div className="mb-auto mt-auto">
-                                <h3 className="text-md text-gray-600">
-                                    <Link to={`/`} className="text-gray-600">By Doug Short</Link>
-                                    <small className="text-gray-500"> • {currentDate()}</small>
-                                </h3>
-                            </div>
-                        </div>
-                        <div className="sm:w-1/3 mt-2 ml-2">
-                            <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
-                                <ImageFixed props={imgAds} />
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                        <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
 
-                <div className="container mx-auto px-18 py-4">
-                    <div className="flex flex-col lg:flex-row">
-
-                        <div className="lg:w-4/6">
-
-                            <form onSubmit={handleSubmit(onSubmit)} >
-                                <div className="block text-left text-black text-2xl font-bold">Title</div>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    placeholder="Summarize your review or highlight an interesting detail"
-                                    ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                                    className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
-                                />
-                                {errors.title && <span className="text-red-400 text-md">{errors?.title?.message}</span>}
-
-                                <div className="block text-left text-black text-2xl font-bold mt-4">Review</div>
-                                <textarea
-                                    type="text"
-                                    name="content"
-                                    placeholder="By sharing your experiences you're helping businesses make better choices. Thank you!"
-                                    ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                                    className="text-black text-lg w-full block box-border rounded-md border border-gray-400 shadow-inner py-2 px-2 h-32 placeholder-gray-400"
-                                />
-                                {errors.content && <span className="text-red-400 text-md">{errors?.content?.message}</span>}
-
-                                <div className="flex">
-                                    <div className="w-3/5">
-                                        <div className="block text-left text-black text-2xl font-bold mt-4">Tool or Service Name</div>
-                                        <CreatableSelect
-                                            name="company"
-                                            placeholder="Select Company..."
-                                            value={companies}
-                                            options={options}
-                                            styles={customStyles}
-                                            onChange={handleChange}
-                                            onCreateOption={handleCreate}
-                                            ref={() =>
-                                                register(
-                                                    { name: "company" },
-                                                    {
-                                                        validate: value => {
-                                                            // need to validate if it is undefined or empty array
-                                                            return Array.isArray(value) ? value.length > 0 : !!value || Constants.FIELD_REQUIRED;
-                                                        }
-                                                    }
-                                                )
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                {/* Company Heading */}
+                                <div className="flex flex-col lg:flex-row">
+                                    <div className="lg:w-3/4 flex flex-col lg:ml-10">
+                                        {/* Categories */}
+                                        <div className="flex">
+                                            {company &&
+                                                <Category categories={company.categories} useLink={false} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-black tracking-tight mr-1" />
                                             }
-                                            isClearable
-                                        />
+                                        </div>
+                                        <div className="flex flex-col items-start md:flex-row">
+                                            <Select
+                                                name="company"
+                                                placeholder="Select Company..."
+                                                styles={Constants.customStyles}
+                                                options={companyOptions}
+                                                value={companyValue}
+                                                onChange={handleChangeCompany}
+                                                isClearable
+                                                className="flex-1 w-full mt-2"
+                                            />
+                                            <button type="button" onClick={showCompanyModal} className="flex-none outline-none focus:outline-none py-3 px-1 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500 underline sm:no-underline sm:mx-4">
+                                                New Company
+                                            </button>
+                                        </div>
                                         {errors.company && <span className="text-red-400 text-md">{errors?.company?.message}</span>}
-                                    </div>
-
-                                    <div className="w-2/5 ml-4">
-                                        <div className="block text-left text-black text-2xl font-bold mt-4">Website</div>
-                                        <input
-                                            type="url"
-                                            name="website"
-                                            placeholder="example.com"
-                                            ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                                            className="block text-black w-full box-border rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
-                                        />
-                                        {errors.website && <span className="text-red-400 text-md">{errors?.website?.message}</span>}
+                                        {/* Logo */}
+                                        <div className="flex pl-4 my-6">
+                                            {company &&
+                                                <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
+                                                    {company && company.imgLogo
+                                                        ? <ImageFixed props={company.imgLogo} />
+                                                        : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-16 w-2/5 object-contain" />}
+                                                </a>}
+                                        </div>
+                                        {/* Marketplace & Website */}
+                                        <div className="flex">
+                                            <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">
+                                                {company &&
+                                                    company.marketplaces.map(marketplace => {
+                                                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
+                                                    })
+                                                }
+                                            </h6>
+                                            {company &&
+                                                <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-2">{company.name}</a>}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="block text-left text-black text-2xl font-bold mt-4">Categories</div>
-                                <Select
-                                    name="categories"
-                                    placeholder="Select Categories..."
-                                    value={values.selectedOption}
-                                    options={categories}
-                                    styles={customStyles}
-                                    onChange={handleMultiChange}
-                                    ref={() =>
-                                        register(
-                                            { name: "categories" },
-                                            {
-                                                validate: value => {
-                                                    // need to validate if it is undefined or empty array
-                                                    return Array.isArray(value) ? value.length > 0 : !!value || Constants.FIELD_REQUIRED;
-                                                }
-                                            }
-                                        )
-                                    }
-                                    isMulti
-                                />
-                                {errors.categories && <span className="text-red-400 text-md">{errors?.categories?.message}</span>}
+                                <hr id="review" className="border-b border-gray-400 opacity-25 mt-4 py-0" />
 
-                                <button
-                                    type="submit"
-                                    value="Submit"
-                                    className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full my-6 py-4 px-8 shadow opacity-75 text-white gradient">
-                                    Submit
-                                </button>
+                                {/* Review */}
+                                <div className="flex flex-col lg:px-10 py-4">
+                                    <div className="flex flex-col">
+                                        <StarRating
+                                            totalStars={5}
+                                            name="rating"
+                                            register={register}
+                                            required
+                                        />
+                                        {errors.rating && <span className="text-red-400 text-md">{errors?.rating?.message}</span>}
+
+                                        <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Title</div>
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            placeholder="Summarize your review or highlight an interesting detail"
+                                            ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
+                                            className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                                        />
+                                        {errors.title && <span className="text-red-400 text-md">{errors?.title?.message}</span>}
+
+                                        <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-4">Review</div>
+                                        <ReactQuill
+                                            name="content"
+                                            placeholder="By sharing your experiences you're helping businesses make better choices. Thank you!"
+                                            value={content}
+                                            onChange={handleChangeContent}
+                                            modules={Constants.editorModules}
+                                            formats={Constants.editorFormats}
+                                            theme="snow"
+                                        />
+                                        {errors.content && <span className="text-red-400 text-md">{errors?.content?.message}</span>}
+
+                                        <div className="block text-black lg:text-2xl text-xl font-bold mt-4">Tags</div>
+                                        <CreatableSelect
+                                            name="tags"
+                                            components={components}
+                                            inputValue={inputValue}
+                                            isClearable
+                                            isMulti
+                                            menuIsOpen={false}
+                                            styles={Constants.customStyles}
+                                            onChange={handleTagChange}
+                                            onInputChange={handleTagInputChange}
+                                            onKeyDown={handleKeyDown}
+                                            placeholder="Type something and press enter..."
+                                            value={tags}
+                                        />
+
+                                        <div className="text-black mt-8">
+                                            <button
+                                                type="submit"
+                                                value="Submit"
+                                                className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </form>
                         </div>
 
-                        <div className="w-2/6 pl-12">
-                            <span className="block text-left text-black text-2xl font-bold mb-2">Rating</span>
-
-                            <StarRating totalStars={5} name="rating" register={register} rules={{ required: true, message: Constants.SELECT_MARKETPLACE }} />
-                            {errors.rating && <span className="text-red-400 text-md">{errors?.rating?.message}</span>}
-
-                            <div className="block text-black text-2xl font-bold mt-8">Tags</div>
-
-                            <InputTag name="tags" label="Tags" register={register} />
-
-                            <div className="block text-left text-black text-2xl font-bold mt-4">Marketplace</div>
-                            <div className="flex-row justify-start text-black">
-                                {Constants.MARKETPLACE_OPTIONS.map((country) =>
-                                    <React.Fragment key={country.id}>
-                                        <input
-                                            type="checkbox"
-                                            name="marketplace"
-                                            value={country.value}
-                                            ref={register({ required: { value: true, message: Constants.SELECT_MARKETPLACE } })}
-                                            className="m-2"
-                                        />{country.value}
-                                    </React.Fragment>
-                                )}
+                        {/* Ads */}
+                        <div id="sidebar" className="lg:w-1/4 flex flex-col py-10 lg:pb-0 bg-gray-200 relative">
+                            <div className="flex mx-auto">
+                                <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
+                                    <ImageFluid props={imgAds} />
+                                </a>
                             </div>
-                            {errors.marketplace && <span className="text-red-400 text-md">{errors?.marketplace?.message}</span>}
+                            <div className="flex mx-auto ml-10 lg:mt-32 fixed">
+                                <div className="flex">
 
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <CompanyModal
+                        show={showModal}
+                        onClose={showCompanyModal}
+                        onCreate={createCompanyModal}
+                    />
+                    <Toast
+                        toastProps={toast}
+                        position="bottom-right"
+                        autoDelete={true}
+                        autoDeleteTime={2500}
+                    />
                 </div>
-            </section >
-        </Layout >
+            </div>
+        </>
     )
 }
-
-export const query = graphql`
-query {
-    allCategories (sort: { fields: name, order: ASC }) {
-        edges {
-            node {
-                id
-                name
-            }
-        }
-    }   
-    allCompanies (sort: { fields: name, order: ASC }) {
-        edges {
-            node {
-                id
-                name
-                logo
-                website
-            }
-        }
-    }
-}
-`
