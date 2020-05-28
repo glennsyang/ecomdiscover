@@ -1,12 +1,13 @@
 <img src="/src/images/logo_ecomdiscover.png" alt="EcomDiscover Logo" height="128" />
 
-# EcomDiscover - Ecommerce Tools & Services Reviews
+# E-commerce Tools & Services Reviews
 
-Find Top-Rated Tools & Services For Your E-commerce Business
+Find Top-Rated Tools & Services For Your E-commerce Business!
 
 ## About
 
-A collection of e-commerce resources. Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources. Search the curated collection of e-commerce resources.
+A collection of e-commerce resources. Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources. 
+Search our curated collection of e-commerce resources and review your favorite tools and share your experiences with our community!
 
 
 ## Built With
