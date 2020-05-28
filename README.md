@@ -6,7 +6,8 @@ Find Top-Rated Tools & Services For Your E-commerce Business
 
 A collection of e-commerce resources. Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources. Search the curated collection of e-commerce resources.
 
-![alt text](https://gitlab.com/gsheppard.yang/eseller-tools-app/-/blob/release/src/images/logo_ecomdiscover.png)
+![alt text](/src/images/logo_ecomdiscover.png)
+![GitHub Logo](/images/logo_ecomdiscover.png)
 
 ## Built With
 
