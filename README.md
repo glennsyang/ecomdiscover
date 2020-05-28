@@ -1,10 +1,12 @@
-# Ecom Discover - Ecommerce Tools & Services Reviews
+# EcomDiscover - Ecommerce Tools & Services Reviews
 
+Find Top-Rated Tools & Services For Your E-commerce Business
 
 ## About
 
-A collection of e-commerce resources. Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources.
+A collection of e-commerce resources. Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources. Search the curated collection of e-commerce resources.
 
+![alt text](https://gitlab.com/gsheppard.yang/eseller-tools-app/-/blob/release/src/images/logo_ecomdiscover.png)
 
 ## Built With
 
@@ -14,28 +16,15 @@ A collection of e-commerce resources. Primarily related to FBA, but also touchin
 
 [Firebase](https://firebase.io)
 
+[React-Hook-Form](https://react-hook-form.com/)
+
+[React-Quill](https://github.com/zenoamaro/react-quill)
+
+[React-Table](https://github.com/tannerlinsley/react-table)
+
+[React-Select](https://react-select.com/home)
+
 ## Author
 
 [Glenn Sheppard](https://glennsheppard.dev)
-
-
-<textarea
-                                            type="text"
-                                            name="content"
-                                            placeholder="By sharing your experiences you're helping businesses make better choices. Thank you!"
-                                            ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                                            className="text-black text-lg w-full block box-border rounded-md border border-gray-400 shadow-inner py-2 px-2 h-40 placeholder-gray-400"
-                                        />
-
-                                        <ReactQuill
-                                            name="content"
-                                            placeholder="By sharing your experiences you're helping businesses make better choices. Thank you!"
-                                            value={content}
-                                            onChange={handleChangeContent}
-                                            modules={Constants.editorModules}
-                                            formats={Constants.editorFormats}
-                                            theme="snow"
-                                        />
-                                        {errors.content && <span className="text-red-400 text-md">{errors?.content?.message}</span>}
-
-                                        
+                           
