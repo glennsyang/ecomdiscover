@@ -6,9 +6,7 @@ Find Top-Rated Tools & Services For Your E-commerce Business
 
 A collection of e-commerce resources. Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources. Search the curated collection of e-commerce resources.
 
-![EcomDiscover Logo](/src/images/logo_ecomdiscover.png)
-
-<img src="/src/images/logo_ecomdiscover.png" alt="EcomDiscover Logo" />
+<img src="/src/images/logo_ecomdiscover.png" alt="EcomDiscover Logo" width="100" height="50" />
 
 ## Built With
 
