@@ -18,6 +18,7 @@ const SignUp = () => {
                 // Create user in 'users' collection
                 firebase.firestore().collection('users').doc(result.user.uid)
                     .set({
+                        active: true,
                         created: firebase.firestore.FieldValue.serverTimestamp(),
                         displayName: data.name,
                         email: data.email,

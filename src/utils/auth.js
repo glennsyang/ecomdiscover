@@ -1,3 +1,5 @@
+import firebase from "gatsby-plugin-firebase"
+
 export const isBrowser = () => typeof window !== "undefined"
 
 export const getUser = () =>
@@ -11,6 +13,17 @@ export const setUser = user =>
 export const isLoggedIn = () => {
     const user = getUser()
     return !!user.email
+}
+
+export const isBlocked = async () => {
+    if (isLoggedIn()) {
+        const user = getUser()
+        const documentReference = firebase.firestore().collection('users').doc(user.uid)
+        const result = await documentReference.get()
+        const data = result.data()
+        //console.log("data:", data)
+        return data.active
+    } else { return false }
 }
 
 export const logout = (firebase) => {
