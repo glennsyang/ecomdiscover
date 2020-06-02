@@ -22,11 +22,11 @@ export default () => {
                         <div className="flex-1">
                             <div className="grid grid-cols-3 gap-1">
                                 {allCategories.nodes.map((node) => (
-                                    <div key={node.id} className="col-span-1 text-blue-500 text-left p-1 sm:mx-6">
+                                    <div key={node.id} className="col-span-1">
                                         <Link
                                             to={`/companies`}
                                             state={{ category: node.name }}
-                                            className="hover:underline">
+                                            className="bg-gray-200 border border-gray-300 rounded-md px-2 text-sm font-semibold text-blue-500 tracking-tight text-left sm:mx-6 mb-1 hover:underline">
                                             {node.name}
                                         </Link>
                                     </div>

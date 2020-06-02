@@ -187,7 +187,7 @@ module.exports = {
       resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
       options: {
         // Fields to index
-        fields: [`name`, `categories`, `title`, `tags`],
+        fields: [`name`, `categories`, `title`, `tags`, `content`],
         // How to resolve each field`s value for a supported node type
         resolvers: {
           // For any node of type Reviews, list how to resolve the fields` values
@@ -200,6 +200,7 @@ module.exports = {
           Reviews: {
             type: node => "reviews",
             title: node => node.title,
+            content: node => node.content,
             tags: node => node.tags,
             company: node => node.company___NODE,
           },

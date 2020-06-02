@@ -16,7 +16,6 @@ function IndexPage({ data }) {
       var dateA = new Date(a.created), dateB = new Date(b.created)
       return dateA - dateB
     }))
-    //console.log("sorted:", companies)
   }, [companies])
 
   return (
