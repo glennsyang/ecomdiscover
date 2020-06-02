@@ -152,7 +152,7 @@ const PublishReviews = () => {
                 sortType: 'datetime'
             },
             {
-                Header: "Live?",
+                Header: "Published?",
                 accessor: "published",
                 Cell: ({ cell: { value } }) => value === 'Yes'
                     ? <FaCheck size={16} className="text-green-500" />

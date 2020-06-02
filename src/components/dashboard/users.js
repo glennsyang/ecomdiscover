@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react"
 import firebase from "gatsby-plugin-firebase"
+import { FaCheck, FaBan } from "react-icons/fa"
 import moment from "moment"
 import Loader from "../loader"
 import Toast from "../toast"
@@ -89,6 +90,14 @@ const Users = () => {
             {
                 Header: "Role",
                 accessor: "role"
+            },
+            {
+                Header: "Active",
+                accessor: "active",
+                Cell: ({ cell: { value } }) => value === true
+                    ? <FaCheck size={16} className="text-green-500" />
+                    : <FaBan size={16} className="text-red-500" />,
+                sortType: 'basic'
             },
             {
                 Header: "Created",

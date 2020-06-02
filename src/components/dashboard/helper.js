@@ -1,4 +1,3 @@
-//import { get, set } from 'lodash'
 
 const getReference = async documentReference => {
     const res = await documentReference.get()
@@ -41,4 +40,4 @@ const hydrate = async (document, paths = []) => Promise.all(
     })
 )
 
-export { hydrate }
+export { hydrate, getReference }

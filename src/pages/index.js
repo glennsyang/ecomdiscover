@@ -5,17 +5,22 @@ import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
 import CompanyCard from "../components/cards/companycard"
 import { useCompanies } from "../hooks/use-companies"
-import { isLoggedIn } from "../utils/auth"
+import { isLoggedIn, isBlocked } from "../utils/auth"
 
 function IndexPage({ data }) {
   const { allCompanies } = useCompanies()
   const [companies, setCompanies] = useState(allCompanies.nodes)
+  const [isUserBlocked, setIsUserBlocked] = useState(false)
 
   useEffect(() => {
-    setCompanies(companies.sort((a, b) => {
-      var dateA = new Date(a.created), dateB = new Date(b.created)
-      return dateA - dateB
-    }))
+    async function fetchData() {
+      setCompanies(companies.sort((a, b) => {
+        var dateA = new Date(a.created), dateB = new Date(b.created)
+        return dateA - dateB
+      }))
+      setIsUserBlocked(await isBlocked())
+    }
+    fetchData()
   }, [companies])
 
   return (
@@ -112,7 +117,7 @@ function IndexPage({ data }) {
           <h3 className="mt-4 mb-12 text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h3>
 
           <Link
-            to={isLoggedIn() ? '/app/writereview' : '/app/login'}
+            to={isLoggedIn() && isUserBlocked ? '/app/writereview' : '/app/login'}
             state={{ fromShare: true }}
             title={isLoggedIn() ? 'Share!' : 'Please log-in to share a review'}
             className="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-8 py-4 px-8 shadow-lg"

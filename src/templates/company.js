@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, graphql } from "gatsby"
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"
 import * as Constants from '../constants'
@@ -9,7 +9,7 @@ import Category from "../components/category"
 import AvgRating from "../components/avgrating"
 import ReviewCard from "../components/cards/reviewcard"
 import Advert from "../components/advert"
-import { isLoggedIn } from "../utils/auth"
+import { isLoggedIn, isBlocked } from "../utils/auth"
 
 const SortByButton = (props) => {
     const { buttonName, sortType, selected } = props
@@ -44,7 +44,6 @@ export default function Company({ data }) {
     ])
     const [currentSort, setCurrentSort] = useState('helpfuldown')
     const [sortHeadingText, setSortHeadingText] = useState("Most Helpful Reviews")
-
     // method called every time the sort button is clicked
     // it will change the currentSort value to the next one
     const onSortByChange = (props) => {
@@ -60,6 +59,11 @@ export default function Company({ data }) {
         setCurrentSort(`${buttonName.toLowerCase()}${nextSort}`)
         setSortHeadingText(Constants.SORT_TYPES[`${buttonName.toLowerCase()}${sortType}`].message)
     }
+    const [isUserBlocked, setIsUserBlocked] = useState(false)
+
+    useEffect(() => {
+        setIsUserBlocked(isBlocked())
+    }, [])
 
     return (
         <Layout>
@@ -148,7 +152,7 @@ export default function Company({ data }) {
                                     <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
                                 </div>
                             </div>
-                            {isLoggedIn() ?
+                            {isLoggedIn() && !isUserBlocked ?
                                 <div className="mx-auto mt-10">
                                     <Link
                                         to={'/app/writereview'}

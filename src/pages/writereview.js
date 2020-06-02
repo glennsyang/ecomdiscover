@@ -17,7 +17,7 @@ import Toast from "../components/toast"
 import CompanyModal from "../components/companyModal"
 import * as Constants from '../constants'
 import { useCompanies } from "../hooks/use-companies"
-import { getUser } from "../utils/auth"
+import { getUser, isBlocked } from "../utils/auth"
 
 const components = { DropdownIndicator: null, }
 const createCompany = (label) => ({ value: label, label: label })
@@ -27,6 +27,7 @@ export default function WriteReview({ location }) {
     const [showModal, setShowModal] = useState(false)
     const [toast, setToast] = useState()
     const { setValue, register, errors, handleSubmit } = useForm()
+    const [isUserBlocked, setIsUserBlocked] = useState(false)
     const titleRef = useRef()
     // Submit button
     const onSubmit = formData => {
@@ -60,7 +61,7 @@ export default function WriteReview({ location }) {
             company: firebase.firestore().doc(`companies/${companyId}`),
             created: firebase.firestore.FieldValue.serverTimestamp(),
             helpful: [],
-            published: false,
+            published: true,
             rating: dataObject.rating ? Number(dataObject.rating) : 0,
             tags: dataObject.tags ? dataObject.tags.map((tag) => (
                 tag.label
@@ -192,6 +193,8 @@ export default function WriteReview({ location }) {
         register({ name: "company" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
         register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
         register({ name: "tags" })
+
+        setIsUserBlocked(isBlocked())
 
         if (location.state.companyId) {
             const selectedCompany = companyList.find(x => x.id === location.state.companyId)
@@ -326,15 +329,16 @@ export default function WriteReview({ location }) {
                                             placeholder="Type something and press enter..."
                                             value={tags}
                                         />
-
-                                        <div className="text-black mt-8">
-                                            <button
-                                                type="submit"
-                                                value="Submit"
-                                                className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient">
-                                                Submit
-                                            </button>
-                                        </div>
+                                        {isUserBlocked ? '' :
+                                            <div className="text-black mt-8">
+                                                <button
+                                                    type="submit"
+                                                    value="Submit"
+                                                    className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </form>
