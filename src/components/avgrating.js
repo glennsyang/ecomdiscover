@@ -5,7 +5,7 @@ import { navigate } from '@reach/router'
 const AvgRating = (props) => {
     const { arrReviews, rating, slug, showAvgRating, showNumReviews, starSize, className } = props
 
-    let avgRating = arrReviews
+    let avgRating = arrReviews && arrReviews.length !== 0
         ? arrReviews.reduce((a, b) => {
             return b.rating === null ? a : a + b.rating
         }, 0) / arrReviews.length
@@ -30,8 +30,8 @@ const AvgRating = (props) => {
                 ? <span className={className}>
                     {showAvgRating
                         ? <Link to={slug} className="hover:underline">
-                            {arrReviews.length} Reviews
-                    </Link>
+                            {arrReviews.length === 1 ? `${arrReviews.length} Review` : `${arrReviews.length} Reviews`}
+                        </Link>
                         : <button
                             className="hover:underline outline-none focus:outline-none"
                             onClick={event => {

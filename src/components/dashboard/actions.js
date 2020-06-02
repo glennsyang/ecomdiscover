@@ -1,6 +1,6 @@
 import React from "react"
 import firebase from "gatsby-plugin-firebase"
-import { FaPen, FaTimesCircle, FaPaperPlane } from "react-icons/fa"
+import { FaPen, FaTimesCircle, FaPaperPlane, FaBan } from "react-icons/fa"
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
@@ -90,8 +90,51 @@ const Actions = (props) => {
                 })
         }
     }
+    const handleUnPublish = (row) => {
+        console.log("UnPublish Row:", row)
+        if (row.published === 'No') {
+            const toastProps = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Warning!',
+                description: `Already Un-Published from Live site.`,
+                color: 'yellow',
+            }
+            onCloseToast(toastProps)
+        } else {
+            // Update name
+            firebase.firestore().collection(collection).doc(row.id)
+                .update({ published: false })
+                .then(() => {
+                    const toastProps = {
+                        id: Math.floor((Math.random() * 101) + 1),
+                        title: 'Success!',
+                        description: `${component} will be un-published.`,
+                        color: 'green',
+                    }
+                    onCloseToast(toastProps)
+                })
+                .catch(error => {
+                    const toastProps = {
+                        id: Math.floor((Math.random() * 101) + 1),
+                        title: 'Error',
+                        description: `There was an error in updating the ${component}. Reason: ${error.code}.`,
+                        color: 'red',
+                    }
+                    onCloseToast(toastProps)
+                })
+        }
+    }
     return (<>
-        {component === 'Review' ? <button type="button" onClick={() => handlePublish(rowProps)} className="text-blue-500 mr-2"><FaPaperPlane size={16} /></button> : ''}
+        {component === 'Review' ?
+            <>
+                <button type="button" title="Unpublish" onClick={() => handleUnPublish(rowProps)} className="text-red-700 mr-2">
+                    <FaBan size={16} />
+                </button>
+                <button type="button" title="Publish" onClick={() => handlePublish(rowProps)} className="text-blue-500 mr-2">
+                    <FaPaperPlane size={16} />
+                </button>
+            </>
+            : ''}
         <button type="button" onClick={() => handleEdit(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>
         <button type="button" onClick={() => handleDelete(rowProps)} className="text-red-500"><FaTimesCircle size={16} /></button>
     </>)

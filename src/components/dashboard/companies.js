@@ -82,7 +82,7 @@ const Companies = () => {
                 accessor: "logoURL",
                 disableSortBy: true,
                 // Cell method will provide the cell value; we pass it to render a custom component
-                Cell: ({ cell: { value } }) => <img src={value} alt={value} className="h-16 w-16 object-contain" />
+                Cell: ({ cell: { value } }) => <img src={value} alt={value} className="h-12 w-12 object-contain" />
             },
             {
                 Header: "Name",

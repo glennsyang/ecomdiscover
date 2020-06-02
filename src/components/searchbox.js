@@ -38,18 +38,20 @@ export default class SearchBox extends Component {
                     </button>
                 </div>
 
-                <div className="absolute w-full bg-white">
-                    {this.state.results.map(page => (
-                        <SearchDisplay key={page.id} props={page} />
-                    ))}
-                </div>
+                {this.state.isActive ?
+                    <div className="absolute w-full bg-white shadow-md rounded border border-gray-300 mt-1">
+                        {this.state.results.map(page => (
+                            <SearchDisplay key={page.id} props={page} />
+                        ))}
+                    </div>
+                    : ''}
             </div>
         )
     }
 
     getOrCreateIndex = () => this.index
         ? this.index
-        : Index.load(this.props.searchIndex);
+        : Index.load(this.props.searchIndex)
 
     search = evt => {
         const query = evt.target.value
@@ -61,9 +63,11 @@ export default class SearchBox extends Component {
                 .search(query, { expand: true }) // Accept partial matches
                 // Map over each ID and return the full document
                 .map(({ ref }) => {
-                    let result = this.index.documentStore.getDoc(ref);
+                    let result = this.index.documentStore.getDoc(ref)
+                    //console.log("result:", result)
                     if (result.type === 'reviews') {
                         const company = this.index.documentStore.getDoc(result.company)
+                        //console.log("company:", company)
                         result = {
                             ...result,
                             slug: company.slug
@@ -74,5 +78,5 @@ export default class SearchBox extends Component {
                 }),
             isActive: !!query,
         })
-    };
+    }
 }
