@@ -62,7 +62,10 @@ export default function Company({ data }) {
     const [isUserBlocked, setIsUserBlocked] = useState(false)
 
     useEffect(() => {
-        setIsUserBlocked(isBlocked())
+        async function fetchData() {
+            setIsUserBlocked(await isBlocked())
+        }
+        fetchData()
     }, [])
 
     return (
@@ -152,7 +155,7 @@ export default function Company({ data }) {
                                     <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
                                 </div>
                             </div>
-                            {isLoggedIn() && !isUserBlocked ?
+                            {isLoggedIn() && isUserBlocked ?
                                 <div className="mx-auto mt-10">
                                     <Link
                                         to={'/app/writereview'}

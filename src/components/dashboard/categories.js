@@ -5,7 +5,6 @@ import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 import EditableCell from "./editablecell"
-import * as Constants from '../../constants'
 
 const Categories = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -48,7 +47,7 @@ const Categories = () => {
         const old = categories[rowIndex].name
         if (value !== old) {
             // Update name
-            firebase.firestore().collection(Constants.DASHBOARD_TABLE_CATEGORIES).doc(id)
+            firebase.firestore().collection('categories').doc(id)
                 .update({ name: value })
                 .then(() => {
                     const toastProps = {
@@ -72,7 +71,7 @@ const Categories = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection(Constants.DASHBOARD_TABLE_CATEGORIES).onSnapshot(querySnapshot => {
+        const unsubscribe = firebase.firestore().collection('categories').onSnapshot(querySnapshot => {
             let allCategories = []
             querySnapshot.forEach(doc => {
                 const category = doc.data()
@@ -97,7 +96,7 @@ const Categories = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_CATEGORIES} component={'Category'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'categories'} component={'Category'} onCloseToast={showToast} />)
             },
         ],
         []
