@@ -53,7 +53,7 @@ const Users = () => {
                 const user = doc.data()
                 user.id = doc.id
                 user.created = user.created.toDate()
-                user.updated = user.updated.toDate()
+                user.updated = user.updated ? user.updated.toDate() : new Date()
                 user.helpful = user.helpful.length
                 allUsers.push(user)
             })
@@ -102,13 +102,13 @@ const Users = () => {
             {
                 Header: "Created",
                 accessor: "created",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {
                 Header: "Updated",
                 accessor: "updated",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
@@ -10,6 +10,7 @@ export default ({ location }) => {
     const props = { title: "E-Commerce Tools & Services", subtitle: "" }
     const { allCompanies } = useCompanies()
     let filteredCompanies = []
+    const [companies, setCompanies] = useState([])
 
     const { state = {} } = location
     const { category } = state
@@ -22,9 +23,11 @@ export default ({ location }) => {
         //.map(company => {
         //    return Object.assign({}, company, { categories: company.categories.filter(cat => cat.name === category) })
         //})
-    } else {
-        filteredCompanies = allCompanies.nodes
-    }
+    } else { filteredCompanies = allCompanies.nodes }
+
+    useEffect(() => {
+        setCompanies(filteredCompanies.sort((a, b) => { return a.name === b.name ? 0 : a.name < b.name ? -1 : 1 }))
+    }, [filteredCompanies])
 
     return (
         <Layout>
@@ -40,7 +43,7 @@ export default ({ location }) => {
                         {category && <Category categories={flteredCategory} useLink={false} className="bg-gray-200 border border-gray-300 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight ml-2" />}
                     </div>
                     <div className="w-full flex flex-wrap">
-                        {filteredCompanies.map(node => (
+                        {companies.map(node => (
                             <CompanyCard key={node.id} company={node} />
                         ))}
                     </div>

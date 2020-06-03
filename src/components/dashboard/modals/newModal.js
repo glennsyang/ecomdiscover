@@ -3,8 +3,9 @@ import { useForm } from "react-hook-form"
 import NewCategory from './newcategory'
 import NewMarketplace from './newmarketplace'
 import NewFAQ from './newfaq'
+import NewCompany from '../../companyModal'
 
-export default function CompanyModal(props) {
+export default function NewModal(props) {
     const { tableName } = props
     const { register, errors, handleSubmit } = useForm()
     // Close button
@@ -33,6 +34,7 @@ export default function CompanyModal(props) {
                                 </button>
                             </div>
                             {/*body*/}
+                            {tableName === 'companies' ? <NewCompany register={register} errors={errors} /> : ''}
                             {tableName === 'categories' ? <NewCategory register={register} errors={errors} /> : ''}
                             {tableName === 'marketplaces' ? <NewMarketplace register={register} errors={errors} /> : ''}
                             {tableName === 'faq' ? <NewFAQ register={register} errors={errors} /> : ''}

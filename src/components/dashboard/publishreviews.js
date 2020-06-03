@@ -148,7 +148,7 @@ const PublishReviews = () => {
             {
                 Header: "Created",
                 accessor: "created",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {
