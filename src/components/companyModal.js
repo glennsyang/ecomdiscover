@@ -109,6 +109,7 @@ export default function CompanyModal(props) {
         firebase.firestore().collection('companies')
             .add({
                 created: firebase.firestore.FieldValue.serverTimestamp(),
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
                 blurb: modalData.blurb,
                 categories: modalData.categories.map((category) => (
                     firebase.firestore().doc(`categories/${category.value}`)

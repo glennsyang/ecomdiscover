@@ -10,7 +10,6 @@ import * as Constants from '../../constants'
 import { hydrate } from "./helper"
 
 const Categories = ({ values }) => {
-    // Loop through the array and create a badge-like component instead of a comma-separated string
     return (<>
         {values.map(category => {
             return (<span key={category.id} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight mr-1">{category.name}</span>)
@@ -25,6 +24,11 @@ const Companies = () => {
     const showToast = (toastProps) => { setToast(toastProps) }
     const [skipPageReset, setSkipPageReset] = useState(false)
 
+    const createData = (modalData) => {
+        setSkipPageReset(true)
+        setIsLoading(true)
+
+    }
     const updateData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
@@ -34,7 +38,10 @@ const Companies = () => {
         if (value !== old) {
             // Update name
             firebase.firestore().collection(Constants.DASHBOARD_TABLE_COMPANIES).doc(id)
-                .update({ name: value })
+                .update({
+                    name: value,
+                    updated: firebase.firestore.FieldValue.serverTimestamp(),
+                })
                 .then(() => {
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
@@ -112,7 +119,7 @@ const Companies = () => {
             {
                 Header: "Created",
                 accessor: "created",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {
@@ -135,6 +142,7 @@ const Companies = () => {
                     data={companies}
                     tableName={'companies'}
                     filterName={'name'}
+                    createData={createData}
                     updateData={updateData}
                     skipPageReset={skipPageReset}
                 />

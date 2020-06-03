@@ -16,7 +16,7 @@ function IndexPage({ data }) {
     async function fetchData() {
       setCompanies(companies.sort((a, b) => {
         var dateA = new Date(a.created), dateB = new Date(b.created)
-        return dateA - dateB
+        return dateB - dateA
       }))
       setIsUserBlocked(await isBlocked())
     }
