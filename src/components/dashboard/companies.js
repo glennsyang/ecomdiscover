@@ -6,7 +6,6 @@ import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 //import EditableCell from "./editablecell"
-import * as Constants from '../../constants'
 import { hydrate } from "./helper"
 
 const Categories = ({ values }) => {
@@ -37,7 +36,7 @@ const Companies = () => {
         //console.log("data:", rowIndex, columnId, value, id)
         if (value !== old) {
             // Update name
-            firebase.firestore().collection(Constants.DASHBOARD_TABLE_COMPANIES).doc(id)
+            firebase.firestore().collection('companies').doc(id)
                 .update({
                     name: value,
                     updated: firebase.firestore.FieldValue.serverTimestamp(),
@@ -64,12 +63,12 @@ const Companies = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection(Constants.DASHBOARD_TABLE_COMPANIES).onSnapshot(querySnapshot => {
+        const unsubscribe = firebase.firestore().collection('companies').onSnapshot(querySnapshot => {
             let allCompanies = []
             querySnapshot.forEach(async doc => {
                 const company = doc.data()
                 company.id = doc.id
-                company.created = company.created.toDate()
+                company.created = company.created ? company.created.toDate() : new Date()
                 company.reviews = company.reviews.length
                 await hydrate(company, ['categories'])
                 allCompanies.push(company)
@@ -127,7 +126,7 @@ const Companies = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_COMPANIES} component={'Companies'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'companies'} component={'Companies'} onCloseToast={showToast} />)
             },
         ],
         []

@@ -137,8 +137,8 @@ const ReviewCard = ({ review }) => {
                 } else {
                     const toastProperties = {
                         id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Error',
-                        description: `User has been blocked.`,
+                        title: 'Error!',
+                        description: `Cannot rate Helpful.`,
                         color: 'red',
                     }
                     setToast(toastProperties)

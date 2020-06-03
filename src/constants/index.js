@@ -18,11 +18,6 @@ export const RATING_MESSAGE = [
     { stars: 5, starMessage: "Excellent" },
 ]
 
-export const DASHBOARD_TABLE_REVIEWS = 'reviews'
-export const DASHBOARD_TABLE_CATEGORIES = 'categories'
-export const DASHBOARD_TABLE_COMPANIES = 'companies'
-export const DASHBOARD_TABLE_USERS = 'users'
-
 export const SORT_TYPES = {
     helpfulup: {
         message: 'Most Helpful Reviews',
