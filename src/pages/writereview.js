@@ -5,7 +5,7 @@ import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
 import ReactQuill from 'react-quill'
-// Don't forget to add: min-height: 18em; to quill.snow.css
+// Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
 //const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
@@ -27,8 +27,9 @@ export default function WriteReview({ location }) {
     const [showModal, setShowModal] = useState(false)
     const [toast, setToast] = useState()
     const { setValue, register, errors, handleSubmit } = useForm()
-    const [isUserBlocked, setIsUserBlocked] = useState(false)
+    const [isUserActive, setIsUserActive] = useState(false)
     const titleRef = useRef()
+    const { state } = location
     // Submit button
     const onSubmit = formData => {
         console.log("data:", formData)
@@ -194,10 +195,10 @@ export default function WriteReview({ location }) {
         register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
         register({ name: "tags" })
 
-        setIsUserBlocked(isBlocked())
+        setIsUserActive(isBlocked())
 
-        if (location.state.companyId) {
-            const selectedCompany = companyList.find(x => x.id === location.state.companyId)
+        if (state.companyId) {
+            const selectedCompany = companyList.find(x => x.id === state.companyId)
             if (selectedCompany.logo) {
                 selectedCompany.imgLogo = {
                     imgName: selectedCompany.logo, imgAlt: `${selectedCompany.name} Logo`, imgClass: ""
@@ -210,7 +211,7 @@ export default function WriteReview({ location }) {
             titleRef.current.focus()
         }
 
-    }, [register, location.state.companyId, companyList, setValue])
+    }, [register, state.companyId, companyList, setValue])
 
     return (
         <>
@@ -329,7 +330,7 @@ export default function WriteReview({ location }) {
                                             placeholder="Type something and press enter..."
                                             value={tags}
                                         />
-                                        {isUserBlocked ? '' :
+                                        {isUserActive ?
                                             <div className="text-black mt-8">
                                                 <button
                                                     type="submit"
@@ -338,7 +339,7 @@ export default function WriteReview({ location }) {
                                                     Submit
                                                 </button>
                                             </div>
-                                        }
+                                            : ''}
                                     </div>
                                 </div>
                             </form>
