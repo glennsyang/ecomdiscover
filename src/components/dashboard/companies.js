@@ -6,11 +6,9 @@ import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 //import EditableCell from "./editablecell"
-import * as Constants from '../../constants'
 import { hydrate } from "./helper"
 
 const Categories = ({ values }) => {
-    // Loop through the array and create a badge-like component instead of a comma-separated string
     return (<>
         {values.map(category => {
             return (<span key={category.id} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight mr-1">{category.name}</span>)
@@ -25,6 +23,11 @@ const Companies = () => {
     const showToast = (toastProps) => { setToast(toastProps) }
     const [skipPageReset, setSkipPageReset] = useState(false)
 
+    const createData = (modalData) => {
+        setSkipPageReset(true)
+        setIsLoading(true)
+
+    }
     const updateData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
@@ -33,8 +36,11 @@ const Companies = () => {
         //console.log("data:", rowIndex, columnId, value, id)
         if (value !== old) {
             // Update name
-            firebase.firestore().collection(Constants.DASHBOARD_TABLE_COMPANIES).doc(id)
-                .update({ name: value })
+            firebase.firestore().collection('companies').doc(id)
+                .update({
+                    name: value,
+                    updated: firebase.firestore.FieldValue.serverTimestamp(),
+                })
                 .then(() => {
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
@@ -57,12 +63,12 @@ const Companies = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection(Constants.DASHBOARD_TABLE_COMPANIES).onSnapshot(querySnapshot => {
+        const unsubscribe = firebase.firestore().collection('companies').onSnapshot(querySnapshot => {
             let allCompanies = []
             querySnapshot.forEach(async doc => {
                 const company = doc.data()
                 company.id = doc.id
-                company.created = company.created.toDate()
+                company.created = company.created ? company.created.toDate() : new Date()
                 company.reviews = company.reviews.length
                 await hydrate(company, ['categories'])
                 allCompanies.push(company)
@@ -82,7 +88,7 @@ const Companies = () => {
                 accessor: "logoURL",
                 disableSortBy: true,
                 // Cell method will provide the cell value; we pass it to render a custom component
-                Cell: ({ cell: { value } }) => <img src={value} alt={value} className="h-16 w-16 object-contain" />
+                Cell: ({ cell: { value } }) => <img src={value} alt={value} className="h-12 w-12 object-contain" />
             },
             {
                 Header: "Name",
@@ -112,7 +118,7 @@ const Companies = () => {
             {
                 Header: "Created",
                 accessor: "created",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {
@@ -120,7 +126,7 @@ const Companies = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_COMPANIES} component={'Companies'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'companies'} component={'Companies'} onCloseToast={showToast} />)
             },
         ],
         []
@@ -135,6 +141,7 @@ const Companies = () => {
                     data={companies}
                     tableName={'companies'}
                     filterName={'name'}
+                    createData={createData}
                     updateData={updateData}
                     skipPageReset={skipPageReset}
                 />

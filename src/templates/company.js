@@ -1,14 +1,15 @@
-import React, { useState } from "react"
-import { graphql } from "gatsby"
+import React, { useState, useEffect } from "react"
+import { Link, graphql } from "gatsby"
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"
 import * as Constants from '../constants'
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
-import ImageFluid from "../components/image-fluid"
 import Category from "../components/category"
 import AvgRating from "../components/avgrating"
 import ReviewCard from "../components/cards/reviewcard"
+import Advert from "../components/advert"
+import { isLoggedIn, isBlocked } from "../utils/auth"
 
 const SortByButton = (props) => {
     const { buttonName, sortType, selected } = props
@@ -43,7 +44,6 @@ export default function Company({ data }) {
     ])
     const [currentSort, setCurrentSort] = useState('helpfuldown')
     const [sortHeadingText, setSortHeadingText] = useState("Most Helpful Reviews")
-
     // method called every time the sort button is clicked
     // it will change the currentSort value to the next one
     const onSortByChange = (props) => {
@@ -59,12 +59,14 @@ export default function Company({ data }) {
         setCurrentSort(`${buttonName.toLowerCase()}${nextSort}`)
         setSortHeadingText(Constants.SORT_TYPES[`${buttonName.toLowerCase()}${sortType}`].message)
     }
+    const [isUserBlocked, setIsUserBlocked] = useState(false)
 
-    const imgAds = {
-        imgName: "ads_digital_ocean.png",
-        imgAlt: "Digital Ocean Ad",
-        imgClass: "w-64 h-full"
-    }
+    useEffect(() => {
+        async function fetchData() {
+            setIsUserBlocked(await isBlocked())
+        }
+        fetchData()
+    }, [])
 
     return (
         <Layout>
@@ -74,14 +76,14 @@ export default function Company({ data }) {
             />
             <div className="bg-gray-200">
 
-                <div className="container mx-auto bg-white">
+                <div className="container mx-auto">
 
                     <div id="wrapper" className="flex flex-col lg:flex-row">
 
-                        <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
+                        <main id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-6 pb-12 bg-white">
 
                             {/* Company Heading */}
-                            <div id="company-heading" className="flex flex-col lg:flex-row lg:flex-grow">
+                            <div id="company-heading" className="flex flex-col lg:flex-row">
                                 <div className="lg:w-3/4 flex flex-col lg:ml-10">
                                     {/* Categories */}
                                     <div className="flex">
@@ -143,21 +145,29 @@ export default function Company({ data }) {
                                     <ReviewCard key={review.id} review={review} />
                                 ))}
                             </div>
-                        </div>
+                        </main>
 
                         {/* Ads */}
-                        <div id="sidebar" className="lg:w-1/4 flex flex-col py-10 lg:pb-0 bg-gray-200 relative">
-                            <div className="flex mx-auto">
-                                <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
-                                    <ImageFluid props={imgAds} />
-                                </a>
-                            </div>
-                            <div className="flex mx-auto ml-10 lg:mt-32 fixed">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col pt-20 pb-4 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                            <Advert />
+                            <div className="mx-auto mt-10">
                                 <div className="flex">
                                     <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
                                 </div>
                             </div>
-                        </div>
+                            {isLoggedIn() && isUserBlocked ?
+                                <div className="mx-auto mt-10">
+                                    <Link
+                                        to={'/app/writereview'}
+                                        state={{ companyId: company.id }}
+                                        title={'Share!'}
+                                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
+                                    >
+                                        Share Review
+                                    </Link>
+                                </div>
+                                : ''}
+                        </aside>
                     </div>
                 </div>
             </div>

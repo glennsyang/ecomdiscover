@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
-import ReactQuill from 'react-quill'
-//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+//import ReactQuill from 'react-quill'
+// Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
 import Category from "../components/category"
-import ImageFluid from "../components/image-fluid"
 import ImageFixed from "../components/image-fixed"
 import StarRating from "../components/starrating"
+import Advert from "../components/advert"
 import Toast from "../components/toast"
 import CompanyModal from "../components/companyModal"
 import * as Constants from '../constants'
 import { useCompanies } from "../hooks/use-companies"
-import { getUser } from "../utils/auth"
+import { getUser, isBlocked } from "../utils/auth"
 
 const components = { DropdownIndicator: null, }
 const createCompany = (label) => ({ value: label, label: label })
 
-export default function WriteReview() {
+export default function WriteReview({ location }) {
     const { uid, displayName } = getUser()
     const [showModal, setShowModal] = useState(false)
     const [toast, setToast] = useState()
     const { setValue, register, errors, handleSubmit } = useForm()
+    const [isUserActive, setIsUserActive] = useState(false)
+    const titleRef = useRef()
+    const { state } = location
     // Submit button
     const onSubmit = formData => {
         console.log("data:", formData)
@@ -58,7 +62,7 @@ export default function WriteReview() {
             company: firebase.firestore().doc(`companies/${companyId}`),
             created: firebase.firestore.FieldValue.serverTimestamp(),
             helpful: [],
-            published: false,
+            published: true,
             rating: dataObject.rating ? Number(dataObject.rating) : 0,
             tags: dataObject.tags ? dataObject.tags.map((tag) => (
                 tag.label
@@ -139,7 +143,7 @@ export default function WriteReview() {
     const [company, setCompany] = useState(null)
 
     const handleChangeCompany = selectedValue => {
-        console.log("selectedValue", selectedValue)
+        //console.log("selectedValue", selectedValue)
         setValue('company', selectedValue, true)
         setCompanyValue(selectedValue)
         if (selectedValue) {
@@ -190,13 +194,24 @@ export default function WriteReview() {
         register({ name: "company" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
         register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
         register({ name: "tags" })
-    }, [register])
 
-    const imgAds = {
-        imgName: "ads_digital_ocean.png",
-        imgAlt: "Digital Ocean Ad",
-        imgClass: "w-64 h-full"
-    }
+        setIsUserActive(isBlocked())
+
+        if (state.companyId) {
+            const selectedCompany = companyList.find(x => x.id === state.companyId)
+            if (selectedCompany.logo) {
+                selectedCompany.imgLogo = {
+                    imgName: selectedCompany.logo, imgAlt: `${selectedCompany.name} Logo`, imgClass: ""
+                }
+            }
+            const selectedValue = { label: selectedCompany.name, value: selectedCompany.id }
+            setValue('company', selectedValue, true)
+            setCompanyValue(selectedValue)
+            setCompany(selectedCompany)
+            titleRef.current.focus()
+        }
+
+    }, [register, companyList, setValue])
 
     return (
         <>
@@ -206,11 +221,11 @@ export default function WriteReview() {
             />
             <div className="bg-gray-200">
 
-                <div className="container mx-auto bg-white">
+                <div className="container mx-auto">
 
                     <div id="wrapper" className="flex flex-col lg:flex-row">
 
-                        <div id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-8 mb-12">
+                        <main id="main" className="lg:w-3/4 flex flex-col px-4 lg:px-0 pt-6 pb-12 bg-white">
 
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 {/* Company Heading */}
@@ -280,8 +295,11 @@ export default function WriteReview() {
                                             type="text"
                                             name="title"
                                             placeholder="Summarize your review or highlight an interesting detail"
-                                            ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                                             className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                                            ref={(e) => {
+                                                register(e, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+                                                titleRef.current = e
+                                            }}
                                         />
                                         {errors.title && <span className="text-red-400 text-md">{errors?.title?.message}</span>}
 
@@ -312,33 +330,25 @@ export default function WriteReview() {
                                             placeholder="Type something and press enter..."
                                             value={tags}
                                         />
-
-                                        <div className="text-black mt-8">
-                                            <button
-                                                type="submit"
-                                                value="Submit"
-                                                className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient">
-                                                Submit
-                                            </button>
-                                        </div>
+                                        {isUserActive ?
+                                            <div className="text-black mt-8">
+                                                <button
+                                                    type="submit"
+                                                    value="Submit"
+                                                    className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                            : ''}
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </main>
 
                         {/* Ads */}
-                        <div id="sidebar" className="lg:w-1/4 flex flex-col py-10 lg:pb-0 bg-gray-200 relative">
-                            <div className="flex mx-auto">
-                                <a href="https://www.digitalocean.com" rel="noopener noreferrer" target="_blank">
-                                    <ImageFluid props={imgAds} />
-                                </a>
-                            </div>
-                            <div className="flex mx-auto ml-10 lg:mt-32 fixed">
-                                <div className="flex">
-
-                                </div>
-                            </div>
-                        </div>
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col pt-20 pb-4 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                            <Advert />
+                        </aside>
                     </div>
                     <CompanyModal
                         show={showModal}

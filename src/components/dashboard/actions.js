@@ -1,6 +1,6 @@
 import React from "react"
 import firebase from "gatsby-plugin-firebase"
-import { FaPen, FaTimesCircle, FaPaperPlane } from "react-icons/fa"
+import { FaPen, FaTimesCircle, FaPaperPlane, FaBan, FaEyeSlash, FaPlay } from "react-icons/fa"
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
@@ -56,42 +56,89 @@ const Actions = (props) => {
         }
         onCloseToast(toastProps)
     }
-    const handlePublish = (row) => {
-        console.log("Publish Row:", row)
-        if (row.published === 'Yes') {
-            const toastProps = {
-                id: Math.floor((Math.random() * 101) + 1),
-                title: 'Warning!',
-                description: `Already Published to Live site.`,
-                color: 'yellow',
-            }
-            onCloseToast(toastProps)
-        } else {
-            // Update name
-            firebase.firestore().collection(collection).doc(row.id)
-                .update({ published: true })
-                .then(() => {
-                    const toastProps = {
-                        id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Success!',
-                        description: `${component} will be published.`,
-                        color: 'green',
-                    }
-                    onCloseToast(toastProps)
-                })
-                .catch(error => {
-                    const toastProps = {
-                        id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Error',
-                        description: `There was an error in updating the ${component}. Reason: ${error.code}.`,
-                        color: 'red',
-                    }
-                    onCloseToast(toastProps)
-                })
-        }
+    const handleTogglePublish = (row) => {
+        console.log("TogglePublish Review:", row)
+        const newValue = row.published === 'Yes' ? false : true
+        firebase.firestore().collection(collection).doc(row.id)
+            .update({
+                published: newValue,
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+            })
+            .then(() => {
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Success!',
+                    description: `${component} will be ${newValue ? 'published' : 'removed'}.`,
+                    color: 'green',
+                }
+                onCloseToast(toastProps)
+            })
+            .catch(error => {
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Error',
+                    description: `There was an error in updating the ${component}. Reason: ${error.code}.`,
+                    color: 'red',
+                }
+                onCloseToast(toastProps)
+            })
     }
+    const handleToggleBlock = (row) => {
+        console.log("ToggleBlock User:", row)
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <div className="border border-gray-300 text-gray-600 antialiased shadow-lg rounded-lg p-10">
+                        <h1 className="text-xl font-bold">{`${row.active ? 'Block' : 'Re-Activate'} User!`}</h1>
+                        <p className="text-lg mt-4 mb-8">Are you sure you want to do this?</p>
+                        <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-2"
+                            onClick={() => {
+                                firebase.firestore().collection(collection).doc(row.id)
+                                    .update({
+                                        active: !row.active,
+                                        updated: firebase.firestore.FieldValue.serverTimestamp(),
+                                    })
+                                    .then(() => {
+                                        const toastProps = {
+                                            id: Math.floor((Math.random() * 101) + 1),
+                                            title: 'Success!',
+                                            description: `${component} is ${row.active ? 'blocked' : 'Re-Activated'}.`,
+                                            color: 'green',
+                                        }
+                                        onCloseToast(toastProps)
+                                        onClose()
+                                    })
+                                    .catch(error => {
+                                        const toastProps = {
+                                            id: Math.floor((Math.random() * 101) + 1),
+                                            title: 'Error',
+                                            description: `There was an error in updating the ${component}. Reason: ${error.code}.`,
+                                            color: 'red',
+                                        }
+                                        onCloseToast(toastProps)
+                                        onClose()
+                                    })
+                            }}
+                        >
+                            Yes
+                            </button>
+                        <button onClick={onClose} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">No</button>
+                    </div>
+                )
+            }
+        })
+    }
+
     return (<>
-        {component === 'Review' ? <button type="button" onClick={() => handlePublish(rowProps)} className="text-blue-500 mr-2"><FaPaperPlane size={16} /></button> : ''}
+        {component === 'Review' ?
+            <button type="button" onClick={() => handleTogglePublish(rowProps)} className={rowProps.published === 'Yes' ? `text-black mr-2` : `text-blue-500 mr-2`}>
+                {rowProps.published === 'Yes' ? <FaEyeSlash size={16} /> : <FaPaperPlane size={16} />}
+            </button>
+            : component === 'User' ?
+                <button type="button" onClick={() => handleToggleBlock(rowProps)} className={rowProps.active ? `text-red-700 mr-2` : `text-blue-500 mr-2`}>
+                    {rowProps.active ? <FaBan size={16} /> : <FaPlay size={16} />}
+                </button>
+                : ''}
         <button type="button" onClick={() => handleEdit(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>
         <button type="button" onClick={() => handleDelete(rowProps)} className="text-red-500"><FaTimesCircle size={16} /></button>
     </>)

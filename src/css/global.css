@@ -21,6 +21,14 @@
     background-size: cover;
     position: relative;
 }
+.advert-image {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("../images/page_header_cart.jpg");
+    height: 18rem;
+    background-position: 50% 45%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
 
 /* Accordiion */
 label:after {

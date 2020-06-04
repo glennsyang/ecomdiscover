@@ -160,6 +160,35 @@ module.exports = {
       }
     },
     {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        // The property ID; the tracking code won't be generated without it
+        trackingId: "G-HFDEZ8W70R",
+        // Defines where to place the tracking script - `true` in the head and `false` in the body
+        head: true,
+        // Setting this parameter is optional
+        //anonymize: true,
+        // Setting this parameter is also optional
+        //respectDNT: true,
+        // Avoids sending pageview hits from custom paths
+        //exclude: ["/preview/**", "/do-not-track/me/too/"],
+        // Delays sending pageview hits on route update (in milliseconds)
+        //pageTransitionDelay: 0,
+        // Enables Google Optimize using your container Id
+        //optimizeId: "YOUR_GOOGLE_OPTIMIZE_TRACKING_ID",
+        // Enables Google Optimize Experiment ID
+        //experimentId: "YOUR_GOOGLE_EXPERIMENT_ID",
+        // Set Variation ID. 0 for original 1,2,3....
+        //variationId: "YOUR_GOOGLE_OPTIMIZE_VARIATION_ID",
+        // Defers execution of google analytics script after page load
+        //defer: false,
+        // Any additional optional fields
+        //sampleRate: 5,
+        //siteSpeedSampleRate: 10,
+        //cookieDomain: "example.com",
+      },
+    },
+    {
       resolve: `gatsby-transformer-rehype`,
       options: {
         // Condition for selecting an existing GrapghQL node (optional)
@@ -187,7 +216,7 @@ module.exports = {
       resolve: `@gatsby-contrib/gatsby-plugin-elasticlunr-search`,
       options: {
         // Fields to index
-        fields: [`name`, `categories`, `title`, `tags`],
+        fields: [`name`, `categories`, `title`, `tags`, `content`],
         // How to resolve each field`s value for a supported node type
         resolvers: {
           // For any node of type Reviews, list how to resolve the fields` values
@@ -200,6 +229,7 @@ module.exports = {
           Reviews: {
             type: node => "reviews",
             title: node => node.title,
+            content: node => node.content,
             tags: node => node.tags,
             company: node => node.company___NODE,
           },

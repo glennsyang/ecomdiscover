@@ -109,6 +109,7 @@ export default function CompanyModal(props) {
         firebase.firestore().collection('companies')
             .add({
                 created: firebase.firestore.FieldValue.serverTimestamp(),
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
                 blurb: modalData.blurb,
                 categories: modalData.categories.map((category) => (
                     firebase.firestore().doc(`categories/${category.value}`)
@@ -245,7 +246,7 @@ export default function CompanyModal(props) {
                                             <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadLogo} onClick={handleSelectFile} />
                                         </label>
                                         <div className="text-gray-600 text-xs mt-2">
-                                            (File formats accepted: .png, .jpg, .gif, .bmp)
+                                            (File formats: .png, .jpg, .gif, .bmp)
                                         </div>
                                     </div>
                                 </div>

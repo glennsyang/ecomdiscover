@@ -66,7 +66,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                     <div className="text-sm antialiased font-semibold">
                         Display
                     <select
-                            className="outline-none appearance-none mx-2 py-2 px-4"
+                            className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-100"
                             value={pageSize}
                             onChange={e => {
                                 setPageSize(Number(e.target.value))
@@ -100,7 +100,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                         : ''}
                 </div>
                 <div className="flex justify-between items-center">
-                    {tableName === 'faq' || tableName === 'marketplaces' || tableName === 'categories' ?
+                    {tableName === 'faq' || tableName === 'marketplaces' || tableName === 'categories' || tableName === 'companies' ?
                         <button
                             type="button"
                             title="Add New"

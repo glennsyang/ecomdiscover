@@ -15,21 +15,38 @@ const Marketplaces = () => {
     const createData = (modalData) => {
         setSkipPageReset(true)
         setIsLoading(true)
-        firebase.firestore().collection('marketplaces').doc(modalData.code)
-            .set({
-                code: modalData.code,
-                flag: modalData.flag,
-                name: modalData.name,
-            })
-            .then(ref => {
-                setIsLoading(false)
-                const toastProps = {
-                    id: Math.floor((Math.random() * 101) + 1),
-                    title: 'Success!',
-                    description: `Successfully added new Marketplace: ${modalData.name}.`,
-                    color: 'green',
-                }
-                setToast(toastProps)
+        // lookup flag & name for 3-letter country code to REST API
+        const { code } = modalData
+        fetch(`https://restcountries.eu/rest/v2/alpha/${code.toLowerCase()}?fields=flag;name;alpha3Code`)
+            .then(res => res.json())
+            .then(data => {
+                firebase.firestore().collection('marketplaces').doc(code)
+                    .set({
+                        code: code,
+                        flag: data.flag,
+                        name: data.name,
+                    })
+                    .then(ref => {
+                        setIsLoading(false)
+                        const toastProps = {
+                            id: Math.floor((Math.random() * 101) + 1),
+                            title: 'Success!',
+                            description: `Successfully added new Marketplace: ${code} - ${data.name}.`,
+                            color: 'green',
+                        }
+                        setToast(toastProps)
+                    })
+                    .catch(error => {
+                        console.log("Error:", error)
+                        setIsLoading(false)
+                        const toastProps = {
+                            id: Math.floor((Math.random() * 101) + 1),
+                            title: 'Error',
+                            description: `There was an error in creating new Marketplace: ${code}. Reason: ${error}.`,
+                            color: 'red',
+                        }
+                        setToast(toastProps)
+                    })
             })
             .catch(error => {
                 console.log("Error:", error)
@@ -37,7 +54,7 @@ const Marketplaces = () => {
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in creating new Marketplace: ${modalData.name}. Reason: ${error}.`,
+                    description: `There was an error in retrieving Country information for: ${code}. Reason: ${error}.`,
                     color: 'red',
                 }
                 setToast(toastProps)

@@ -10,7 +10,7 @@ import Tag from "../tag"
 import Toast from "../toast"
 import AvgRating from "../avgrating"
 import Loader from "../loader"
-import { getUser, isLoggedIn } from "../../utils/auth"
+import { getUser, isLoggedIn, isBlocked } from "../../utils/auth"
 import { Paragraph, ExternalLink, List } from "../rehype/elements"
 
 const renderAst = new rehypeReact({
@@ -89,49 +89,61 @@ const ReviewCard = ({ review }) => {
             setToast(toastProperties)
 
         } else {
-            // get current logged-in user
-            const { uid, displayName } = getUser()
-            // update 'helpful' field in 'reviews' with current user id
-            firebase.firestore().collection('reviews').doc(review.id)
-                .update({
-                    helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('users').doc(uid)),
-                })
-                .then(() => {
-                    // update 'helpful' field in 'users' with current review id
-                    firebase.firestore().collection('users').doc(uid)
+            isBlocked().then(isUserBlocked => {
+                if (isUserBlocked) {
+                    // get current logged-in user
+                    const { uid, displayName } = getUser()
+                    // update 'helpful' field in 'reviews' with current user id
+                    firebase.firestore().collection('reviews').doc(review.id)
                         .update({
-                            helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('reviews').doc(review.id)),
+                            helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('users').doc(uid)),
                         })
                         .then(() => {
-                            const toastProperties = {
-                                id: Math.floor((Math.random() * 101) + 1),
-                                title: 'Info',
-                                description: `Thank you ${displayName} for your rating!`,
-                                color: 'green',
-                            }
-                            setToast(toastProperties)
+                            // update 'helpful' field in 'users' with current review id
+                            firebase.firestore().collection('users').doc(uid)
+                                .update({
+                                    helpful: firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('reviews').doc(review.id)),
+                                })
+                                .then(() => {
+                                    const toastProperties = {
+                                        id: Math.floor((Math.random() * 101) + 1),
+                                        title: 'Info',
+                                        description: `Thank you ${displayName} for your rating!`,
+                                        color: 'green',
+                                    }
+                                    setToast(toastProperties)
+                                })
+                                .catch(error => {
+                                    console.log("Error:", error)
+                                    const toastProperties = {
+                                        id: Math.floor((Math.random() * 101) + 1),
+                                        title: 'Error',
+                                        description: `Couldn't update user record. Reason: ${error}.`,
+                                        color: 'red',
+                                    }
+                                    setToast(toastProperties)
+                                })
                         })
                         .catch(error => {
                             console.log("Error:", error)
                             const toastProperties = {
                                 id: Math.floor((Math.random() * 101) + 1),
                                 title: 'Error',
-                                description: `Couldn't update user record. Reason: ${error}.`,
+                                description: `Couldn't update review record for ${review.title}. Reason: ${error}.`,
                                 color: 'red',
                             }
                             setToast(toastProperties)
                         })
-                })
-                .catch(error => {
-                    console.log("Error:", error)
+                } else {
                     const toastProperties = {
                         id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Error',
-                        description: `Couldn't update review record for ${review.title}. Reason: ${error}.`,
+                        title: 'Error!',
+                        description: `Cannot rate Helpful.`,
                         color: 'red',
                     }
                     setToast(toastProperties)
-                })
+                }
+            })
         }
     }
 

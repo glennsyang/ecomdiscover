@@ -9,7 +9,7 @@ const View = ({ title, children }) => (
             keywords={[`amazon`, `seller`, `tools`, `FBA`]}
         />
         <div className="container mx-auto bg-white">
-            <div className="px-4 py-6 lg:py-0 lg:py-20 md:mx-24 lg:mx-64">
+            <div className="p-4 lg:py-16 md:mx-24 lg:mx-48">
                 <h1 className="text-3xl font-bold mb-2">
                     {title}
                 </h1>
