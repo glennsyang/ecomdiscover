@@ -28,8 +28,8 @@ export default function WriteReview({ location }) {
     const [toast, setToast] = useState()
     const { setValue, register, errors, handleSubmit } = useForm()
     const [isUserActive, setIsUserActive] = useState(false)
-    const titleRef = useRef()
     const { state } = location
+    const titleRef = useRef()
     // Submit button
     const onSubmit = formData => {
         console.log("data:", formData)
