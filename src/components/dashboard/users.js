@@ -1,12 +1,12 @@
 import React, { useMemo, useState, useEffect } from "react"
 import firebase from "gatsby-plugin-firebase"
+import { FaCheck, FaBan } from "react-icons/fa"
 import moment from "moment"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 import EditableCell from "./editablecell"
-import * as Constants from '../../constants'
 
 const Users = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -22,7 +22,7 @@ const Users = () => {
         const old = users[rowIndex].displayName
         if (value !== old) {
             // Update displayName
-            firebase.firestore().collection(Constants.DASHBOARD_TABLE_USERS).doc(uid)
+            firebase.firestore().collection('users').doc(uid)
                 .update({ displayName: value })
                 .then(() => {
                     const toastProps = {
@@ -46,13 +46,13 @@ const Users = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection(Constants.DASHBOARD_TABLE_USERS).onSnapshot(querySnapshot => {
+        const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
             let allUsers = []
             querySnapshot.forEach(doc => {
                 const user = doc.data()
                 user.id = doc.id
                 user.created = user.created.toDate()
-                user.updated = user.updated.toDate()
+                user.updated = user.updated ? user.updated.toDate() : new Date()
                 user.helpful = user.helpful.length
                 allUsers.push(user)
             })
@@ -91,15 +91,23 @@ const Users = () => {
                 accessor: "role"
             },
             {
+                Header: "Active",
+                accessor: "active",
+                Cell: ({ cell: { value } }) => value === true
+                    ? <FaCheck size={16} className="text-green-500" />
+                    : <FaBan size={16} className="text-red-500" />,
+                sortType: 'basic'
+            },
+            {
                 Header: "Created",
                 accessor: "created",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {
                 Header: "Updated",
                 accessor: "updated",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {
@@ -107,7 +115,7 @@ const Users = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_USERS} component={'User'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'users'} component={'User'} onCloseToast={showToast} />)
                 //accessor: (str) => 'delete',
                 // Cell: ({ row }) => (
                 //     <div>

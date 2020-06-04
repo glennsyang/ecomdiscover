@@ -7,7 +7,6 @@ import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 //import EditableCell from "./editablecell"
-import * as Constants from '../../constants'
 import { hydrate } from "./helper"
 
 const Tags = ({ values }) => {
@@ -33,7 +32,7 @@ const PublishReviews = () => {
         const old = reviews[rowIndex].title
         if (value !== old) {
             // Update name
-            firebase.firestore().collection(Constants.DASHBOARD_TABLE_REVIEWS).doc(id)
+            firebase.firestore().collection('reviews').doc(id)
                 .update({ title: value })
                 .then(() => {
                     const toastProps = {
@@ -148,11 +147,11 @@ const PublishReviews = () => {
             {
                 Header: "Created",
                 accessor: "created",
-                Cell: ({ cell: { value } }) => moment.utc(value).format("DD-MMM-YYYY hh:mm a"),
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },
             {
-                Header: "Live?",
+                Header: "Published?",
                 accessor: "published",
                 Cell: ({ cell: { value } }) => value === 'Yes'
                     ? <FaCheck size={16} className="text-green-500" />
@@ -165,7 +164,7 @@ const PublishReviews = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={Constants.DASHBOARD_TABLE_REVIEWS} component={'Review'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'reviews'} component={'Review'} onCloseToast={showToast} />)
             },
         ],
         []
