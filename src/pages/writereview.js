@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
-import ReactQuill from 'react-quill'
+//import ReactQuill from 'react-quill'
 // Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
-//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
 import Category from "../components/category"
@@ -211,7 +211,7 @@ export default function WriteReview({ location }) {
             titleRef.current.focus()
         }
 
-    }, [register, state.companyId, companyList, setValue])
+    }, [register, companyList, setValue])
 
     return (
         <>
