@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "ecomdiscover",
+    "private_key_id": "ca09fa33e394e11eb14e1683ab89be335e63ce7d",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCK3J6JsDRWyq4/\n+deFhpBgV7PdLYgG7IMNV5ZA+5VVrreitgv/1HWFpOnV+maS2S6cNKJhhSDAXiJ7\nW/Ax3YjANsMloZdVx/+Q8rrmn2Ve2GEM1HabAyqCKZd9RuLUpmyg+NVOyb3H6Yzt\nkr8gLqKS0XZpTZDSHx1/mP59vphR9ppMvQCXXD9y028Mb5xVielArcUB2/UH9GPg\nKl5bi09fZHWxh1esQ9KpQsqj14ltXl4JgIHKXvLfxJSB6aoaOKyoa/ZBs3rcBtXI\nvN2rWCqN8WAkJrdCR3mlAvZQ6CpaFg03pHyQ5FbyUBjEjtM2JX+Ca04FP+hmjxMq\nBXSE8UVDAgMBAAECggEAHRr17eUtaz2rPUSYTGfyjgcD76mR9+WN6HeBylgRKnbn\nDac7p6E4Cs2Qp6WG52O3Nc2AdZFKVpfEgXe5RjJpbeRsjdArYLL9WbvOufUR8cnH\nucE0pPQKbmLaWktH0wuY/Dp7tzpo2WSWAdu+zLeJot1dhN/ZqXkVHUALo36V/aO0\nEcXGhGipK7qF4L14JoCV4fmhiO5064AVcqeoxJnACRxopqWVLI0xe8R57Ba9Wrfj\nO2tWxyi+HU57kU08B80/z0r8tqWY21OFVCD9TdYrv4mb+6R6F4NkQM+zWuOs/Knw\nZz2WYR9328s4WXjEqqardqyWCM2XUZ3Ja/mSwqTX5QKBgQC/6R8noxRFF6I2/knf\n0be5MHBAc6zk2sCrFUuoGoyjxZ41k1FJKTAiVlznPBQazBM6YCuZyP0QZwP3CsqD\nDobT3Mp23f5BDxYdjlhWc+C0udfJG7T03Wk3SwC6vuvhaCSoOhdle35qqFjn1xQk\nIivzKGGa+OVDfAmOfr47mAjynQKBgQC5PDs1YN9jd9B01U8aIsRmHg8afBaFjyok\nxu+IZNxBaaDLqrw0lXbaUmVD3dTxMrDZS9Jhy3nYl+uL7E/CdGFCuXIHxy8D3jWU\nG5lrdfuxnqmaXT240KcP8gli0Sc8KdgtlxQgu72p9PHLDpzZ7yIu1jY6Nh24IsFS\nbfbbg+0hXwKBgQCAI3kw7xvGsmwWih3re01QMr6Q2mvz9vg0g6ibmvaTF412umHJ\nFt5T3xRzNVM7PU4NaU9ThLcsb4xfNG5ZqaZu6fqp+bod2KPsojHrr723Dmu9lWlz\nIi9xwvu+tWIshGwNg5RBp36WWsfaLWr+YW61Eh5x6oSyVazP32LHydEXpQKBgAgY\nSb4bbae7JLD2YW6S9mJADgjqQ1Gy3/SbfPxI7Bcvtocv/umNXpRL5YEBwLyJqpDU\nb202pyx/9xs2SIYG7/kqgYE1gyh4HX9LdXjsvwMUG/VS/c+FzscznJVk7oICkh/r\n6kVD7xXuTmLBULl1adkCI3yHwOS7IBeqFo+hREuhAoGBALbOmTBMqc2ClbWC+lkR\n2CtI9DWI9oonYsd+SGr/QhfNWJkGcAsedhLNneH7miGpph2xk/nbvWyrh3eshen3\nfZIqyYboZ2lsQpS74jnEuc5qszU6cPfob0Z0AUmIfGxSosQyG7O5cYcl5dmqXRHA\nU8jAHsGScRgayj/7b2snH+2p\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-q2nve@ecomdiscover.iam.gserviceaccount.com",
+    "client_id": "108054518449025798394",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-q2nve%40ecomdiscover.iam.gserviceaccount.com"
+}
