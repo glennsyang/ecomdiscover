@@ -1,4 +1,4 @@
-image: node:latest
+image: node:10.18.0
 
 stages:
   - build
@@ -12,7 +12,7 @@ buildGatsby:
   stage: build
   script:
     - npm install
-    - ./node_modules/.bin/gatsby build --prefix-paths
+    - ./node_modules/.bin/gatsby build
   # specify the artifacts to save
   artifacts:
     paths:
