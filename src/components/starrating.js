@@ -23,6 +23,7 @@ const StarRating = ({ totalStars, name, register, required }) => {
             <input
                 type="number"
                 name={name}
+                aria-label="Star"
                 value={starsSelected}
                 ref={register({
                     required: { value: true, message: Constants.FIELD_REQUIRED },

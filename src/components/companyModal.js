@@ -189,6 +189,7 @@ export default function CompanyModal(props) {
                                         type="text"
                                         name="name"
                                         placeholder="Company, Tool or Service Name"
+                                        aria-label="Enter the Company, Tool or Service Name"
                                         ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                                         className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                                     />
@@ -199,6 +200,7 @@ export default function CompanyModal(props) {
                                         type="text"
                                         name="blurb"
                                         placeholder="A little blurb about the Company, Tool or Service"
+                                        aria-label="Enter the blurb about Company, Tool or Service Name"
                                         ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                                         className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                                     />
@@ -209,6 +211,7 @@ export default function CompanyModal(props) {
                                         type="text"
                                         name="website"
                                         placeholder="Website URL"
+                                        aria-label="Enter the Website"
                                         ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                                         className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                                     />
@@ -231,6 +234,7 @@ export default function CompanyModal(props) {
                                                 <input
                                                     type="checkbox"
                                                     name="marketplaces"
+                                                    aria-label="Enter the Marketplace"
                                                     value={country.code}
                                                     ref={register({ required: { value: true, message: Constants.SELECT_MARKETPLACE } })}
                                                     className="mx-2"
@@ -243,7 +247,8 @@ export default function CompanyModal(props) {
                                         <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                             <FaCamera size={18} className="mr-2" />
                                             <span>Upload Logo</span>
-                                            <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadLogo} onClick={handleSelectFile} />
+                                            <input type="file" id="fileInput" aria-label="File Input"
+                                                className="hidden" ref={fileInput} onChange={handleUploadLogo} onClick={handleSelectFile} />
                                         </label>
                                         <div className="text-gray-600 text-xs mt-2">
                                             (File formats: .png, .jpg, .gif, .bmp)

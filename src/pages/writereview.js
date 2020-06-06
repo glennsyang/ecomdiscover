@@ -6,6 +6,7 @@ import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
 //import ReactQuill from 'react-quill'
 // Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
+// Add state.companyId, to the useEffect dependencies
 const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
@@ -295,6 +296,7 @@ export default function WriteReview({ location }) {
                                             type="text"
                                             name="title"
                                             placeholder="Summarize your review or highlight an interesting detail"
+                                            aria-label="Title of Review"
                                             className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                                             ref={(e) => {
                                                 register(e, { required: { value: true, message: Constants.FIELD_REQUIRED } })

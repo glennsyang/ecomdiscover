@@ -11,7 +11,8 @@ cache:
 buildGatsby:
   stage: build
   script:
-    - npm install
+    - yarn install
+    - ./node_modules/.bin/gatsby clean
     - ./node_modules/.bin/gatsby build
   # specify the artifacts to save
   artifacts:

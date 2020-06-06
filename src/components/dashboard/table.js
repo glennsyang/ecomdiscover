@@ -68,6 +68,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                     <select
                             className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-100"
                             value={pageSize}
+                            aria-label="Select Page Size"
                             onChange={e => {
                                 setPageSize(Number(e.target.value))
                             }}
@@ -85,6 +86,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                             <select
                                 className="outline-none appearance-none mx-2 py-2 px-4"
                                 value={filterPublish}
+                                aria-label="Select Published or not"
                                 onChange={e => {
                                     handleFilterPublish(e)
                                 }}
@@ -115,6 +117,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                             value={filterInput}
                             onChange={handleFilterChange}
                             placeholder={"Search..."}
+                            aria-label="Search a column"
                             type='text'
                             className="px-4 outline-none text-sm antialiased font-light"
                         />

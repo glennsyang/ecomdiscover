@@ -93,6 +93,7 @@ const SignUp = () => {
                             type="text"
                             placeholder="Name"
                             name="name"
+                            aria-label="Name"
                             ref={register({
                                 required: Constants.FIELD_REQUIRED,
                             })}
@@ -105,6 +106,7 @@ const SignUp = () => {
                             type="text"
                             placeholder="E-mail address"
                             name="email"
+                            aria-label="E-mail address"
                             ref={register({
                                 required: Constants.FIELD_REQUIRED,
                                 pattern: { value: /^\S+@\S+$/i, message: Constants.VALID_EMAIL }
@@ -118,6 +120,7 @@ const SignUp = () => {
                             type="password"
                             placeholder="Password"
                             name="password"
+                            aria-label="Password"
                             ref={register({
                                 required: Constants.FIELD_REQUIRED,
                                 minLength: { value: 8, message: Constants.VALID_PASSWORD }

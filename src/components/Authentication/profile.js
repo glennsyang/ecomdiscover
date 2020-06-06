@@ -264,7 +264,7 @@ const Profile = () => {
                                 <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                     <FaCamera size={18} className="mr-2" />
                                     <span>Upload</span>
-                                    <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
+                                    <input type="file" id="fileInput" aria-label="File input" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
                                 </label>
                             </div>
                         </div>
@@ -277,6 +277,7 @@ const Profile = () => {
                                             type="text"
                                             placeholder="Name"
                                             name="name"
+                                            aria-label="Name"
                                             value={userInfo.name}
                                             onChange={handleChange}
                                             //defaultValue={displayName}

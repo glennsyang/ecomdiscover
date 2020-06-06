@@ -53,6 +53,7 @@ const Login = ({ location }) => {
                         <input
                             type="text"
                             placeholder="E-mail address"
+                            aria-label="Enter the E-mail address"
                             name="email"
                             ref={register({
                                 required: Constants.FIELD_REQUIRED,
@@ -66,6 +67,7 @@ const Login = ({ location }) => {
                             type="password"
                             placeholder="Password"
                             name="password"
+                            aria-label="Enter the Password"
                             ref={register({
                                 required: Constants.FIELD_REQUIRED,
                                 minLength: { value: 8, message: Constants.VALID_PASSWORD }

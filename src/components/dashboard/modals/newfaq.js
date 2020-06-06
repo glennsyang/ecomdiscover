@@ -9,6 +9,7 @@ export default function NewFAQ({ register, errors }) {
                 type="text"
                 name="question"
                 placeholder="Question...?"
+                aria-label="Question"
                 ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                 className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
             />
@@ -19,6 +20,7 @@ export default function NewFAQ({ register, errors }) {
                 type="text"
                 name="answer"
                 placeholder="Answer to the question..."
+                aria-label="Answer"
                 ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                 className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400 h-40"
             />
