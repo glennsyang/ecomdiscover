@@ -139,8 +139,8 @@ const Actions = (props) => {
                     {rowProps.active ? <FaBan size={16} /> : <FaPlay size={16} />}
                 </button>
                 : ''}
-        <button type="button" onClick={() => handleEdit(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>
-        <button type="button" onClick={() => handleDelete(rowProps)} className="text-red-500"><FaTimesCircle size={16} /></button>
+        <button type="button" aria-label="Edit" onClick={() => handleEdit(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>
+        <button type="button" aria-label="Delete" onClick={() => handleDelete(rowProps)} className="text-red-500"><FaTimesCircle size={16} /></button>
     </>)
 }
 

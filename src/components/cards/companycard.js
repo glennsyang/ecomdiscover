@@ -16,7 +16,7 @@ const CompanyCard = ({ company }) => {
         <div className="max-w-sm flex-grow rounded-lg overflow-hidden shadow-xl border border-gray-100 bg-white m-4 lg:mx-4">
             {/* Logo */}
             <div className="flex justify-center items-center h-24 md:h-32 lg:h-32 px-4">
-                <Link to={company.fields.slug}>
+                <Link to={`/${company.fields.slug}`}>
                     {company.logo
                         ? <ImageFixed props={props} />
                         : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-20 w-full object-contain" />
@@ -31,7 +31,7 @@ const CompanyCard = ({ company }) => {
                 </div>
                 <hr className="border-b border-gray-300 opacity-25 py-0" />
                 <div className="font-semibold py-4">
-                    <Link to={company.fields.slug}>
+                    <Link to={`/${company.fields.slug}`}>
                         {company.name}
                     </Link>
                 </div>
@@ -47,7 +47,7 @@ const CompanyCard = ({ company }) => {
                     })}
                 </div>
                 <hr className="border-b border-gray-300 opacity-25 py-0" />
-                <Link to={company.fields.slug} className="inline-block text-blue-500 text-xs hover:underline pt-4">
+                <Link to={`/${company.fields.slug}`} className="inline-block text-blue-500 text-xs hover:underline pt-4">
                     See Reviews
                     <FaChevronRight className="inline-block text-sm pl-2" />
                 </Link>

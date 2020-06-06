@@ -9,6 +9,7 @@ export default function NewMarketplace({ register, errors }) {
                 type="text"
                 name="code"
                 placeholder="3-letter Country Code"
+                aria-label="New Country Code"
                 ref={register({
                     required: { value: true, message: Constants.FIELD_REQUIRED },
                     maxLength: { value: 3, message: "Must be only 3 characters." },

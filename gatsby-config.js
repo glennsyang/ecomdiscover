@@ -205,9 +205,9 @@ module.exports = {
         // Space mode (optional, default: `html`)
         space: `html`,
         // EmitParseErrors mode (optional, default: false)
-        emitParseErrors: false,
+        emitParseErrors: true,
         // Verbose mode (optional, default: false)
-        verbose: false,
+        verbose: true,
         // Plugins configs (optional but most likely you need one)
         //plugins: [],
       },

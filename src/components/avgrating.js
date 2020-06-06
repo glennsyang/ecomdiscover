@@ -29,7 +29,7 @@ const AvgRating = (props) => {
             {showNumReviews
                 ? <span className={className}>
                     {showAvgRating
-                        ? <Link to={slug} className="hover:underline">
+                        ? <Link to={`/${slug}`} className="hover:underline">
                             {arrReviews.length === 1 ? `${arrReviews.length} Review` : `${arrReviews.length} Reviews`}
                         </Link>
                         : <button

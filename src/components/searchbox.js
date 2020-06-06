@@ -25,6 +25,7 @@ export default class SearchBox extends Component {
                             <input
                                 className='w-full text-black outline-none'
                                 type='text'
+                                aria-label="Search box"
                                 value={this.state.query}
                                 onChange={this.search}
                                 placeholder="I'm looking for..."
