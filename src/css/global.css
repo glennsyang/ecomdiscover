@@ -30,6 +30,10 @@
     position: relative;
 }
 
+.ql-editor {
+  min-height: 18em;
+}
+
 /* Accordiion */
 label:after {
     content: '+';

@@ -8126,10 +8126,10 @@ gatsby-telemetry@^1.3.10, gatsby-telemetry@^1.3.9:
     stack-utils "1.0.2"
     uuid "3.4.0"
 
-gatsby-transformer-rehype@^1.4.2:
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/gatsby-transformer-rehype/-/gatsby-transformer-rehype-1.4.2.tgz#a04e6e4ae27f657bd4a9ebfa8b1f35657bf00bd7"
-  integrity sha512-g7njcFs8+MLktXwgdzEcXZVrcawDp6hjJPEkJLo53HEvdWmd2ICEKh0QMBIgaXRZc51FprW/PWrUDIi3I3BhAQ==
+gatsby-transformer-rehype@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/gatsby-transformer-rehype/-/gatsby-transformer-rehype-1.4.3.tgz#a74c4716495f18f65a23c24586d193c6a92ebd76"
+  integrity sha512-Zmxr6/N2EmGYvdFUBoOfo7hbEPeiixHI5oaZ3lIdIKRbvCQ9WSrm4j7VTAur5JbhdZgw4ipDgxnKGoBNZvLA+w==
   dependencies:
     "@babel/runtime" "7.9.2"
     bluebird "3.7.2"
