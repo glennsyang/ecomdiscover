@@ -7,7 +7,7 @@ import * as Constants from '../../constants'
 import AuthenticationView from "./authenticationview"
 import ImageFluid from "../image-fluid"
 import Loader from "../loader"
-import Toast from "../../components/toast"
+import Toast from "../toast"
 import { getUser, setUser } from "../../utils/auth"
 
 function getFileNameFromUrl(urlString) {
