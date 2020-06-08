@@ -12,7 +12,6 @@ buildGatsby:
   stage: build
   script:
     - yarn install
-    - ./node_modules/.bin/gatsby clean
     - ./node_modules/.bin/gatsby build --prefix-paths
   # specify the artifacts to save
   artifacts:
@@ -35,7 +34,8 @@ deployGatsby:
   # Inject the remote's private key
   - echo -n "$SSH_PRIVATE_KEY" | tr -d '\r'
   - echo "========================="
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\\r' | ssh-add - > /dev/null
+  # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
   # echo "$SSH_KNOWN_HOSTS"
@@ -44,6 +44,7 @@ deployGatsby:
   - chmod 644 ~/.ssh/known_hosts
   # rsync -avuz --exclude=".*" $CI_PROJECT_DIR/dist/ $SERVER_USER@$SERVER_IP:/var/www/watchcrypto.today
   - rsync -avzh --delete public/* $SERVER_USER@$SERVER_IP:/var/www/ecomdiscover.com/html
+  # rsync -avuz -e 'ssh -i ~/.ssh/deploy_rsa' $CI_PROJECT_DIR/dist/ $SERVER_USER@8.8.8.8:/var/wwww/example.com
   # Non interactive ssh gracefully reloads server
   - ssh $SERVER_USER@$SERVER_IP '. /etc/profile; pm2 reload all'
   # scp -i ~/.ssh/deploy_dev -r public/* deploy@159.203.38.209:/var/www/glennsheppard.dev/html
