@@ -14,10 +14,10 @@ function IndexPage({ data }) {
 
   useEffect(() => {
     async function fetchData() {
-      setCompanies(companies.sort((a, b) => {
-        var dateA = new Date(a.created), dateB = new Date(b.created)
-        return dateB - dateA
-      }))
+      //setCompanies(companies.sort((a, b) => {
+      //  var dateA = new Date(a.created), dateB = new Date(b.created)
+      //  return dateB - dateA
+      //}))
       setIsUserBlocked(await isBlocked())
     }
     fetchData()
