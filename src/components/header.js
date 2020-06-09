@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Link } from "gatsby"
 import { useSiteMetadata } from "../hooks/use-site-metadata"
 import SVGImage from "../components/svgimage"
-import Status from "./auth/status"
+import Status from "./authentication/status"
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false)

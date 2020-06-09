@@ -66,7 +66,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                     <div className="text-sm antialiased font-semibold">
                         Display
                     <select
-                            className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-100"
+                            className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-200"
                             value={pageSize}
                             aria-label="Select Page Size"
                             onChange={e => {
@@ -84,7 +84,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                         <div className="text-sm antialiased font-semibold ml-3">
                             Published
                             <select
-                                className="outline-none appearance-none mx-2 py-2 px-4"
+                                className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-200"
                                 value={filterPublish}
                                 aria-label="Select Published or not"
                                 onChange={e => {

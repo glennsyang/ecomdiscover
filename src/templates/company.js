@@ -31,7 +31,7 @@ const SortByButton = (props) => {
 
 export default function Company({ data }) {
     const company = data.companies
-    const reviews = data.companies.reviews
+    const reviews = data.companies.reviews.filter(review => review.published === true)
     const imgLogo = {
         imgName: company.logo,
         imgAlt: `${company.name} Logo`,
@@ -206,6 +206,8 @@ export const query = graphql`
                     htmlAst
                 }
                 created
+                updated
+                published
                 helpful {
                     id
                     username
