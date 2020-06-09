@@ -32,9 +32,9 @@ deployGatsby:
   - "which rsync || ( apt-get update -y && apt-get install rsync -y )"
   - eval $(ssh-agent -s)
   # Inject the remote's private key
-  - echo "========================="
-  - echo "$SSH_PRIVATE_KEY"
-  - echo "========================="
+  # - echo "========================="
+  # - echo "$SSH_PRIVATE_KEY"
+  # - echo "========================="
   # - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
   - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
   - mkdir -p ~/.ssh
