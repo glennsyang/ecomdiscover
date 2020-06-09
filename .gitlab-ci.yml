@@ -48,4 +48,3 @@ deployGatsby:
   # rsync -avuz -e 'ssh -i ~/.ssh/deploy_rsa' $CI_PROJECT_DIR/dist/ $SERVER_USER@8.8.8.8:/var/wwww/example.com
   # Non interactive ssh gracefully reloads server
   # - ssh $SERVER_USER@$SERVER_IP '. /etc/profile; pm2 reload all'
-  # scp -i ~/.ssh/deploy_dev -r public/* deploy@159.203.38.209:/var/www/glennsheppard.dev/html
