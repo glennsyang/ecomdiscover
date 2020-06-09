@@ -30,6 +30,8 @@ export const useCompanies = () => {
                     title
                     content
                     created
+                    updated
+                    published
                     rating
                     tags
                     helpful {

@@ -7,8 +7,8 @@ import Categories from "../components/dashboard/categories"
 import Users from "../components/dashboard/users"
 import Marketplaces from "../components/dashboard/marketplaces"
 import Faqs from "../components/dashboard/faqs"
-import Login from "../components/auth/login"
-import PrivateRoute from "../components/auth/privateroute"
+import Login from "../components/authentication/login"
+import PrivateRoute from "../components/authentication/privateroute"
 
 const Dashboard = () => (
     <Layout>
