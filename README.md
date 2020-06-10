@@ -28,6 +28,7 @@ Search our curated collection of e-commerce resources and review your favorite t
 
 ## Status
 [![pipeline status](https://gitlab.com/gsheppard.yang/eseller-tools-app/badges/release/pipeline.svg)](https://gitlab.com/gsheppard.yang/eseller-tools-app/-/commits/release)
+[![coverage report](https://gitlab.com/gsheppard.yang/eseller-tools-app/badges/release/coverage.svg)](https://gitlab.com/gsheppard.yang/eseller-tools-app/-/commits/release)
 
 ## Author
 
