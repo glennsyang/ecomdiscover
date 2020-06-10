@@ -24,7 +24,6 @@ buildGatsby:
 deployGatsby:
   stage: deploy
   only:
-  - schedules
   - release
   dependencies:
   - buildGatsby
