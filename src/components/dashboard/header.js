@@ -26,20 +26,52 @@ function Header(props) {
                         <p className="text-sm mb-8">(This will take a few minutes to complete)</p>
                         <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-2"
                             onClick={() => {
-                                const toastProps = {
-                                    id: Math.floor((Math.random() * 101) + 1),
-                                    title: 'Success!',
-                                    description: `Site will be updated.`,
-                                    color: 'green',
+                                // Make API call to trigger Pipeline
+                                const reqOptions = {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'multipart/form-data' },
+                                    body: `token=${process.env.GATSBY_GITLAB_CI_TRIGGER_TOKEN}&ref=release`
                                 }
-                                setToast(toastProps)
-                                onClose()
+                                fetch('https://gitlab.com/api/v4/projects/16950764/trigger/pipeline', reqOptions)
+                                    .then(async response => {
+                                        const data = await response.json()
+                                        // check for error response
+                                        if (data.error || !response.ok) {
+                                            const toastProps = {
+                                                id: Math.floor((Math.random() * 101) + 1),
+                                                title: 'Error!',
+                                                description: data.error ? `${data.error}.` : `${data.message}`,
+                                                color: 'red',
+                                            }
+                                            setToast(toastProps)
+                                            onClose()
+                                        } else {
+                                            const toastProps = {
+                                                id: Math.floor((Math.random() * 101) + 1),
+                                                title: 'Success!',
+                                                description: `Site will be updated.`,
+                                                color: 'green',
+                                            }
+                                            setToast(toastProps)
+                                            onClose()
+                                        }
+                                    })
+                                    .catch(error => {
+                                        const toastProps = {
+                                            id: Math.floor((Math.random() * 101) + 1),
+                                            title: 'Error!',
+                                            description: `${error.toString()}.`,
+                                            color: 'red',
+                                        }
+                                        setToast(toastProps)
+                                        onClose()
+                                    })
                             }}
                         >
                             Yes
                         </button>
                         <button onClick={onClose} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">No</button>
-                    </div>
+                    </div >
                 )
             }
         })
