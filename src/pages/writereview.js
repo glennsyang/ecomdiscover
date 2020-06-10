@@ -348,7 +348,7 @@ export default function WriteReview({ location }) {
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col pt-20 pb-4 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col py-4 md:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
                             <Advert />
                         </aside>
                     </div>
