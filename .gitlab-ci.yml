@@ -18,12 +18,14 @@ buildGatsby:
     paths:
       - public
   only:
+    - release
     - schedules
     
 deployGatsby:
   stage: deploy
   only:
   - release
+  - schedules
   dependencies:
   - buildGatsby
   script:
