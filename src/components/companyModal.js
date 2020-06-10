@@ -166,9 +166,9 @@ export default function CompanyModal(props) {
             <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 {isLoading
                     ? <Loader />
-                    : <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                    : <div className="relative w-auto mt-16 md:my-6 mx-1 md:mx-auto max-w-3xl">
                         {/*content*/}
-                        <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                        <div className="border-2 md:border-0 border-gray-300 shadow-inner md:shadow-lg rounded-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 {/*header*/}
                                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
@@ -183,7 +183,7 @@ export default function CompanyModal(props) {
                                     </button>
                                 </div>
                                 {/*body*/}
-                                <div className="relative p-6 flex-1">
+                                <div className="relative p-4 md:p-6 flex-1">
                                     <div className="block text-left text-black lg:text-2xl text-xl font-bold">Name</div>
                                     <input
                                         type="text"
@@ -266,7 +266,7 @@ export default function CompanyModal(props) {
                                     <button
                                         type="submit"
                                         value="Submit"
-                                        className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient transition ease-in-out duration-700">
+                                        className="hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient transition ease-in-out duration-700">
                                         Create
                                     </button>
                                 </div>

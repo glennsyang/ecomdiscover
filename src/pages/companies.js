@@ -42,7 +42,7 @@ export default ({ location }) => {
                         {category && <span className="text-xs tracking-tight text-gray-600">Applied Category Filter:</span>}
                         {category && <Category categories={flteredCategory} useLink={false} className="bg-gray-200 border border-gray-300 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight ml-2" />}
                     </div>
-                    <div className="w-full flex flex-wrap">
+                    <div className="w-full flex flex-wrap justify-center xl:justify-start">
                         {companies.map(node => (
                             <CompanyCard key={node.id} company={node} />
                         ))}

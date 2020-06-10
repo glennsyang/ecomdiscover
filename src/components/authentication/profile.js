@@ -260,7 +260,7 @@ const Profile = () => {
                                     : <ImageFluid props={imgBlankProfile} />
                                 }
                             </div>
-                            <div className="flex ml-4 lg:pt-4 lg:ml-0">
+                            <div className="flex ml-6 md:pt-4 md:ml-0">
                                 <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                     <FaCamera size={18} className="mr-2" />
                                     <span>Upload</span>
@@ -302,7 +302,7 @@ const Profile = () => {
                                     </div>
                                 </div>
                                 <div className="lg:w-2/5">
-                                    <div className="float-right">
+                                    <div className="mt-4 md:mt-0 md:float-right">
                                         {isEditing ?
                                             <button name="save" onClick={handleSaveProfile} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                                                 Save
@@ -319,21 +319,21 @@ const Profile = () => {
                             <hr className="border-b border-gray-400 opacity-25 py-0" />
 
                             <div className="flex flex-col lg:flex-row lg:flex-grow py-6">
-                                <div className="lg:w-3/5">
+                                <div className="md:w-3/5">
                                     <h3 className="text-base font-bold text-black pb-2">
                                         Sign-in Method
-                                </h3>
+                                    </h3>
                                     <p className="text-gray-500 text-sm lg:text-xs">
                                         {signInMethods.map(provider => {
                                             return provider
                                         })}
                                     </p>
                                 </div>
-                                <div className="lg:w-2/5">
-                                    <div className="float-right">
+                                <div className="md:w-2/5">
+                                    <div className="mt-4 md:mt-0 md:float-right">
                                         <button name="change" onClick={handleChangeSignIn} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                                             Change
-                                </button>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +350,7 @@ const Profile = () => {
                                 </p>
                                 </div>
                                 <div className="lg:w-2/5">
-                                    <div className="float-right">
+                                    <div className="mt-4 md:mt-0 md:float-right">
                                         <button name="delete" onClick={handleDeleteAccount} className="bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center">
                                             Deactivate
                                         </button>
@@ -366,7 +366,7 @@ const Profile = () => {
 
                                     </div>
                                     <div className="lg:w-2/5">
-                                        <div className="float-right">
+                                        <div className="md:mt-0 md:float-right">
                                             <Link to={`/dashboard/publishreviews`} className="bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded inline-flex items-center">
                                                 Dashboard
                                         </Link>
