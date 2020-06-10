@@ -120,6 +120,11 @@ export default function Company({ data }) {
 
                             {/* Reviews */}
                             <div className="flex flex-col lg:px-10 py-4">
+                                <div className="md:hidden mb-4">
+                                    <div className="flex">
+                                        <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
+                                    </div>
+                                </div>
                                 <div className="mb-3">
                                     <span className="text-2xl sm:text-2xl font-bold text-black">
                                         {sortHeadingText}
@@ -148,15 +153,15 @@ export default function Company({ data }) {
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col pt-20 pb-4 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col-reverse md:flex-col pt-4 md:py-4 md:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
                             <Advert />
-                            <div className="mx-auto mt-10">
+                            <div className="invisible md:visible mx-auto md:mt-10">
                                 <div className="flex">
                                     <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
                                 </div>
                             </div>
                             {isLoggedIn() && isUserBlocked ?
-                                <div className="mx-auto mt-10">
+                                <div className="mx-auto mt-2 md:mt-10">
                                     <Link
                                         to={'/app/writereview'}
                                         state={{ companyId: company.id }}

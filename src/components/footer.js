@@ -20,7 +20,7 @@ const Footer = () => {
                         </Link>
                     </div>
                     <div className="flex-1">
-                        <p className="uppercase text-black font-bold mb-6 md:mb-6">Links</p>
+                        <p className="uppercase text-black font-bold mb-2 md:mb-6">Links</p>
                         <ul className="list-reset mb-4">
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/FAQ`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">FAQ</Link>
@@ -34,18 +34,22 @@ const Footer = () => {
                         </ul>
                     </div>
                     <div className="flex-1">
-                        <p className="uppercase text-black font-bold mb-6 md:mb-6">Legal</p>
+                        <p className="uppercase text-black font-bold mb-2 md:mb-6">Legal</p>
                         <ul className="list-reset mb-4">
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <Link to={`/terms`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Terms</Link>
+                                <Link to={`/terms`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">
+                                    Terms
+                                </Link>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <Link to={`/privacy`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Privacy</Link>
+                                <Link to={`/privacy`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">
+                                    Privacy
+                                </Link>
                             </li>
                         </ul>
                     </div>
                     <div className="flex-1">
-                        <p className="uppercase text-black font-bold mb-6 md:mb-6">Company</p>
+                        <p className="uppercase text-black font-bold mb-2 md:mb-6">Company</p>
                         <ul className="list-reset mb-6">
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/blog`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Official Blog</Link>

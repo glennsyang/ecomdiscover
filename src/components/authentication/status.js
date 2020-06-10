@@ -29,14 +29,14 @@ export default ({ isOpen }) => {
     return (
         <nav className={isOpen ? 'block px-2 pt-2 pb-4 sm:flex sm:p-0' : 'hidden px-2 pt-2 pb-4 sm:flex sm:p-0'}>
             {!isLoggedIn() ?
-                <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20 justify-end flex-1 lg:mr-8" id="nav-content">
-                    <ShareReviewButton buttonName="Share Review" className="py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500" />
-                    <Link to={`/app/login`} className="mr-5 py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500">
+                <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto block bg-white lg:bg-transparent text-black z-20 justify-end flex-1 lg:mr-8" id="nav-content">
+                    <ShareReviewButton buttonName="Share Review" className="block py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500" />
+                    <Link to={`/app/login`} className="block lg:mr-5 py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500">
                         Sign In
-                        </Link>
-                    <Link to={`/app/signup`} className="mx-auto lg:mx-0 hover:underline bg-blue-500 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 text-white gradient">
+                    </Link>
+                    <Link to={`/app/signup`} className="block lg:mx-0 hover:underline bg-blue-500 font-bold rounded-full mt-2 lg:mt-0 py-4 px-8 shadow opacity-75 text-white gradient">
                         Sign Up
-                        </Link>
+                    </Link>
                 </div>
                 :
                 <>
