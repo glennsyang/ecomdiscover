@@ -153,7 +153,7 @@ export default function Company({ data }) {
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col-reverse md:flex-col pt-4 md:py-4 md:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col-reverse md:flex-col pt-4 md:py-4 mb-6 md:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
                             <Advert />
                             <div className="invisible md:visible mx-auto md:mt-10">
                                 <div className="flex">
