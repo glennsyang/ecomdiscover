@@ -20,13 +20,13 @@ export default () => {
                 <div className="container mx-auto px-8 pb-4">
                     <div className="w-full flex flex-col md:flex-row py-8">
                         <div className="flex-1">
-                            <div className="md:grid grid-cols-3 gap-1">
+                            <div className="lg:grid grid-cols-3 gap-1">
                                 {allCategories.nodes.map((node) => (
-                                    <div key={node.id} className="md:col-span-1">
+                                    <div key={node.id} className="lg:col-span-1">
                                         <Link
                                             to={`/companies`}
                                             state={{ category: node.name }}
-                                            className="bg-gray-200 border border-gray-300 rounded-md px-2 text-sm font-semibold text-blue-500 tracking-tight text-left md:mx-6 mb-1 hover:underline">
+                                            className="bg-gray-200 border border-gray-300 rounded-md px-2 text-sm font-semibold text-blue-500 tracking-tight text-left lg:mx-6 mb-1 hover:underline">
                                             {node.name}
                                         </Link>
                                     </div>

@@ -166,13 +166,13 @@ export default function CompanyModal(props) {
             <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                 {isLoading
                     ? <Loader />
-                    : <div className="relative w-auto mt-16 md:my-6 mx-1 md:mx-auto max-w-3xl">
+                    : <div className="relative w-auto lg:mt-16 lg:my-6 mx-1 lg:mx-auto max-w-3xl">
                         {/*content*/}
-                        <div className="border-2 md:border-0 border-gray-300 shadow-inner md:shadow-lg rounded-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                        <div className="border-2 lg:border-0 border-gray-300 shadow-inner lg:shadow-lg rounded-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 {/*header*/}
                                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
-                                    <h3 className="lg:text-3xl text-xl font-semibold pr-2 md:pr-10">
+                                    <h3 className="lg:text-3xl text-xl font-semibold pr-2 lg:pr-10">
                                         New Company, Tool or Service
                                     </h3>
                                     <button
@@ -183,7 +183,7 @@ export default function CompanyModal(props) {
                                     </button>
                                 </div>
                                 {/*body*/}
-                                <div className="relative p-4 md:p-6 flex-1">
+                                <div className="relative p-4 lg:p-6 flex-1">
                                     <div className="block text-left text-black lg:text-2xl text-xl font-bold">Name</div>
                                     <input
                                         type="text"

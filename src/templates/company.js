@@ -120,7 +120,7 @@ export default function Company({ data }) {
 
                             {/* Reviews */}
                             <div className="flex flex-col lg:px-10 py-4">
-                                <div className="md:hidden mb-4">
+                                <div className="lg:hidden mb-4">
                                     <div className="flex">
                                         <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
                                     </div>
@@ -153,15 +153,15 @@ export default function Company({ data }) {
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col-reverse md:flex-col pt-4 md:py-4 mb-6 md:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col-reverse lg:flex-col pt-4 lg:py-4 mb-6 lg:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll mx-auto">
                             <Advert />
-                            <div className="invisible md:visible mx-auto md:mt-10">
+                            <div className="invisible lg:visible mx-auto lg:mt-10">
                                 <div className="flex">
                                     <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
                                 </div>
                             </div>
                             {isLoggedIn() && isUserBlocked ?
-                                <div className="mx-auto mt-2 md:mt-10">
+                                <div className="mx-auto mt-2 lg:mt-10">
                                     <Link
                                         to={'/app/writereview'}
                                         state={{ companyId: company.id }}
