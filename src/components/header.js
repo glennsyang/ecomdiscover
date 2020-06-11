@@ -28,7 +28,7 @@ function Header() {
             </button>
           </div>
         </div>
-        <Status isOpen={isOpen} />
+        <Status isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
     </header>
   )

@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
-import ReactQuill from 'react-quill'
+//import ReactQuill from 'react-quill'
 // Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
 // Add state.companyId, to the useEffect dependencies
-//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
 import Category from "../components/category"
@@ -348,7 +348,7 @@ export default function WriteReview({ location }) {
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col py-4 md:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col py-4 lg:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll mx-auto">
                             <Advert />
                         </aside>
                     </div>
