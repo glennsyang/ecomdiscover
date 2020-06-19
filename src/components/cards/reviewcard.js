@@ -52,7 +52,7 @@ const ReviewCard = ({ review }) => {
                     description: 'You are not signed in. Please sign-in for more details.',
                     color: 'yellow',
                 }
-                setToast(toastProperties)
+                //setToast(toastProperties)
             })
             setIsLoading(false)
         })

@@ -35,8 +35,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `e-seller-tools`,
-        short_name: `e-seller-tools`,
+        name: `EcomDiscover`,
+        short_name: `ecomdiscover`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
