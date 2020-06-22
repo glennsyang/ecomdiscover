@@ -12,7 +12,7 @@ export default function Advert() {
                 <SVGImage name="logo" width="100%" height="100%" viewBox="0 0 1450 400" className="h-20 object-none border border-blue-500 bg-white rounded-lg shadow-2xl mx-auto px-4" />
             </Link>
             <span className="font-serif antialiased text-white text-lg font-semibold mx-auto mt-6">Want to advertise with us?</span>
-            <a href={`mailto:${email}`} className="text-white antialiased text-sm font-bold mx-auto mt-4 hover:underline" rel="noopener noreferrer" target="_blank">Contact us!</a>
+            <a href={`mailto:${email}`} className="text-white antialiased text-sm font-bold mx-auto mt-4 underline" rel="noopener noreferrer" target="_blank">Contact us!</a>
         </div>
     )
 }

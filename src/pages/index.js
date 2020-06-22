@@ -6,6 +6,7 @@ import SearchBox from '../components/searchbox'
 import CompanyCard from "../components/cards/companycard"
 import { useCompanies } from "../hooks/use-companies"
 import { isLoggedIn, isBlocked } from "../utils/auth"
+import AdVideo from "../images/EcomdiscoverAdvert.mp4"
 
 function IndexPage({ data }) {
   const { allCompanies } = useCompanies()
@@ -67,7 +68,7 @@ function IndexPage({ data }) {
         </section>
 
         {/* Title cards */}
-        <section className="bg-gray-100 py-8" id="title-cards">
+        <section className="bg-gray-100 pt-8" id="title-cards">
           <div className="container mx-auto flex flex-wrap pt-2 pb-10">
             <h3 className="antialiased w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
               E-Commerce Tools & Services
@@ -85,6 +86,15 @@ function IndexPage({ data }) {
                 VIEW ALL
             </Link>
             </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-100 pb-12" id="video-ad">
+          <div className="flex justify-center mx-4">
+            <video height="500" width="800" controls autoplay preload="auto">
+              <source src={AdVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
           </div>
         </section>
 
