@@ -212,7 +212,7 @@ export default function WriteReview({ location }) {
             titleRef.current.focus()
         }
 
-    }, [register, state.companyId, companyList, setValue])
+    }, [register, companyList, setValue])
 
     return (
         <>
@@ -348,7 +348,7 @@ export default function WriteReview({ location }) {
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col py-4 lg:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll mx-auto">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col pt-4 lg:py-4 mb-6 lg:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll lg:pl-4">
                             <Advert />
                         </aside>
                     </div>

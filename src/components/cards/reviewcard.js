@@ -46,12 +46,12 @@ const ReviewCard = ({ review }) => {
                     photo: doc.data().photoURL,
                 })
             }).catch(error => {
-                const toastProperties = {
-                    id: Math.floor((Math.random() * 101) + 1),
-                    title: 'Warning',
-                    description: 'You are not signed in. Please sign-in for more details.',
-                    color: 'yellow',
-                }
+                // const toastProperties = {
+                //     id: Math.floor((Math.random() * 101) + 1),
+                //     title: 'Warning',
+                //     description: 'You are not signed in. Please sign-in for more details.',
+                //     color: 'yellow',
+                // }
                 //setToast(toastProperties)
             })
             setIsLoading(false)
