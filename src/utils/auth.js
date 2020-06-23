@@ -12,7 +12,7 @@ export const setUser = user =>
 
 export const isLoggedIn = () => {
     const user = getUser()
-    return !!user.email
+    return user === null ? false : !!user.email
 }
 
 export const isBlocked = async () => {

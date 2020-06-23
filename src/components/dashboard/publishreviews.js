@@ -78,6 +78,7 @@ const PublishReviews = () => {
                 const review = {}
                 review.id = data.id
                 review.user = data.uid.displayName
+                review.companyId = data.company ? data.company.id : 'companyId'
                 review.company = data.company ? data.company.name : 'company'
                 review.helpful = data.helpful.length
                 review.created = data.created.toDate()

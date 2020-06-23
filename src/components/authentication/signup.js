@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { navigate } from '@reach/router'
 import { Link } from 'gatsby'
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
+import { FcGoogle } from 'react-icons/fc'
 import firebase from "gatsby-plugin-firebase"
 import AuthenticationView from "./authenticationview"
 import { setUser, isLoggedIn } from "../../utils/auth"
@@ -16,46 +17,7 @@ const SignUp = () => {
         firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
             .then(result => {
                 // Create user in 'users' collection
-                firebase.firestore().collection('users').doc(result.user.uid)
-                    .set({
-                        active: true,
-                        created: firebase.firestore.FieldValue.serverTimestamp(),
-                        displayName: data.name,
-                        email: data.email,
-                        helpful: [],
-                        photoURL: '',
-                        role: 'user',
-                        updated: firebase.firestore.FieldValue.serverTimestamp(),
-                    })
-                    .then(() => {
-                        // Update the user profile with 'displayName'
-                        result.user
-                            .updateProfile({ displayName: data.name, })
-                            .then(() => {
-                                setUser(result.user)
-                                navigate('/app/profile')
-                            })
-                            .catch(error => {
-                                console.log("Error:", error)
-                                const toastProperties = {
-                                    id: Math.floor((Math.random() * 101) + 1),
-                                    title: 'Error',
-                                    description: 'There was an error in updating your Name in your Profile.',
-                                    color: 'red',
-                                }
-                                setToast(toastProperties)
-                            })
-                    })
-                    .catch(error => {
-                        console.log("Error:", error)
-                        const toastProperties = {
-                            id: Math.floor((Math.random() * 101) + 1),
-                            title: 'Error',
-                            description: `Could not create Profile for user ${data.email}.`,
-                            color: 'red',
-                        }
-                        setToast(toastProperties)
-                    })
+                createUserInDatabase(result.user, result.user.uid, data.name, data.email, '', true)
             })
             .catch(error => {
                 switch (error.code) {
@@ -75,6 +37,90 @@ const SignUp = () => {
                         break
                 }
             })
+    }
+    const handleSignUpWithGoogle = () => {
+        var provider = new firebase.auth.GoogleAuthProvider()
+        firebase.auth().signInWithPopup(provider).then(result => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            //var token = result.credential.accessToken
+            var user = result.user
+            // Create user in 'users' collection
+            createUserInDatabase(user, user.uid, user.displayName, user.email, user.photoURL, false)
+        }).catch(error => {
+            console.log("error:", error)
+            const toastProperties = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Error',
+                description: `There was an error while signing in: ${error.message}.`,
+                color: 'red',
+            }
+            setToast(toastProperties)
+        })
+    }
+    const createUserInDatabase = (user, uid, name, email, photoURL, isUpdateDisplayName) => {
+        // Check if user already exists
+        firebase.firestore().collection('users').doc(uid).get().then(doc => {
+            if (!doc.exists) {
+                // Create user in 'users' collection
+                firebase.firestore().collection('users').doc(uid)
+                    .set({
+                        active: true,
+                        created: firebase.firestore.FieldValue.serverTimestamp(),
+                        displayName: name,
+                        email: email,
+                        helpful: [],
+                        photoURL: photoURL !== '' ? photoURL : '',
+                        role: 'user',
+                        updated: firebase.firestore.FieldValue.serverTimestamp(),
+                    })
+                    .then(() => {
+                        if (isUpdateDisplayName) {
+                            // Update the user profile with 'displayName'
+                            user
+                                .updateProfile({ displayName: name, })
+                                .then(() => {
+                                    setUser(user)
+                                    navigate('/app/profile')
+                                })
+                                .catch(error => {
+                                    console.log("Error:", error)
+                                    const toastProperties = {
+                                        id: Math.floor((Math.random() * 101) + 1),
+                                        title: 'Error',
+                                        description: 'There was an error in updating your Name in your Profile.',
+                                        color: 'red',
+                                    }
+                                    setToast(toastProperties)
+                                })
+                        } else {
+                            setUser(user)
+                            navigate('/app/profile')
+                        }
+                    })
+                    .catch(error => {
+                        console.log("Error:", error)
+                        const toastProperties = {
+                            id: Math.floor((Math.random() * 101) + 1),
+                            title: 'Error',
+                            description: `Could not create Profile for user ${email}.`,
+                            color: 'red',
+                        }
+                        setToast(toastProperties)
+                    })
+            } else {
+                setUser(user)
+                navigate('/app/profile')
+            }
+        }).catch(error => {
+            console.log("error:", error)
+            const toastProperties = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Error',
+                description: `An error ocurred while signing up: ${error} .`,
+                color: 'red',
+            }
+            setToast(toastProperties)
+        })
     }
 
     if (isLoggedIn()) {
@@ -128,12 +174,21 @@ const SignUp = () => {
                             className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                         />
                         {errors.password && <span className="text-red-500 text-md">{errors?.password?.message}</span>}
-                        <div className="text-black">
+                        <div className="flex justify-between">
                             <button
                                 type="submit"
                                 value="Submit"
                                 className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full mt-6 py-4 px-8 shadow opacity-75 text-white gradient">
                                 Sign Up
+                            </button>
+                            <button
+                                name="loginwithgoogle"
+                                type="button"
+                                value="SignInWithGoogle"
+                                onClick={handleSignUpWithGoogle}
+                                className="mt-8 mb-2 hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
+                                <FcGoogle size={18} className="mr-2" />
+                                Sign up with Google
                             </button>
                         </div>
                     </form>
@@ -146,7 +201,7 @@ const SignUp = () => {
                 autoDeleteTime={2500}
             />
         </AuthenticationView>
-    );
+    )
 }
 
 export default SignUp
