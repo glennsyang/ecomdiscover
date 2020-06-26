@@ -91,7 +91,7 @@ function IndexPage({ data }) {
 
         <section className="bg-gray-100 pb-12" id="video-ad">
           <div className="flex justify-center mx-4">
-            <video height="500" width="800" controls autoPlay preload="auto" className="border border-blue-300">
+            <video height="500" width="800" controls preload="auto" className="border border-blue-300">
               <source src={AdVideo} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
