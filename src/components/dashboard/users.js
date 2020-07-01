@@ -48,16 +48,29 @@ const Users = () => {
     useEffect(() => {
         const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
             let allUsers = []
-            querySnapshot.forEach(doc => {
+            querySnapshot.forEach(async doc => {
                 const user = doc.data()
                 user.id = doc.id
                 user.created = user.created.toDate()
                 user.updated = user.updated ? user.updated.toDate() : new Date()
                 user.helpful = user.helpful.length
+
+                const userDocRef = firebase.firestore().collection('users').doc(doc.id)
+                const reviewDocs = await firebase.firestore().collection('reviews').where("uid", "==", userDocRef).get()
+                let writtenReviews = []
+                reviewDocs.forEach(reviewDoc => {
+                    writtenReviews.push(reviewDoc.data().id)
+                })
+                user.numReviews = writtenReviews.length
+
                 allUsers.push(user)
             })
-            setUsers(allUsers)
-            setIsLoading(false)
+            //setUsers(allUsers)
+            //setIsLoading(false)
+            setTimeout(() => {
+                setUsers(allUsers)
+                setIsLoading(false)
+            }, 500)
         })
         setSkipPageReset(false)
         return () => unsubscribe()
@@ -80,6 +93,10 @@ const Users = () => {
             {
                 Header: "Email",
                 accessor: "email"
+            },
+            {
+                Header: "Reviews",
+                accessor: "numReviews",
             },
             {
                 Header: "Liked",
