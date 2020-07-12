@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link, graphql } from "gatsby"
-import { FaChevronDown, FaChevronUp } from "react-icons/fa"
+import { FaChevronDown, FaChevronUp, FaExternalLinkAlt } from 'react-icons/fa'
 import * as Constants from '../constants'
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -105,13 +105,17 @@ export default function Company({ data }) {
                                         </a>
                                     </div>
                                     {/* Marketplace */}
-                                    <div className="flex">
-                                        <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">
+                                    <div className="flex items-center">
+                                        <a href={company.website} rel="noopener noreferrer" target="_blank"
+                                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded inline-flex items-center -m-1">
+                                            <FaExternalLinkAlt size={18} className="mr-3" />
+                                            Visit Website
+                                        </a>
+                                        <h6 className="flex text-gray-500 text-xs tracking-tight uppercase ml-4">
                                             {company.marketplaces.map(marketplace => {
                                                 return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
                                             })}
                                         </h6>
-                                        <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-2">{company.name}</a>
                                     </div>
                                 </div>
                             </div>

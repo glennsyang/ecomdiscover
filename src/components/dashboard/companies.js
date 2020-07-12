@@ -5,7 +5,7 @@ import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
-//import EditableCell from "./editablecell"
+import EditableCell from "./editablecell"
 import { hydrate } from "./helper"
 
 const Categories = ({ values }) => {
@@ -32,15 +32,15 @@ const Companies = () => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
         const id = companies[rowIndex].id
-        const old = companies[rowIndex].name
-        //console.log("data:", rowIndex, columnId, value, id)
-        if (value !== old) {
-            // Update name
+        const oldValue = companies[rowIndex][columnId]
+        console.log("oldVal:", oldValue, "columnId:", columnId, "newValue:", value)
+        if (value !== oldValue) {
+            // Update db
+            let dataObj = {}
+            dataObj[columnId] = value
+            dataObj['updated'] = firebase.firestore.FieldValue.serverTimestamp()
             firebase.firestore().collection('companies').doc(id)
-                .update({
-                    name: value,
-                    updated: firebase.firestore.FieldValue.serverTimestamp(),
-                })
+                .update(dataObj)
                 .then(() => {
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
@@ -93,12 +93,12 @@ const Companies = () => {
             {
                 Header: "Name",
                 accessor: "name",
-                //Cell: EditableCell,
+                Cell: EditableCell,
             },
             {
                 Header: "Blurb",
                 accessor: "blurb",
-                //Cell: EditableCell,
+                Cell: EditableCell,
                 className: "w-1/3"
             },
             {
