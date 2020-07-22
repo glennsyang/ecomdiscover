@@ -5,7 +5,7 @@ require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`, })
 module.exports = {
   siteMetadata: {
     title: `Ecom Discover`,
-    description: `A collection of e-commerce resources.  Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources.`,
+    description: `Find Top-Rated Tools & Services For Your Ecommerce Business.`,
     siteUrl: `https://www.ecomdiscover.com`,
     website: `ecomdiscover.com`,
     email: `info@ecomdiscover.com`,
