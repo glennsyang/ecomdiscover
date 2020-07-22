@@ -5,17 +5,21 @@ import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
+import NewModal from "./modals/newModal"
 //import EditableCell from "./editablecell"
 
 const Faqs = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [faqs, setFaqs] = useState([])
+
+    const [showModal, setShowModal] = useState(false)
+    const [rowProps, setRowProps] = useState()
+
     const [toast, setToast] = useState()
     const showToast = (toastProps) => { setToast(toastProps) }
     const [skipPageReset, setSkipPageReset] = useState(false)
 
     const createData = (modalData) => {
-        console.log("modalData:", modalData)
         setSkipPageReset(true)
         setIsLoading(true)
         firebase.firestore().collection('faq')
@@ -46,37 +50,43 @@ const Faqs = () => {
                 setToast(toastProps)
             })
     }
-    const updateData = (rowIndex, columnId, value) => {
+    // Modal
+    const handleToggleModal = (rowProps) => {
+        setRowProps(rowProps)
+        setShowModal(!showModal)
+    }
+    const handleEditModal = (modalData) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
         setIsLoading(true)
-        const id = faqs[rowIndex].id
-        const old = faqs[rowIndex].answer
-        if (value !== old) {
-            // Update name
-            firebase.firestore().collection('faq').doc(id)
-                .update({ answer: value })
-                .then(() => {
-                    setIsLoading(false)
-                    const toastProps = {
-                        id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Success!',
-                        description: `FAQ successfully updated.`,
-                        color: 'green',
-                    }
-                    setToast(toastProps)
-                })
-                .catch(error => {
-                    setIsLoading(false)
-                    const toastProps = {
-                        id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Error',
-                        description: `There was an error in updating the faq '${value}'. Reason: ${error.code}.`,
-                        color: 'red',
-                    }
-                    setToast(toastProps)
-                })
-        }
+        setShowModal(!showModal)
+        let dataObj = {}
+        dataObj['question'] = modalData.question
+        dataObj['answer'] = modalData.answer
+        dataObj['date'] = firebase.firestore.FieldValue.serverTimestamp()
+        // Update FAQ
+        firebase.firestore().collection('faq').doc(modalData.id)
+            .update(dataObj)
+            .then(() => {
+                setIsLoading(false)
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Success!',
+                    description: `FAQ successfully updated.`,
+                    color: 'green',
+                }
+                setToast(toastProps)
+            })
+            .catch(error => {
+                setIsLoading(false)
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Error',
+                    description: `There was an error in updating the FAQ. Reason: ${error.code}.`,
+                    color: 'red',
+                }
+                setToast(toastProps)
+            })
     }
 
     useEffect(() => {
@@ -117,7 +127,7 @@ const Faqs = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'faq'} component={'FAQ'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'faq'} component={'FAQ'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
             },
         ],
         []
@@ -132,7 +142,6 @@ const Faqs = () => {
                     data={faqs}
                     tableName={'faq'}
                     filterName={'question'}
-                    updateData={updateData}
                     createData={createData}
                     skipPageReset={skipPageReset}
                 />
@@ -142,6 +151,13 @@ const Faqs = () => {
                 position="bottom-right"
                 autoDelete={true}
                 autoDeleteTime={2500}
+            />
+            <NewModal
+                show={showModal}
+                tableName='faq'
+                rowProps={rowProps}
+                onClose={handleToggleModal}
+                onCreate={handleEditModal}
             />
         </div>
     )

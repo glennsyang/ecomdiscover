@@ -28,7 +28,7 @@ function IndexPage({ data }) {
     <Layout>
       <SEO
         title="Home"
-        keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+        keywords={[`amazon`, `ecommerce`, `FBA`, `repricing`, `profit monitoring`, `listing optimization`]}
       />
 
       <div className="gradient">
@@ -144,7 +144,7 @@ function IndexPage({ data }) {
 
 export const query = graphql`
   query {
-    allCategories(limit: 5, sort: {fields: name, order: ASC}, skip: 15) {
+    allCategories(limit: 5, skip: 15, sort: {fields: name, order: ASC}) {
       edges {
         node {
           id

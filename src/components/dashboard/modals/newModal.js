@@ -4,15 +4,16 @@ import NewCategory from './newcategory'
 import NewMarketplace from './newmarketplace'
 import NewFAQ from './newfaq'
 import NewCompany from '../../companyModal'
+import EditCompany from './editcompany'
 
 export default function NewModal(props) {
-    const { tableName } = props
     const showModal = true
-    const { register, errors, handleSubmit } = useForm()
+    const { tableName, rowProps } = props
+    const { register, errors, setValue, getValues, handleSubmit } = useForm()
     // Close button
     const onClose = () => { props.onClose && props.onClose() }
     // Submit button
-    const onSubmit = modalData => { props.onCreate(modalData) }
+    const onSubmit = modalData => { props.onCreate({ ...rowProps, ...modalData }) }
 
     if (!props.show) { return null }
     return (
@@ -26,14 +27,14 @@ export default function NewModal(props) {
                 :
                 <>
                     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                        <div className="relative w-auto my-6 mx-auto w-1/3 max-w-lg">
+                        <div className="relative my-6 mx-auto w-1/3 max-w-3xl">
                             {/*content*/}
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     {/*header*/}
                                     <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
                                         <h3 className="lg:text-3xl text-xl font-semibold pr-2 md:pr-10">
-                                            New {tableName.toUpperCase()}
+                                            {rowProps ? 'Update' : 'New'} {tableName.toUpperCase()}
                                         </h3>
                                         <button
                                             type="button"
@@ -45,7 +46,8 @@ export default function NewModal(props) {
                                     {/*body*/}
                                     {tableName === 'categories' ? <NewCategory register={register} errors={errors} /> : ''}
                                     {tableName === 'marketplaces' ? <NewMarketplace register={register} errors={errors} /> : ''}
-                                    {tableName === 'faq' ? <NewFAQ register={register} errors={errors} /> : ''}
+                                    {tableName === 'faq' ? <NewFAQ register={register} errors={errors} rowProps={rowProps} /> : ''}
+                                    {tableName === 'company' ? <EditCompany register={register} errors={errors} setValue={setValue} rowProps={rowProps} getValues={getValues} /> : ''}
                                     {/*footer*/}
                                     <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
                                         <button
@@ -53,13 +55,13 @@ export default function NewModal(props) {
                                             onClick={onClose}
                                             className="py-2 px-1 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500 mx-4">
                                             Close
-                                    </button>
+                                        </button>
                                         <button
                                             type="submit"
                                             value="Submit"
                                             className="mx-auto lg:mx-0 hover:shadow-xl hover:opacity-50 bg-blue-500 font-bold rounded-full py-4 px-8 shadow opacity-75 text-white gradient transition ease-in-out duration-700">
-                                            Create
-                                    </button>
+                                            {rowProps ? 'Update' : 'Create'}
+                                        </button>
                                     </div>
                                 </form>
                             </div>
