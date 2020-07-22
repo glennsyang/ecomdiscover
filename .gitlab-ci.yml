@@ -12,6 +12,7 @@ buildGatsby:
   stage: build
   script:
     - yarn install
+    - gatsby --version
     - ./node_modules/.bin/gatsby build --prefix-paths
   # specify the artifacts to save
   artifacts:
