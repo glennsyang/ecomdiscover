@@ -6,11 +6,14 @@ import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 import EditableCell from "./editablecell"
+import NewModal from "./modals/newModal"
 import { hydrate } from "./helper"
 
 const Categories = ({ values }) => {
+    console.log("values:", values)
+    if (values[0].category === 'undefined') { return null }
     return (<>
-        {values.map(category => {
+        {values?.map(category => {
             return (<span key={category.id} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight mr-1">{category.name}</span>)
         })}
     </>)
@@ -23,10 +26,12 @@ const Companies = () => {
     const showToast = (toastProps) => { setToast(toastProps) }
     const [skipPageReset, setSkipPageReset] = useState(false)
 
+    const [showModal, setShowModal] = useState(false)
+    const [rowProps, setRowProps] = useState()
+
     const createData = (modalData) => {
         setSkipPageReset(true)
         setIsLoading(true)
-
     }
     const updateData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
@@ -60,6 +65,55 @@ const Companies = () => {
                     setToast(toastProps)
                 })
         }
+    }
+    // Modal
+    const handleToggleModal = (rowProps) => {
+        //console.log("handleToggleModal():", rowProps)
+        setRowProps(rowProps)
+        setShowModal(!showModal)
+    }
+    const handleEditModal = (modalData) => {
+        // We also turn on the flag to not reset the page
+        setSkipPageReset(true)
+        setIsLoading(true)
+        setShowModal(!showModal)
+        console.log("handleEditModal():", modalData)
+        // Create the data object to be updated
+        let dataObj = {}
+        dataObj['blurb'] = modalData.blurb
+        dataObj['name'] = modalData.name
+        dataObj['categories'] = modalData.categories.map((category) => (
+            firebase.firestore().doc(`categories/${category.value}`)
+        ))
+        dataObj['logoURL'] = modalData.logoURL
+        dataObj['marketplaces'] = modalData.marketplaces.map((marketplace) => (
+            firebase.firestore().doc(`marketplaces/${marketplace}`)
+        ))
+        dataObj['website'] = modalData.website
+        dataObj['updated'] = firebase.firestore.FieldValue.serverTimestamp()
+        // Update Company
+        firebase.firestore().collection('companies').doc(modalData.id)
+            .update(dataObj)
+            .then(() => {
+                setIsLoading(false)
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Success!',
+                    description: `Company successfully updated.`,
+                    color: 'green',
+                }
+                setToast(toastProps)
+            })
+            .catch(error => {
+                setIsLoading(false)
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Error',
+                    description: `There was an error in updating the Company. Reason: ${error.code}.`,
+                    color: 'red',
+                }
+                setToast(toastProps)
+            })
     }
 
     useEffect(() => {
@@ -126,7 +180,7 @@ const Companies = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'companies'} component={'Companies'} onCloseToast={showToast} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'companies'} component={'Companies'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
             },
         ],
         []
@@ -151,6 +205,13 @@ const Companies = () => {
                 position="bottom-right"
                 autoDelete={true}
                 autoDeleteTime={2500}
+            />
+            <NewModal
+                show={showModal}
+                tableName='company'
+                rowProps={rowProps}
+                onClose={handleToggleModal}
+                onCreate={handleEditModal}
             />
         </div>
     )

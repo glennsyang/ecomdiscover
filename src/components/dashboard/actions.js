@@ -7,6 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 const Actions = (props) => {
     const { rowProps, collection, component } = props
     const onCloseToast = (toastProps) => { props.onCloseToast && props.onCloseToast(toastProps) }
+    const onEditRow = (rowProps) => { props.onEditRow && props.onEditRow(rowProps) }
 
     const handleDelete = (row) => {
         confirmAlert({
@@ -45,16 +46,6 @@ const Actions = (props) => {
                 )
             }
         })
-    }
-    const handleEdit = (row) => {
-        //console.log("Edit Row:", row)
-        const toastProps = {
-            id: Math.floor((Math.random() * 101) + 1),
-            title: 'Warning',
-            description: `Please click the cell for this column to edit.`,
-            color: 'yellow',
-        }
-        onCloseToast(toastProps)
     }
     const handleTogglePublish = (row) => {
         console.log("TogglePublish Review:", row)
@@ -159,7 +150,9 @@ const Actions = (props) => {
                     {rowProps.active ? <FaBan size={16} /> : <FaPlay size={16} />}
                 </button>
                 : ''}
-        <button type="button" aria-label="Edit" onClick={() => handleEdit(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>
+        {component === 'Category' || component === 'Marketplace' ?
+            ''
+            : <button type="button" aria-label="Edit" onClick={() => onEditRow(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>}
         <button type="button" aria-label="Delete" onClick={() => handleDelete(rowProps)} className="text-red-500"><FaTimesCircle size={16} /></button>
     </>)
 }
