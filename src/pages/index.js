@@ -77,7 +77,7 @@ function IndexPage({ data }) {
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
             </div>
             <div className="w-full justify-center flex flex-wrap">
-              {companies.slice(0, 3).map(node => (
+              {companies.slice(5, 8).map(node => (
                 <CompanyCard key={node.id} company={node} />
               ))}
             </div>
@@ -142,19 +142,20 @@ function IndexPage({ data }) {
   )
 }
 
-export const query = graphql`
-  query {
-    allCategories(limit: 5, skip: 15, sort: {fields: name, order: ASC}) {
+export const pageQuery = graphql`
+  query SearchIndexQuery {
+    allCategories(limit: 5) {
       edges {
         node {
           id
-          name
+          name 
         }
       }
+    }
+    siteSearchIndex {
+      index
+    }
   }
-  siteSearchIndex {
-    index
-  }
-}
 `
+
 export default IndexPage
