@@ -4,23 +4,17 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
 import CompanyCard from "../components/cards/companycard"
-import { useCompanies } from "../hooks/use-companies"
 import { isLoggedIn, isBlocked } from "../utils/auth"
 import AdVideo from "../images/EcomdiscoverAdvert.mp4"
 
 function IndexPage({ data }) {
-  const { allCompanies } = useCompanies()
-  const [companies, setCompanies] = useState(allCompanies.nodes)
   const [isUserBlocked, setIsUserBlocked] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
-      //setCompanies(companies.sort((a, b) => {
-      //  var dateA = new Date(a.created), dateB = new Date(b.created)
-      //  return dateB - dateA
-      //}))
       setIsUserBlocked(await isBlocked())
     }
+
     fetchData()
   }, [])
 
@@ -77,7 +71,7 @@ function IndexPage({ data }) {
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
             </div>
             <div className="w-full justify-center flex flex-wrap">
-              {companies.slice(5, 8).map(node => (
+              {data.allCompanies.edges.map(({ node }) => (
                 <CompanyCard key={node.id} company={node} />
               ))}
             </div>
@@ -93,6 +87,7 @@ function IndexPage({ data }) {
           <div className="flex justify-center mx-4">
             <video height="500" width="800" controls preload="auto" className="border border-blue-300">
               <source src={AdVideo} type="video/mp4" />
+              <track kind="captions" src="sampleCaptions.vtt" srcLang="en" />
                 Your browser does not support the video tag.
             </video>
           </div>
@@ -154,6 +149,58 @@ export const pageQuery = graphql`
     }
     siteSearchIndex {
       index
+    }
+    allCompanies(limit: 3, sort: { fields: updated, order: DESC }) {
+      edges {
+            node {
+                id
+                name
+                logo
+                logoURL
+                website
+                blurb
+                created
+                updated
+                marketplaces {
+                    id
+                    flag
+                    code
+                    name
+                }
+                fields {
+                    slug
+                }
+                categories {
+                    id
+                    name
+                }
+                reviews {
+                    id
+                    title
+                    content
+                    created
+                    updated
+                    published
+                    rating
+                    tags
+                    helpful {
+                        username
+                        email
+                        photoURL
+                        created
+                        updated
+                    }
+                    user {
+                        username
+                        email
+                        photoURL
+                        role
+                        created
+                        updated
+                    }
+                }
+            }
+        }
     }
   }
 `

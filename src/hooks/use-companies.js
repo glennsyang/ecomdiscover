@@ -12,6 +12,7 @@ export const useCompanies = () => {
                 website
                 blurb
                 created
+                updated
                 marketplaces {
                     id
                     flag
