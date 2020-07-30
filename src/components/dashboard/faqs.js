@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
 import moment from "moment"
 import Loader from "../loader"
@@ -51,10 +51,11 @@ const Faqs = () => {
             })
     }
     // Modal
-    const handleToggleModal = (rowProps) => {
+    const handleToggleModal = useCallback((rowProps) => {
         setRowProps(rowProps)
-        setShowModal(!showModal)
-    }
+        setShowModal(s => !s)
+        //setShowModal(!showModal)
+    }, [])
     const handleEditModal = (modalData) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
@@ -130,7 +131,7 @@ const Faqs = () => {
                 Cell: ({ row }) => (<Actions rowProps={row.original} collection={'faq'} component={'FAQ'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
             },
         ],
-        []
+        [handleToggleModal]
     )
 
     return (
