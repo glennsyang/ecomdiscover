@@ -95,6 +95,7 @@ module.exports = {
               website: doc.website,
               blurb: doc.blurb,
               created: doc.created,
+              updated: doc.updated,
               marketplaces___NODE: doc.marketplaces.map(marketplace => marketplace.id),
               categories___NODE: doc.categories.map(category => category.id),
               reviews___NODE: doc.reviews.map(review => review.id),
