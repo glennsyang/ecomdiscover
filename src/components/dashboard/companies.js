@@ -10,7 +10,6 @@ import NewModal from "./modals/newModal"
 import { hydrate } from "./helper"
 
 const Categories = ({ values }) => {
-    console.log("values:", values)
     if (values[0].category === 'undefined') { return null }
     return (<>
         {values?.map(category => {
@@ -187,20 +186,19 @@ const Companies = () => {
         [handleToggleModal]
     )
 
+    if (isLoading) { return <Loader /> }
+
     return (
         <div className="flex flex-col">
-            {isLoading
-                ? <Loader />
-                : <Table
-                    columns={columns}
-                    data={companies}
-                    tableName={'companies'}
-                    filterName={'name'}
-                    createData={createData}
-                    updateData={updateData}
-                    skipPageReset={skipPageReset}
-                />
-            }
+            <Table
+                columns={columns}
+                data={companies}
+                tableName={'companies'}
+                filterName={'name'}
+                createData={createData}
+                updateData={updateData}
+                skipPageReset={skipPageReset}
+            />
             <Toast
                 toastProps={toast}
                 position="bottom-right"

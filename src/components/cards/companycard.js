@@ -19,7 +19,9 @@ const CompanyCard = ({ company }) => {
                 <Link to={`/${company.fields.slug}`}>
                     {company.logo
                         ? <ImageFixed props={props} />
-                        : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-20 w-full object-contain" />
+                        : company.logoURL ?
+                            <img src={company.logoURL} alt={`${company.name} Logo`} className="h-20 w-full object-contain" />
+                            : <span className="text-gray-400">missing logo</span>
                     }
                 </Link>
             </div>
@@ -35,12 +37,15 @@ const CompanyCard = ({ company }) => {
                         {company.name}
                     </Link>
                 </div>
+                {/* Rating */}
                 <div className="flex pt-4 pb-4">
                     <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={true} showNumReviews={true} starSize="5" className="text-sm text-blue-500 pl-3" />
                 </div>
+                {/* Blurb */}
                 <div className="text-xs text-gray-700 pb-4">
-                    {company.blurb}
+                    {company.blurb.replace(/(.{140})..+/, "$1...")}
                 </div>
+                {/* Marketplaces */}
                 <div className="flex text-xs text-gray-500 tracking-tight uppercase pb-2">
                     {company.marketplaces.map(marketplace => {
                         return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />

@@ -100,7 +100,9 @@ export default function Company({ data }) {
                                         <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
                                             {company.logo
                                                 ? <ImageFixed props={imgLogo} />
-                                                : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-16 w-2/5 object-contain" />
+                                                : company.logoURL
+                                                    ? <img src={company.logoURL} alt={`${company.name} Logo`} className="h-16 w-2/5 object-contain" />
+                                                    : <span className="text-gray-400">missing logo</span>
                                             }
                                         </a>
                                     </div>
