@@ -92,14 +92,21 @@ const Faqs = () => {
 
     useEffect(() => {
         const unsubscribe = firebase.firestore().collection('faq').onSnapshot(querySnapshot => {
-            let allFaqs = []
-            querySnapshot.forEach(doc => {
-                const faq = doc.data()
-                faq.id = doc.id
-                faq.date = faq.date ? faq.date.toDate() : new Date()
-                allFaqs.push(faq)
-            })
-            setFaqs(allFaqs)
+            let docs = querySnapshot.docs.map(doc => (
+                { ...doc.data(), id: doc.id, date: doc.data().date ? doc.data().date.toDate() : new Date() }
+            ))
+            //let allFaqs = []
+            //querySnapshot.forEach(doc =>
+            //    allFaqs.push({ ...doc.data(), id: doc.id })
+            //)
+            //querySnapshot.forEach(doc => 
+            //    const faq = doc.data()
+            //    faq.id = doc.id
+            //    faq.date = faq.date ? faq.date.toDate() : new Date()
+            //    allFaqs.push(faq)
+            //)
+            //console.log("allFaqs:", docs)
+            setFaqs(docs)
             setIsLoading(false)
         })
         return () => unsubscribe()
@@ -134,19 +141,18 @@ const Faqs = () => {
         [handleToggleModal]
     )
 
+    if (isLoading) { return <Loader /> }
+
     return (
         <div className="flex flex-col">
-            {isLoading
-                ? <Loader />
-                : <Table
-                    columns={columns}
-                    data={faqs}
-                    tableName={'faq'}
-                    filterName={'question'}
-                    createData={createData}
-                    skipPageReset={skipPageReset}
-                />
-            }
+            <Table
+                columns={columns}
+                data={faqs}
+                tableName={'faq'}
+                filterName={'question'}
+                createData={createData}
+                skipPageReset={skipPageReset}
+            />
             <Toast
                 toastProps={toast}
                 position="bottom-right"
