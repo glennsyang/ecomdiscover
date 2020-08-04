@@ -182,20 +182,19 @@ const PublishReviews = () => {
         []
     )
 
+    if (isLoading) { return <Loader /> }
+
     return (
         <div className="flex flex-col">
-            {isLoading
-                ? <Loader />
-                : <Table
-                    columns={columns}
-                    data={reviews}
-                    tableName={'reviews'}
-                    renderRowSubComponent={renderRowSubComponent}
-                    filterName={'title'}
-                    updateData={updateData}
-                    skipPageReset={skipPageReset}
-                />
-            }
+            <Table
+                columns={columns}
+                data={reviews}
+                tableName={'reviews'}
+                renderRowSubComponent={renderRowSubComponent}
+                filterName={'title'}
+                updateData={updateData}
+                skipPageReset={skipPageReset}
+            />
             <Toast
                 toastProps={toast}
                 position="bottom-right"

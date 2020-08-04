@@ -72,13 +72,10 @@ const Categories = () => {
 
     useEffect(() => {
         const unsubscribe = firebase.firestore().collection('categories').onSnapshot(querySnapshot => {
-            let allCategories = []
-            querySnapshot.forEach(doc => {
-                const category = doc.data()
-                category.id = doc.id
-                allCategories.push(category)
-            })
-            setCategories(allCategories)
+            let docs = querySnapshot.docs.map(doc => (
+                { ...doc.data(), id: doc.id }
+            ))
+            setCategories(docs)
             setIsLoading(false)
         })
         return () => unsubscribe()
@@ -102,20 +99,19 @@ const Categories = () => {
         []
     )
 
+    if (isLoading) { return <Loader /> }
+
     return (
         <div className="flex flex-col">
-            {isLoading
-                ? <Loader />
-                : <Table
-                    columns={columns}
-                    data={categories}
-                    tableName={'categories'}
-                    filterName={'name'}
-                    createData={createData}
-                    updateData={updateData}
-                    skipPageReset={skipPageReset}
-                />
-            }
+            <Table
+                columns={columns}
+                data={categories}
+                tableName={'categories'}
+                filterName={'name'}
+                createData={createData}
+                updateData={updateData}
+                skipPageReset={skipPageReset}
+            />
             <Toast
                 toastProps={toast}
                 position="bottom-right"

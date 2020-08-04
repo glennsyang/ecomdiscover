@@ -46,6 +46,31 @@ const Users = () => {
     }
 
     useEffect(() => {
+        async function fetchData() {
+            const unsubscribe = firebase.firestore().collection('users').onSnapshot(async querySnapshot => {
+                let docs = querySnapshot.docs.map(doc => (
+                    {
+                        ...doc.data(),
+                        id: doc.id,
+                        helpful: doc.data().helpful.length,
+                        numReviews: 0
+                    }
+                ))
+                //const userDocRef = firebase.firestore().collection('users').doc("MUjD9A6FjbQpR1bsg7Dv1TMkSmk2")
+                docs.map(async doc => {
+                    const reviewDocs = await firebase.firestore().collection('reviews').where("uid", "==", firebase.firestore().collection('users').doc(doc.id)).get()
+                    console.log(doc.id, '=', reviewDocs.size)
+                })
+                //const reviewDocs = await firebase.firestore().collection('reviews').where("uid", "==", firebase.firestore().collection('users').doc("MUjD9A6FjbQpR1bsg7Dv1TMkSmk2")).get()
+                console.log({ docs })
+                setUsers(docs)
+                setIsLoading(false)
+            })
+            return () => unsubscribe()
+        }
+        console.log("before fetchData:", users.length)
+        fetchData()
+        /*
         const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
             let allUsers = []
             querySnapshot.forEach(async doc => {
@@ -57,11 +82,7 @@ const Users = () => {
 
                 const userDocRef = firebase.firestore().collection('users').doc(doc.id)
                 const reviewDocs = await firebase.firestore().collection('reviews').where("uid", "==", userDocRef).get()
-                let writtenReviews = []
-                reviewDocs.forEach(reviewDoc => {
-                    writtenReviews.push(reviewDoc.data().id)
-                })
-                user.numReviews = writtenReviews.length
+                user.numReviews = reviewDocs.size
 
                 allUsers.push(user)
             })
@@ -74,7 +95,8 @@ const Users = () => {
         })
         setSkipPageReset(false)
         return () => unsubscribe()
-    }, [])
+        */
+    }, [users.length])
 
     const columns = useMemo(
         () => [
@@ -99,7 +121,7 @@ const Users = () => {
                 accessor: "numReviews",
             },
             {
-                Header: "Liked",
+                Header: "Helpful",
                 accessor: "helpful",
                 sortType: 'basic'
             },
@@ -144,19 +166,18 @@ const Users = () => {
         []
     )
 
+    if (isLoading) { return <Loader /> }
+
     return (
         <div className="flex flex-col">
-            {isLoading
-                ? <Loader />
-                : <Table
-                    columns={columns}
-                    data={users}
-                    tableName={'users'}
-                    filterName={'displayName'}
-                    updateData={updateData}
-                    skipPageReset={skipPageReset}
-                />
-            }
+            <Table
+                columns={columns}
+                data={users}
+                tableName={'users'}
+                filterName={'displayName'}
+                updateData={updateData}
+                skipPageReset={skipPageReset}
+            />
             <Toast
                 toastProps={toast}
                 position="bottom-right"
