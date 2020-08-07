@@ -6,6 +6,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 import ImageFluid from "../image-fluid"
 import SVGImage from "../svgimage"
 import Toast from "../toast"
+//import firebase from "gatsby-plugin-firebase"
 
 function Header(props) {
     const { title, userInfo } = props
@@ -77,6 +78,33 @@ function Header(props) {
         })
     }
     const handleNotifications = () => {
+        // firebase.firestore().collection('reviews').get().then(querySnapshot => {
+        //     querySnapshot.forEach(doc => {
+        //         const reviewRef = firebase.firestore().collection('reviews').doc(doc.id)
+        //         reviewRef
+        //             .update({
+        //                 updated: doc.data().created
+        //             })
+        //             .then(() => {
+        //                 console.log("success!")
+        //             })
+        //             .catch(error => {
+        //                 console.log("error:", error)
+        //             })
+        //         // console.log(typeof reviewRef, reviewRef, doc.data().uid)
+        //         // const userRef = doc.data().uid
+        //         // userRef
+        //         //     .update({
+        //         //         reviews: firebase.firestore.FieldValue.arrayUnion(reviewRef)
+        //         //     })
+        //         //     .then(() => {
+        //         //         console.log("success!")
+        //         //     })
+        //         //     .catch(error => {
+        //         //         console.log("error")
+        //         //     })
+        //     })
+        // })
         const toastProps = {
             id: Math.floor((Math.random() * 101) + 1),
             title: 'Warning!',

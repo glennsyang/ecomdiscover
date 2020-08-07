@@ -131,6 +131,7 @@ module.exports = {
               created: doc.created,
               updated: doc.updated,
               helpful___NODE: doc.helpful.map(review => review.id),
+              reviews___NODE: doc.reviews.map(review => review.id),
             }),
           },
           {

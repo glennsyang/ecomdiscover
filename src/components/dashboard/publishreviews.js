@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
 import { FaCaretRight, FaCaretDown, FaCheck, FaTimes } from "react-icons/fa"
 import moment from "moment"
@@ -6,7 +6,7 @@ import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
-//import EditableCell from "./editablecell"
+import NewModal from "./modals/newModal"
 import { hydrate } from "./helper"
 
 const Tags = ({ values }) => {
@@ -25,34 +25,49 @@ const PublishReviews = () => {
     const showToast = (toastProps) => { setToast(toastProps) }
     const [skipPageReset, setSkipPageReset] = useState(false)
 
-    const updateData = (rowIndex, columnId, value) => {
+    const [showModal, setShowModal] = useState(false)
+    const [rowProps, setRowProps] = useState()
+
+    // Modal
+    const handleToggleModal = useCallback((rowProps) => {
+        setRowProps(rowProps)
+        setShowModal(s => !s)
+    }, [])
+    const handleEditModal = (modalData) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
-        const id = reviews[rowIndex].id
-        const old = reviews[rowIndex].title
-        if (value !== old) {
-            // Update name
-            firebase.firestore().collection('reviews').doc(id)
-                .update({ title: value })
-                .then(() => {
-                    const toastProps = {
-                        id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Success!',
-                        description: `Review successfully updated.`,
-                        color: 'green',
-                    }
-                    setToast(toastProps)
-                })
-                .catch(error => {
-                    const toastProps = {
-                        id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Error',
-                        description: `There was an error in updating the review '${value}'. Reason: ${error.code}.`,
-                        color: 'red',
-                    }
-                    setToast(toastProps)
-                })
-        }
+        setIsLoading(true)
+        setShowModal(!showModal)
+        let dataObj = {}
+        dataObj['title'] = modalData.title
+        dataObj['content'] = modalData.content
+        dataObj['tags'] = modalData.tags ? modalData.tags.map((tag) => (
+            tag.label
+        )) : []
+        dataObj['updated'] = firebase.firestore.FieldValue.serverTimestamp()
+        // Update FAQ
+        firebase.firestore().collection('reviews').doc(modalData.id)
+            .update(dataObj)
+            .then(() => {
+                setIsLoading(false)
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Success!',
+                    description: `Review successfully updated.`,
+                    color: 'green',
+                }
+                setToast(toastProps)
+            })
+            .catch(error => {
+                setIsLoading(false)
+                const toastProps = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Error',
+                    description: `There was an error in updating the Review. Reason: ${error.code}.`,
+                    color: 'red',
+                }
+                setToast(toastProps)
+            })
     }
 
     // const getReview = async docId => {
@@ -82,6 +97,7 @@ const PublishReviews = () => {
                 review.company = data.company ? data.company.name : 'company'
                 review.helpful = data.helpful.length
                 review.created = data.created.toDate()
+                review.updated = data.updated.toDate()
                 review.categories = data.categories.length
                 review.tags = data.tags
                 review.rating = data.rating
@@ -93,7 +109,7 @@ const PublishReviews = () => {
             setTimeout(() => {
                 setReviews(allReviews)
                 setIsLoading(false)
-            }, 500)
+            }, 600)
         })
     }, [])
 
@@ -123,7 +139,6 @@ const PublishReviews = () => {
             {
                 Header: "Title",
                 accessor: "title",
-                //Cell: EditableCell,
                 className: "min-w-full"
             },
             {
@@ -152,6 +167,12 @@ const PublishReviews = () => {
                 sortType: 'datetime'
             },
             {
+                Header: "Updated",
+                accessor: "updated",
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
+                sortType: 'datetime'
+            },
+            {
                 Header: "Published?",
                 accessor: "published",
                 Cell: ({ cell: { value } }) => value === 'Yes'
@@ -165,10 +186,11 @@ const PublishReviews = () => {
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'reviews'} component={'Review'} onCloseToast={showToast} />)
+                className: 'w-20',
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'reviews'} component={'Review'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
             },
         ],
-        []
+        [handleToggleModal]
     )
 
     // Create a function that will render our row sub components
@@ -192,7 +214,6 @@ const PublishReviews = () => {
                 tableName={'reviews'}
                 renderRowSubComponent={renderRowSubComponent}
                 filterName={'title'}
-                updateData={updateData}
                 skipPageReset={skipPageReset}
             />
             <Toast
@@ -200,6 +221,13 @@ const PublishReviews = () => {
                 position="bottom-right"
                 autoDelete={true}
                 autoDeleteTime={2500}
+            />
+            <NewModal
+                show={showModal}
+                tableName='review'
+                rowProps={rowProps}
+                onClose={handleToggleModal}
+                onCreate={handleEditModal}
             />
         </div>
     )
