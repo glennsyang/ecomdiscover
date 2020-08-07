@@ -15,6 +15,16 @@ export const useUsers = () => {
                     id
                     title
                 }
+                reviews {
+                    id
+                    title
+                    content
+                    created
+                    updated
+                    published
+                    rating
+                    tags
+                }
             }
         }
     }

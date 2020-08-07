@@ -5,7 +5,6 @@ import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
-import EditableCell from "./editablecell"
 import NewModal from "./modals/newModal"
 import { hydrate } from "./helper"
 
@@ -37,7 +36,6 @@ const Companies = () => {
         setSkipPageReset(true)
         const id = companies[rowIndex].id
         const oldValue = companies[rowIndex][columnId]
-        console.log("oldVal:", oldValue, "columnId:", columnId, "newValue:", value)
         if (value !== oldValue) {
             // Update db
             let dataObj = {}
@@ -77,7 +75,6 @@ const Companies = () => {
         setSkipPageReset(true)
         setIsLoading(true)
         setShowModal(!showModal)
-        console.log("handleEditModal():", modalData)
         // Create the data object to be updated
         let dataObj = {}
         dataObj['blurb'] = modalData.blurb
@@ -123,6 +120,7 @@ const Companies = () => {
                 const company = doc.data()
                 company.id = doc.id
                 company.created = company.created ? company.created.toDate() : new Date()
+                company.updated = company.updated ? company.updated.toDate() : new Date()
                 company.reviews = company.reviews.length
                 await hydrate(company, ['categories'])
                 allCompanies.push(company)
@@ -130,7 +128,7 @@ const Companies = () => {
             setTimeout(() => {
                 setCompanies(allCompanies)
                 setIsLoading(false)
-            }, 500)
+            }, 600)
         })
         return () => unsubscribe()
     }, [])
@@ -147,12 +145,12 @@ const Companies = () => {
             {
                 Header: "Name",
                 accessor: "name",
-                Cell: EditableCell,
+                //Cell: EditableCell,
             },
             {
                 Header: "Blurb",
                 accessor: "blurb",
-                Cell: EditableCell,
+                //Cell: EditableCell,
                 className: "w-1/3"
             },
             {
@@ -172,6 +170,12 @@ const Companies = () => {
             {
                 Header: "Created",
                 accessor: "created",
+                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
+                sortType: 'datetime'
+            },
+            {
+                Header: "Updated",
+                accessor: "updated",
                 Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
                 sortType: 'datetime'
             },

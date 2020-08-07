@@ -5,11 +5,12 @@ import NewMarketplace from './newmarketplace'
 import NewFAQ from './newfaq'
 import NewCompany from '../../companyModal'
 import EditCompany from './editcompany'
+import EditReview from './editreview'
 
 export default function NewModal(props) {
     const showModal = true
     const { tableName, rowProps } = props
-    const { register, errors, setValue, getValues, handleSubmit } = useForm()
+    const { register, errors, setValue, handleSubmit } = useForm()
     // Close button
     const onClose = () => { props.onClose && props.onClose() }
     // Submit button
@@ -47,7 +48,8 @@ export default function NewModal(props) {
                                     {tableName === 'categories' ? <NewCategory register={register} errors={errors} /> : ''}
                                     {tableName === 'marketplaces' ? <NewMarketplace register={register} errors={errors} /> : ''}
                                     {tableName === 'faq' ? <NewFAQ register={register} errors={errors} rowProps={rowProps} /> : ''}
-                                    {tableName === 'company' ? <EditCompany register={register} errors={errors} setValue={setValue} rowProps={rowProps} getValues={getValues} /> : ''}
+                                    {tableName === 'review' ? <EditReview register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
+                                    {tableName === 'company' ? <EditCompany register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
                                     {/*footer*/}
                                     <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
                                         <button
