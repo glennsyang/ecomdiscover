@@ -18,12 +18,15 @@ const Users = () => {
     const updateData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
-        const uid = users[rowIndex].id
-        const old = users[rowIndex].displayName
-        if (value !== old) {
-            // Update displayName
-            firebase.firestore().collection('users').doc(uid)
-                .update({ displayName: value })
+        const id = users[rowIndex].id
+        const oldValue = users[rowIndex][columnId]
+        if (value !== oldValue) {
+            // Update db
+            let dataObj = {}
+            dataObj[columnId] = value
+            dataObj['updated'] = firebase.firestore.FieldValue.serverTimestamp()
+            firebase.firestore().collection('users').doc(id)
+                .update(dataObj)
                 .then(() => {
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
@@ -47,56 +50,25 @@ const Users = () => {
 
     useEffect(() => {
         async function fetchData() {
-            const unsubscribe = firebase.firestore().collection('users').onSnapshot(async querySnapshot => {
+            const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
                 let docs = querySnapshot.docs.map(doc => (
                     {
                         ...doc.data(),
                         id: doc.id,
+                        created: doc.data().created.toDate(),
+                        updated: doc.data().updated ? doc.data().updated.toDate() : new Date(),
                         helpful: doc.data().helpful.length,
-                        numReviews: 0
+                        numReviews: doc.data().reviews.length
                     }
                 ))
-                //const userDocRef = firebase.firestore().collection('users').doc("MUjD9A6FjbQpR1bsg7Dv1TMkSmk2")
-                docs.map(async doc => {
-                    const reviewDocs = await firebase.firestore().collection('reviews').where("uid", "==", firebase.firestore().collection('users').doc(doc.id)).get()
-                    console.log(doc.id, '=', reviewDocs.size)
-                })
-                //const reviewDocs = await firebase.firestore().collection('reviews').where("uid", "==", firebase.firestore().collection('users').doc("MUjD9A6FjbQpR1bsg7Dv1TMkSmk2")).get()
-                console.log({ docs })
                 setUsers(docs)
                 setIsLoading(false)
+                setSkipPageReset(false)
             })
             return () => unsubscribe()
         }
-        console.log("before fetchData:", users.length)
         fetchData()
-        /*
-        const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
-            let allUsers = []
-            querySnapshot.forEach(async doc => {
-                const user = doc.data()
-                user.id = doc.id
-                user.created = user.created.toDate()
-                user.updated = user.updated ? user.updated.toDate() : new Date()
-                user.helpful = user.helpful.length
-
-                const userDocRef = firebase.firestore().collection('users').doc(doc.id)
-                const reviewDocs = await firebase.firestore().collection('reviews').where("uid", "==", userDocRef).get()
-                user.numReviews = reviewDocs.size
-
-                allUsers.push(user)
-            })
-            //setUsers(allUsers)
-            //setIsLoading(false)
-            setTimeout(() => {
-                setUsers(allUsers)
-                setIsLoading(false)
-            }, 500)
-        })
-        setSkipPageReset(false)
-        return () => unsubscribe()
-        */
-    }, [users.length])
+    }, [])
 
     const columns = useMemo(
         () => [
@@ -127,7 +99,8 @@ const Users = () => {
             },
             {
                 Header: "Role",
-                accessor: "role"
+                accessor: "role",
+                Cell: EditableCell,
             },
             {
                 Header: "Active",

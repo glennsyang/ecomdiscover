@@ -6,7 +6,6 @@ import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 import NewModal from "./modals/newModal"
-//import EditableCell from "./editablecell"
 
 const Faqs = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -95,17 +94,6 @@ const Faqs = () => {
             let docs = querySnapshot.docs.map(doc => (
                 { ...doc.data(), id: doc.id, date: doc.data().date ? doc.data().date.toDate() : new Date() }
             ))
-            //let allFaqs = []
-            //querySnapshot.forEach(doc =>
-            //    allFaqs.push({ ...doc.data(), id: doc.id })
-            //)
-            //querySnapshot.forEach(doc => 
-            //    const faq = doc.data()
-            //    faq.id = doc.id
-            //    faq.date = faq.date ? faq.date.toDate() : new Date()
-            //    allFaqs.push(faq)
-            //)
-            //console.log("allFaqs:", docs)
             setFaqs(docs)
             setIsLoading(false)
         })

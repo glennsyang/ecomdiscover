@@ -6,38 +6,35 @@ import { useMarketplaces } from '../../../hooks/use-marketplaces'
 import Toast from '../../../components/toast'
 import * as Constants from '../../../constants'
 
-export default function EditCompany({ register, setValue, getValues, errors, rowProps }) {
-    console.log("errors:", errors)
-    console.log("rowProps:", rowProps)
+export default function EditCompany({ register, setValue, errors, rowProps }) {
+    //console.log("rowProps:", rowProps)
     const { allMarketplaces } = useMarketplaces()
     const { allCategories } = useCategories()
-    const [selectedCategories, setSelectedCategories] = useState(rowProps.categories?.map(category => (
-        { value: category.id, label: category.name }
-    )))
-    const [selectedMarketplaces, setSelectedMarketplaces] = useState(allMarketplaces.nodes.map((node) => (
-        { id: node.id, code: node.code, flag: node.flag, name: node.name, checked: rowProps.marketplaces.some(x => x.id === node.code) }
-    )))
+    //const [categoriesValue, setCategoriesValue] = useState()
+    const [selectedMarketplaces, setSelectedMarketplaces] = useState([])
     const [selectedFile, setSelectedFile] = useState()
     const [toast, setToast] = useState()
     const fileInput = useRef()
+    //console.log({ selectedCategories })
+    //console.log({ selectedMarketplaces })
 
     const defaultCategories = allCategories.nodes.map((node) => (
         { value: node.id, label: node.name }
     ))
-    //const selectedCategories = rowProps.categories.map(category => (
-    //    { value: category.id, label: category.name }
-    //))
+    const selectedCategories = rowProps.categories.map(category => (
+        { value: category.id, label: category.name }
+    ))
     //const selectedMarketplaces = allMarketplaces.nodes.map((node) => (
     //    { id: node.id, code: node.code, flag: node.flag, name: node.name, checked: rowProps.marketplaces.some(x => x.id === node.code) }
     //))
 
     const handleMultiChange = selectedOption => {
-        console.log("categories:", getValues('categories'))
+        //console.log("categories:", getValues('categories'))
         setValue('categories', selectedOption)
         //rowProps.categories = selectedOption?.map(option => (
         //    { id: option.value, name: option.label }
         //))
-        console.log("categories:", getValues('categories'))
+        //console.log("categories:", getValues('categories'))
     }
     // File Upload
     const handleSelectFile = (e) => {
@@ -68,9 +65,39 @@ export default function EditCompany({ register, setValue, getValues, errors, row
 
     useEffect(() => {
         register({ name: "categories" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
-        setValue('categories', selectedCategories)
-        console.log("selectedCategories:", selectedCategories)
-    }, [register])
+
+        async function fetchData() {
+            setSelectedMarketplaces(allMarketplaces.nodes.map((node) => (
+                { id: node.id, code: node.code, flag: node.flag, name: node.name, checked: rowProps.marketplaces.some(x => x.id === node.code) }
+            )))
+            //setSelectedCategories([{ value: '7GxXweFmb1Pt8g5Djkc8', label: 'Cross Marketplace Listing' }])
+            //setSelectedCategories(rowProps.categories.map(category => (
+            //    { value: category.id, label: category.name }
+            //)))
+            //console.log("selectedCategories:", selectedCategories)
+
+            //if (rowProps.categories) {
+            //const selectedCategories = rowProps.categories.map(category => (
+            //    { value: category.id, label: category.name }
+            //))
+            const categoriesValue = rowProps.categories.map(category => (
+                { value: category.id, label: category.name }
+            ))
+            setValue('categories', categoriesValue, true)
+            //setCategoriesValue(selectedCategories)
+            //}
+        }
+        fetchData()
+
+        //console.log("rowProps.categories", rowProps.categories)
+        //const selectedCategories = rowProps.categories?.map(category => (
+        //    { value: category.id, label: category.name }
+        //))
+        //setTimeout(() => {
+        //}, 600)
+
+        //console.log("selectedCategories:", selectedCategories)
+    }, [register, rowProps, allMarketplaces, setValue])
 
     return (
         <>
@@ -116,9 +143,11 @@ export default function EditCompany({ register, setValue, getValues, errors, row
                 <Select
                     name="categories"
                     placeholder="Select Categories..."
-                    options={defaultCategories}
-                    defaultValue={selectedCategories}
                     styles={Constants.customStyles}
+                    options={defaultCategories}
+                    //defaultValue={categoriesValue}
+                    //value={categoriesValue}
+                    defaultValue={selectedCategories}
                     onChange={handleMultiChange}
                     isMulti
                 />

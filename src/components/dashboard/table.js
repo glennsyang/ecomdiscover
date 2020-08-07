@@ -95,7 +95,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                                 {['Yes', 'No'].map((option, i) => (
                                     <option key={i} value={option}>
                                         {option}
-                                    </option>
+                                    </ option>
                                 ))}
                             </select>
                         </div>

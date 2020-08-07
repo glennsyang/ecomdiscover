@@ -62,6 +62,7 @@ export default function WriteReview({ location }) {
             )),
             company: firebase.firestore().doc(`companies/${companyId}`),
             created: firebase.firestore.FieldValue.serverTimestamp(),
+            updated: firebase.firestore.FieldValue.serverTimestamp(),
             helpful: [],
             published: true,
             rating: dataObject.rating ? Number(dataObject.rating) : 0,
@@ -74,21 +75,34 @@ export default function WriteReview({ location }) {
             .firestore().collection('reviews')
             .add(dataObject)
             .then(ref => {
-                console.log("created new review:", ref.id)
+                console.log("Created new review:", ref.id)
                 // Update the 'companies' collection with this latest review
                 firebase.firestore().collection('companies').doc(companyId)
-                    .update({
-                        reviews: firebase.firestore.FieldValue.arrayUnion(ref),
-                    })
+                    .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
                     .then(() => {
                         console.log("Updated Company:", companyId)
-                        navigate(
-                            "/form-submitted",
-                            {
-                                state: { username: displayName },
-                                replace: true,
-                            }
-                        )
+                        // Update the 'users' collection with this latest review
+                        firebase.firestore().collection('users').doc(uid)
+                            .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
+                            .then(() => {
+                                console.log("Updated User:", uid)
+                                navigate(
+                                    "/form-submitted",
+                                    {
+                                        state: { username: displayName },
+                                        replace: true,
+                                    }
+                                )
+                            })
+                            .catch(error => {
+                                const toastProperties = {
+                                    id: Math.floor((Math.random() * 101) + 1),
+                                    title: 'Error',
+                                    description: `There was an error in updating User: ${uid} with your new review. Reason: ${error}.`,
+                                    color: 'red',
+                                }
+                                setToast(toastProperties)
+                            })
                     })
                     .catch(error => {
                         const toastProperties = {
