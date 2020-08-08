@@ -5,7 +5,7 @@ import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
 import CompanyCard from "../components/cards/companycard"
 import { isLoggedIn, isBlocked } from "../utils/auth"
-import AdVideo from "../images/EcomdiscoverAdvert.mp4"
+//import AdVideo from "../images/EcomdiscoverAdvert.mp4"
 
 function IndexPage({ data }) {
   const [isUserBlocked, setIsUserBlocked] = useState(false)
@@ -85,11 +85,7 @@ function IndexPage({ data }) {
 
         <section className="bg-gray-100 pb-12" id="video-ad">
           <div className="flex justify-center mx-4">
-            <video height="500" width="800" controls preload="auto" className="border border-blue-300">
-              <source src={AdVideo} type="video/mp4" />
-              <track kind="captions" src="sampleCaptions.vtt" srcLang="en" />
-                Your browser does not support the video tag.
-            </video>
+            <iframe title="EcomDiscover Ad" width="560" height="315" src="https://www.youtube.com/embed/tRpyBKx2_QU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           </div>
         </section>
 
