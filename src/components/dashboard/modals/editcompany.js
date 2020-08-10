@@ -102,8 +102,8 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
     return (
         <>
             {/*body*/}
-            <div className="relative p-4 flex-1">
-                <div className="block text-left text-black lg:text-2xl text-xl font-bold">Name</div>
+            <div className="relative py-2 px-3 flex-1">
+                <div className="block text-left text-black lg:text-lg text-base font-bold">Name</div>
                 <input
                     type="text"
                     name="name"
@@ -115,7 +115,7 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
                 />
                 {errors.name && <span className="text-red-400 text-md">{errors?.name?.message}</span>}
 
-                <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Description</div>
+                <div className="block text-left text-black lg:text-lg text-base font-bold mt-2">Blurb</div>
                 <input
                     type="text"
                     name="blurb"
@@ -127,7 +127,20 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
                 />
                 {errors.blurb && <span className="text-red-400 text-md bg-red-100">Errors: {errors?.blurb?.message}</span>}
 
-                <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Website</div>
+                <div className="block text-left text-black lg:text-lg text-base font-bold mt-2">Description</div>
+                <textarea
+                    type="text"
+                    rows="3"
+                    name="description"
+                    defaultValue={rowProps.description}
+                    placeholder="A longer description about the Company, Tool or Service..."
+                    aria-label="Enter the longer description about Company, Tool or Service Name"
+                    ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
+                    className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                />
+                {errors.description && <span className="text-red-400 text-md bg-red-100">Errors: {errors?.description?.message}</span>}
+
+                <div className="block text-left text-black lg:text-lg text-base font-bold mt-2">Website</div>
                 <input
                     type="text"
                     name="website"
@@ -139,7 +152,7 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
                 />
                 {errors.website && <span className="text-red-400 text-md">{errors?.website?.message}</span>}
 
-                <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Categories</div>
+                <div className="block text-left text-black lg:text-lg text-base font-bold mt-2">Categories</div>
                 <Select
                     name="categories"
                     placeholder="Select Categories..."
@@ -152,7 +165,7 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
                     isMulti
                 />
                 {errors.categories && <span className="text-red-400 text-md">{errors?.categories?.message}</span>}
-                <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Marketplaces</div>
+                <div className="block text-left text-black lg:text-lg text-base font-bold mt-2">Marketplaces</div>
                 <div className="flex-row justify-start text-black">
                     {selectedMarketplaces.map((country) =>
                         <React.Fragment key={country.id}>

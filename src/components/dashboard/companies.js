@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
+import { FaCaretRight, FaCaretDown } from "react-icons/fa"
 import moment from "moment"
 import Loader from "../loader"
 import Toast from "../toast"
@@ -78,6 +79,7 @@ const Companies = () => {
         // Create the data object to be updated
         let dataObj = {}
         dataObj['blurb'] = modalData.blurb
+        dataObj['description'] = modalData.description
         dataObj['name'] = modalData.name
         dataObj['categories'] = modalData.categories.map((category) => (
             firebase.firestore().doc(`categories/${category.value}`)
@@ -145,13 +147,28 @@ const Companies = () => {
             {
                 Header: "Name",
                 accessor: "name",
-                //Cell: EditableCell,
+            },
+            {
+                Header: () => null, // No header
+                id: 'expander', // It needs an ID
+                className: "max-w-xs",
+                Cell: ({ row }) => (
+                    // Use Cell to render an expander for each row.
+                    // We can use the getToggleRowExpandedProps prop-getter
+                    // to build the expander.
+                    <span {...row.getToggleRowExpandedProps()}>
+                        {row.isExpanded ? <FaCaretDown /> : <FaCaretRight />}
+                    </span>
+                ),
             },
             {
                 Header: "Blurb",
                 accessor: "blurb",
-                //Cell: EditableCell,
-                className: "w-1/3"
+                className: "min-w-full"
+            },
+            {
+                Header: "Description",
+                accessor: "description",
             },
             {
                 Header: "Categories",
@@ -162,10 +179,6 @@ const Companies = () => {
                 Header: "Reviews",
                 accessor: "reviews",
                 sortType: 'basic'
-            },
-            {
-                Header: "Website",
-                accessor: "website",
             },
             {
                 Header: "Created",
@@ -190,6 +203,16 @@ const Companies = () => {
         [handleToggleModal]
     )
 
+    // Create a function that will render our row sub components
+    const renderRowSubComponent = React.useCallback(
+        ({ row }) => (
+            <div className="text-gray-600 text-sm font-light antialiased p-2">
+                {row.values.description}
+            </div>
+        ),
+        []
+    )
+
     if (isLoading) { return <Loader /> }
 
     return (
@@ -198,6 +221,7 @@ const Companies = () => {
                 columns={columns}
                 data={companies}
                 tableName={'companies'}
+                renderRowSubComponent={renderRowSubComponent}
                 filterName={'name'}
                 createData={createData}
                 updateData={updateData}

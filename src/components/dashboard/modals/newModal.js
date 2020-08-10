@@ -33,8 +33,8 @@ export default function NewModal(props) {
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     {/*header*/}
-                                    <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
-                                        <h3 className="lg:text-3xl text-xl font-semibold pr-2 md:pr-10">
+                                    <div className="flex items-start justify-between p-2 border-b border-solid border-gray-300 rounded-t">
+                                        <h3 className="lg:text-2xl text-lg font-semibold pr-2 md:pr-10">
                                             {rowProps ? 'Update' : 'New'} {tableName.toUpperCase()}
                                         </h3>
                                         <button
@@ -51,7 +51,7 @@ export default function NewModal(props) {
                                     {tableName === 'review' ? <EditReview register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
                                     {tableName === 'company' ? <EditCompany register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
                                     {/*footer*/}
-                                    <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
+                                    <div className="flex items-center justify-end py-2 px-4 border-t border-solid border-gray-300 rounded-b">
                                         <button
                                             type="button"
                                             onClick={onClose}
