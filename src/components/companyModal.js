@@ -8,9 +8,11 @@ import { useCategories } from "../hooks/use-categories"
 import { useMarketplaces } from "../hooks/use-marketplaces"
 import Toast from "../components/toast"
 import Loader from "../components/loader"
+import { getUser } from "../utils/auth"
 
 export default function CompanyModal(props) {
     const { setValue, register, errors, handleSubmit } = useForm()
+    const { uid } = getUser()
     const [isLoading, setIsLoading] = useState(false)
     const [toast, setToast] = useState()
     const [selectedFile, setSelectedFile] = useState()
@@ -110,7 +112,9 @@ export default function CompanyModal(props) {
             .add({
                 created: firebase.firestore.FieldValue.serverTimestamp(),
                 updated: firebase.firestore.FieldValue.serverTimestamp(),
+                uid: firebase.firestore().collection('users').doc(uid),
                 blurb: modalData.blurb,
+                description: modalData.description,
                 categories: modalData.categories.map((category) => (
                     firebase.firestore().doc(`categories/${category.value}`)
                 )),
@@ -171,8 +175,8 @@ export default function CompanyModal(props) {
                         <div className="border-2 lg:border-0 border-gray-300 shadow-inner lg:shadow-lg rounded-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 {/*header*/}
-                                <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t">
-                                    <h3 className="lg:text-3xl text-xl font-semibold pr-2 lg:pr-10">
+                                <div className="flex items-start justify-between p-3 border-b border-solid border-gray-300 rounded-t">
+                                    <h3 className="lg:text-xl text-lg font-semibold pr-2 lg:pr-10">
                                         New Company, Tool or Service
                                     </h3>
                                     <button
@@ -183,8 +187,8 @@ export default function CompanyModal(props) {
                                     </button>
                                 </div>
                                 {/*body*/}
-                                <div className="relative p-4 lg:p-6 flex-1">
-                                    <div className="block text-left text-black lg:text-2xl text-xl font-bold">Name</div>
+                                <div className="relative p-2 lg:px-6 flex-1">
+                                    <div className="block text-left text-black lg:text-xl text-lg font-bold">Name</div>
                                     <input
                                         type="text"
                                         name="name"
@@ -195,18 +199,30 @@ export default function CompanyModal(props) {
                                     />
                                     {errors.name && <span className="text-red-400 text-md">{errors?.name?.message}</span>}
 
-                                    <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Description</div>
+                                    <div className="block text-left text-black lg:text-xl text-lg font-bold mt-2">Blurb</div>
                                     <input
                                         type="text"
                                         name="blurb"
-                                        placeholder="A little blurb about the Company, Tool or Service"
+                                        placeholder="Short blurb about the Company, Tool or Service"
                                         aria-label="Enter the blurb about Company, Tool or Service Name"
                                         ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                                         className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                                     />
                                     {errors.blurb && <span className="text-red-400 text-md">{errors?.blurb?.message}</span>}
 
-                                    <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Website</div>
+                                    <div className="block text-left text-black lg:text-xl text-lg font-bold mt-2">Description</div>
+                                    <textarea
+                                        type="text"
+                                        rows="3"
+                                        name="description"
+                                        placeholder="A longer description about the Company, Tool or Service..."
+                                        aria-label="Enter the longer description about Company, Tool or Service Name"
+                                        ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
+                                        className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                                    />
+                                    {errors.description && <span className="text-red-400 text-md">{errors?.description?.message}</span>}
+
+                                    <div className="block text-left text-black lg:text-xl text-lg font-bold mt-2">Website</div>
                                     <input
                                         type="text"
                                         name="website"
@@ -217,7 +233,7 @@ export default function CompanyModal(props) {
                                     />
                                     {errors.website && <span className="text-red-400 text-md">{errors?.website?.message}</span>}
 
-                                    <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Categories</div>
+                                    <div className="block text-left text-black lg:text-xl text-lg font-bold mt-2">Categories</div>
                                     <Select
                                         name="categories"
                                         placeholder="Select Categories..."
@@ -227,7 +243,7 @@ export default function CompanyModal(props) {
                                         isMulti
                                     />
                                     {errors.categories && <span className="text-red-400 text-md">{errors?.categories?.message}</span>}
-                                    <div className="block text-left text-black lg:text-2xl text-xl font-bold mt-2">Marketplaces</div>
+                                    <div className="block text-left text-black lg:text-xl text-lg font-bold mt-2">Marketplaces</div>
                                     <div className="flex-row justify-start text-black">
                                         {allMarketplaces.nodes.map((country) =>
                                             <React.Fragment key={country.id}>
@@ -256,7 +272,7 @@ export default function CompanyModal(props) {
                                     </div>
                                 </div>
                                 {/*footer*/}
-                                <div className="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b">
+                                <div className="flex items-center justify-end p-4 border-t border-solid border-gray-300 rounded-b">
                                     <button
                                         type="button"
                                         onClick={onClose}

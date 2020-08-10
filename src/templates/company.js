@@ -89,14 +89,16 @@ export default function Company({ data }) {
                                     <div className="flex">
                                         <Category categories={company.categories} useLink={false} className="inline-block bg-gray-100 border border-gray-200 rounded-md px-2 text-xs font-semibold text-black tracking-tight mr-1" />
                                     </div>
+                                    {/* Name */}
                                     <div className="flex mt-1">
                                         <h1 className="text-3xl font-extrabold text-black">{company.name}</h1>
                                     </div>
+                                    {/* Blurb */}
                                     <div className="flex mt-1">
-                                        <h4 className="text-xl font-normal tracking-tight text-black">{company.blurb}</h4>
+                                        <h2 className="text-xl font-normal tracking-tight text-black">{company.blurb}</h2>
                                     </div>
                                     {/* Logo */}
-                                    <div id="logo" className="flex pl-4 my-6">
+                                    <div id="logo" className="flex pl-4 my-4">
                                         <a href={`${company.website}`} title={company.name} rel="noopener noreferrer" target="_blank">
                                             {company.logo
                                                 ? <ImageFixed props={imgLogo} />
@@ -106,8 +108,12 @@ export default function Company({ data }) {
                                             }
                                         </a>
                                     </div>
+                                    {/* Description */}
+                                    <div className="flex">
+                                        <h3 className="text-base font-normal tracking-normal leading-relaxed text-black">{company.description}</h3>
+                                    </div>
                                     {/* Marketplace */}
-                                    <div className="flex items-center">
+                                    <div className="flex items-center mt-6">
                                         <a href={company.website} rel="noopener noreferrer" target="_blank"
                                             className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded inline-flex items-center -m-1">
                                             <FaExternalLinkAlt size={18} className="mr-3" />
@@ -195,6 +201,7 @@ export const query = graphql`
             logoURL
             website
             blurb
+            description
             created
             marketplaces {
                 id
