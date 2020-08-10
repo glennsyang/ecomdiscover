@@ -30,7 +30,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
     } = useTable({
         columns,
         data,
-        initialState: { pageIndex: 0, hiddenColumns: ['content'] },
+        initialState: { pageIndex: 0, hiddenColumns: ['content', 'description'] },
         createData,
         updateData,
         autoResetPage: !skipPageReset,

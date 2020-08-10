@@ -85,7 +85,7 @@ function IndexPage({ data }) {
 
         <section className="bg-gray-100 pb-12" id="video-ad">
           <div className="flex justify-center mx-4">
-            <iframe title="EcomDiscover Ad" width="560" height="315" src="https://www.youtube.com/embed/tRpyBKx2_QU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe title="EcomDiscover Ad" width="560" height="315" src="https://www.youtube.com/embed/tRpyBKx2_QU" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           </div>
         </section>
 
@@ -155,6 +155,7 @@ export const pageQuery = graphql`
                 logoURL
                 website
                 blurb
+                description
                 created
                 updated
                 marketplaces {
