@@ -296,7 +296,7 @@ export default function WriteReview({ location }) {
 
                                 {/* Review */}
                                 <div className="flex flex-col lg:px-10 py-4">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col review-editor">
                                         <StarRating
                                             totalStars={5}
                                             name="rating"

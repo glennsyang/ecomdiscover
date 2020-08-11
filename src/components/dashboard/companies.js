@@ -79,7 +79,7 @@ const Companies = () => {
         // Create the data object to be updated
         let dataObj = {}
         dataObj['blurb'] = modalData.blurb
-        dataObj['description'] = modalData.description
+        dataObj['content'] = modalData.content
         dataObj['name'] = modalData.name
         dataObj['categories'] = modalData.categories.map((category) => (
             firebase.firestore().doc(`categories/${category.value}`)
@@ -168,7 +168,7 @@ const Companies = () => {
             },
             {
                 Header: "Description",
-                accessor: "description",
+                accessor: "content",
             },
             {
                 Header: "Categories",
@@ -180,12 +180,12 @@ const Companies = () => {
                 accessor: "reviews",
                 sortType: 'basic'
             },
-            {
-                Header: "Created",
-                accessor: "created",
-                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
-                sortType: 'datetime'
-            },
+            // {
+            //     Header: "Created",
+            //     accessor: "created",
+            //     Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
+            //     sortType: 'datetime'
+            // },
             {
                 Header: "Updated",
                 accessor: "updated",
@@ -206,9 +206,8 @@ const Companies = () => {
     // Create a function that will render our row sub components
     const renderRowSubComponent = React.useCallback(
         ({ row }) => (
-            <div className="text-gray-600 text-sm font-light antialiased p-2">
-                {row.values.description}
-            </div>
+            <div className="text-gray-600 text-sm font-light antialiased p-2"
+                dangerouslySetInnerHTML={{ __html: row.values.content }} />
         ),
         []
     )

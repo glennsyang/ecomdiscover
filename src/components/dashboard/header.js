@@ -81,11 +81,10 @@ function Header(props) {
         firebase.firestore().collection('companies').get().then(querySnapshot => {
             querySnapshot.forEach(doc => {
                 const reviewRef = firebase.firestore().collection('companies').doc(doc.id)
-                const userRef = firebase.firestore().collection('users').doc('MUjD9A6FjbQpR1bsg7Dv1TMkSmk2')
+                //const userRef = firebase.firestore().collection('users').doc('MUjD9A6FjbQpR1bsg7Dv1TMkSmk2')
                 reviewRef
                     .update({
-                        description: "",
-                        uid: userRef,
+                        description: firebase.firestore.FieldValue.delete()
                     })
                     .then(() => {
                         console.log("success!")
