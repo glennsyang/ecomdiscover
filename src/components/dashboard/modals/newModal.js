@@ -28,7 +28,7 @@ export default function NewModal(props) {
                 :
                 <>
                     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                        <div className="relative my-6 mx-auto w-1/3 max-w-3xl">
+                        <div className="relative my-6 mx-1 lg:mx-auto w-2/3 max-w-3xl">
                             {/*content*/}
                             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -44,12 +44,14 @@ export default function NewModal(props) {
                                             <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">×</span>
                                         </button>
                                     </div>
+
                                     {/*body*/}
                                     {tableName === 'categories' ? <NewCategory register={register} errors={errors} /> : ''}
                                     {tableName === 'marketplaces' ? <NewMarketplace register={register} errors={errors} /> : ''}
                                     {tableName === 'faq' ? <NewFAQ register={register} errors={errors} rowProps={rowProps} /> : ''}
                                     {tableName === 'review' ? <EditReview register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
                                     {tableName === 'company' ? <EditCompany register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
+
                                     {/*footer*/}
                                     <div className="flex items-center justify-end py-2 px-4 border-t border-solid border-gray-300 rounded-b">
                                         <button

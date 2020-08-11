@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import Select from "react-select"
 import firebase from "gatsby-plugin-firebase"
+//import ReactQuill from 'react-quill'
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 import { FaCamera } from 'react-icons/fa'
 import * as Constants from '../constants'
 import { useCategories } from "../hooks/use-categories"
@@ -28,6 +30,12 @@ export default function CompanyModal(props) {
     }
     const onClose = () => {
         props.onClose && props.onClose()
+    }
+    // React-quill Editor
+    const [content, setContent] = useState('')
+    const handleChangeContent = newValue => {
+        setValue('content', newValue)
+        setContent(newValue)
     }
     // File Upload
     const handleSelectFile = (e) => {
@@ -114,7 +122,7 @@ export default function CompanyModal(props) {
                 updated: firebase.firestore.FieldValue.serverTimestamp(),
                 uid: firebase.firestore().collection('users').doc(uid),
                 blurb: modalData.blurb,
-                description: modalData.description,
+                content: modalData.content,
                 categories: modalData.categories.map((category) => (
                     firebase.firestore().doc(`categories/${category.value}`)
                 )),
@@ -161,6 +169,7 @@ export default function CompanyModal(props) {
 
     useEffect(() => {
         register({ name: "categories" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+        register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
     }, [register])
 
 
@@ -176,7 +185,7 @@ export default function CompanyModal(props) {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 {/*header*/}
                                 <div className="flex items-start justify-between p-3 border-b border-solid border-gray-300 rounded-t">
-                                    <h3 className="lg:text-xl text-lg font-semibold pr-2 lg:pr-10">
+                                    <h3 className="lg:text-2xl text-xl font-semibold pr-2 lg:pr-10">
                                         New Company, Tool or Service
                                     </h3>
                                     <button
@@ -187,7 +196,7 @@ export default function CompanyModal(props) {
                                     </button>
                                 </div>
                                 {/*body*/}
-                                <div className="relative p-2 lg:px-6 flex-1">
+                                <div className="relative p-2 lg:px-6 flex-1 company-editor">
                                     <div className="block text-left text-black lg:text-xl text-lg font-bold">Name</div>
                                     <input
                                         type="text"
@@ -211,16 +220,16 @@ export default function CompanyModal(props) {
                                     {errors.blurb && <span className="text-red-400 text-md">{errors?.blurb?.message}</span>}
 
                                     <div className="block text-left text-black lg:text-xl text-lg font-bold mt-2">Description</div>
-                                    <textarea
-                                        type="text"
-                                        rows="3"
-                                        name="description"
+                                    <ReactQuill
+                                        name="content"
                                         placeholder="A longer description about the Company, Tool or Service..."
-                                        aria-label="Enter the longer description about Company, Tool or Service Name"
-                                        ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                                        className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                                        value={content}
+                                        onChange={handleChangeContent}
+                                        modules={Constants.editorModules}
+                                        formats={Constants.editorFormats}
+                                        theme="snow"
                                     />
-                                    {errors.description && <span className="text-red-400 text-md">{errors?.description?.message}</span>}
+                                    {errors.content && <span className="text-red-400 text-md">{errors?.content?.message}</span>}
 
                                     <div className="block text-left text-black lg:text-xl text-lg font-bold mt-2">Website</div>
                                     <input

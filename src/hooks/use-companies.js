@@ -11,7 +11,7 @@ export const useCompanies = () => {
                 logoURL
                 website
                 blurb
-                description
+                content
                 created
                 updated
                 marketplaces {

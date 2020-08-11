@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import Select from "react-select"
+//import ReactQuill from 'react-quill'
+const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 import { FaCamera } from 'react-icons/fa'
 import { useCategories } from '../../../hooks/use-categories'
 import { useMarketplaces } from '../../../hooks/use-marketplaces'
@@ -36,6 +38,12 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
         //))
         //console.log("categories:", getValues('categories'))
     }
+    // React-quill Editor
+    const [content, setContent] = useState(rowProps.content)
+    const handleChangeContent = newValue => {
+        setValue('content', newValue)
+        setContent(newValue)
+    }
     // File Upload
     const handleSelectFile = (e) => {
         e.target.value = null
@@ -65,6 +73,7 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
 
     useEffect(() => {
         register({ name: "categories" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+        register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
 
         async function fetchData() {
             setSelectedMarketplaces(allMarketplaces.nodes.map((node) => (
@@ -128,17 +137,16 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
                 {errors.blurb && <span className="text-red-400 text-md bg-red-100">Errors: {errors?.blurb?.message}</span>}
 
                 <div className="block text-left text-black lg:text-lg text-base font-bold mt-2">Description</div>
-                <textarea
-                    type="text"
-                    rows="3"
-                    name="description"
-                    defaultValue={rowProps.description}
+                <ReactQuill
+                    name="content"
                     placeholder="A longer description about the Company, Tool or Service..."
-                    aria-label="Enter the longer description about Company, Tool or Service Name"
-                    ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
-                    className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
+                    value={content}
+                    onChange={handleChangeContent}
+                    modules={Constants.editorModules}
+                    formats={Constants.editorFormats}
+                    theme="snow"
                 />
-                {errors.description && <span className="text-red-400 text-md bg-red-100">Errors: {errors?.description?.message}</span>}
+                {errors.content && <span className="text-red-400 text-md bg-red-100">Errors: {errors?.content?.message}</span>}
 
                 <div className="block text-left text-black lg:text-lg text-base font-bold mt-2">Website</div>
                 <input
