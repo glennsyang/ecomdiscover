@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "gatsby"
 import firebase from "gatsby-plugin-firebase"
-import rehypeReact from "rehype-react"
+import rehypeReact from 'rehype-react'
 import { FaThumbsUp } from 'react-icons/fa'
 import Popper from "popper.js"
 import moment from "moment"

@@ -30,9 +30,15 @@
     position: relative;
 }
 
-.ql-editor {
+.review-editor .ql-editor {
   min-height: 18em;
 }
+.company-editor .ql-editor {
+  min-height: 4em;
+}
+/*.ql-editor {
+  min-height: 18em;
+}*/
 
 /* Accordiion */
 label:after {

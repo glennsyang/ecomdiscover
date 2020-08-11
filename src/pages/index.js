@@ -155,7 +155,7 @@ export const pageQuery = graphql`
                 logoURL
                 website
                 blurb
-                description
+                content
                 created
                 updated
                 marketplaces {

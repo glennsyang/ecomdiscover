@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link, graphql } from "gatsby"
+import rehypeReact from 'rehype-react'
 import { FaChevronDown, FaChevronUp, FaExternalLinkAlt } from 'react-icons/fa'
 import * as Constants from '../constants'
 import Layout from "../components/layout"
@@ -10,6 +11,12 @@ import AvgRating from "../components/avgrating"
 import ReviewCard from "../components/cards/reviewcard"
 import Advert from "../components/advert"
 import { isLoggedIn, isBlocked } from "../utils/auth"
+import { Paragraph, ExternalLink, List } from '../components/rehype/elements'
+
+const renderAst = new rehypeReact({
+    createElement: React.createElement,
+    components: { p: Paragraph, a: ExternalLink, ul: List }
+}).Compiler
 
 const SortByButton = (props) => {
     const { buttonName, sortType, selected } = props
@@ -110,20 +117,22 @@ export default function Company({ data }) {
                                     </div>
                                     {/* Description */}
                                     <div className="flex">
-                                        <h3 className="text-base font-normal tracking-normal leading-relaxed text-black">{company.description}</h3>
+                                        <div className="text-sm font-sans font-normal tracking-tight leading-relaxed text-gray-900">
+                                            {renderAst(company.childHtmlRehype.htmlAst)}
+                                        </div>
                                     </div>
-                                    {/* Marketplace */}
+                                    {/* Website & Marketplace */}
                                     <div className="flex items-center mt-6">
                                         <a href={company.website} rel="noopener noreferrer" target="_blank"
-                                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded inline-flex items-center -m-1">
+                                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded inline-flex flex-shrink-0 items-center -m-1">
                                             <FaExternalLinkAlt size={18} className="mr-3" />
                                             Visit Website
                                         </a>
-                                        <h6 className="flex text-gray-500 text-xs tracking-tight uppercase ml-4">
+                                        <div className="flex flex-wrap text-gray-500 text-xs tracking-tight uppercase ml-4">
                                             {company.marketplaces.map(marketplace => {
-                                                return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
+                                                return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 m-1" />
                                             })}
-                                        </h6>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -201,7 +210,10 @@ export const query = graphql`
             logoURL
             website
             blurb
-            description
+            content
+            childHtmlRehype {
+                htmlAst
+            }
             created
             marketplaces {
                 id

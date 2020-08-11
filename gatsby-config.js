@@ -94,7 +94,7 @@ module.exports = {
               logoURL: doc.logoURL,
               website: doc.website,
               blurb: doc.blurb,
-              description: doc.description,
+              content: doc.content,
               created: doc.created,
               updated: doc.updated,
               //user___NODE: doc.uid.id,
@@ -213,7 +213,7 @@ module.exports = {
       options: {
         // Condition for selecting an existing GrapghQL node (optional)
         // If not set, the transformer operates on file nodes.
-        filter: node => node.internal.type === `Reviews`,
+        filter: node => node.internal.type === `Reviews` || node.internal.type === `Companies`,
         // Only needed when using filter (optional, default: node.html)
         // Source location of the html to be transformed
         source: node => node.content,
