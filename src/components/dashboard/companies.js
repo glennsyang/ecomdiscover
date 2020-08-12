@@ -66,16 +66,41 @@ const Companies = () => {
     }
     // Modal
     const handleToggleModal = useCallback((rowProps) => {
-        //console.log("handleToggleModal():", rowProps)
         setRowProps(rowProps)
         setShowModal(s => !s)
-        //setShowModal(!showModal)
     }, [])
     const handleEditModal = (modalData) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
         setIsLoading(true)
         setShowModal(!showModal)
+        // First, upload the logo to the Storage bucket, if exists
+        if (modalData.selectedFile) {
+            const storageRef = firebase.storage().ref().child(`company-images/${modalData.selectedFile.name}`)
+            storageRef.put(modalData.selectedFile).on('state_changed', (snap) => {
+                let percentage = (snap.bytesTransferred / snap.totalBytes) * 100
+                console.log(percentage)
+            }, (err) => {
+                setIsLoading(false)
+                const toastProperties = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Error',
+                    description: `There was an error in uploading the file. Reason: ${err}.`,
+                    color: 'red',
+                    position: 'top-right'
+                }
+                setToast(toastProperties)
+            }, async () => {
+                const companyLogoURL = await storageRef.getDownloadURL()
+                modalData.logoURL = companyLogoURL
+                updateCompanyInFirestore(modalData)
+            })
+        } else {
+            updateCompanyInFirestore(modalData)
+        }
+    }
+    // Update the Company in the Firestore db
+    const updateCompanyInFirestore = (modalData) => {
         // Create the data object to be updated
         let dataObj = {}
         dataObj['blurb'] = modalData.blurb

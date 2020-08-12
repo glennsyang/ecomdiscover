@@ -1,24 +1,18 @@
 import React, { useState, useEffect, useRef } from "react"
 import Select from "react-select"
-//import ReactQuill from 'react-quill'
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+import ReactQuill from 'react-quill'
+//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 import { FaCamera } from 'react-icons/fa'
-import { useCategories } from '../../../hooks/use-categories'
-import { useMarketplaces } from '../../../hooks/use-marketplaces'
+import { useCategories } from '../../../hooks/useCategories'
+import { useMarketplaces } from '../../../hooks/useMarketplaces'
 import Toast from '../../../components/toast'
 import * as Constants from '../../../constants'
 
 export default function EditCompany({ register, setValue, errors, rowProps }) {
-    //console.log("rowProps:", rowProps)
     const { allMarketplaces } = useMarketplaces()
     const { allCategories } = useCategories()
-    //const [categoriesValue, setCategoriesValue] = useState()
     const [selectedMarketplaces, setSelectedMarketplaces] = useState([])
-    const [selectedFile, setSelectedFile] = useState()
     const [toast, setToast] = useState()
-    const fileInput = useRef()
-    //console.log({ selectedCategories })
-    //console.log({ selectedMarketplaces })
 
     const defaultCategories = allCategories.nodes.map((node) => (
         { value: node.id, label: node.name }
@@ -30,13 +24,9 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
     //    { id: node.id, code: node.code, flag: node.flag, name: node.name, checked: rowProps.marketplaces.some(x => x.id === node.code) }
     //))
 
+    // Categories Selector
     const handleMultiChange = selectedOption => {
-        //console.log("categories:", getValues('categories'))
         setValue('categories', selectedOption)
-        //rowProps.categories = selectedOption?.map(option => (
-        //    { id: option.value, name: option.label }
-        //))
-        //console.log("categories:", getValues('categories'))
     }
     // React-quill Editor
     const [content, setContent] = useState(rowProps.content)
@@ -45,30 +35,32 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
         setContent(newValue)
     }
     // File Upload
+    const fileInput = useRef()
+    const [selectedFile, setSelectedFile] = useState(null)
+    const [error, setError] = useState(null)
     const handleSelectFile = (e) => {
         e.target.value = null
     }
     const handleUploadLogo = (e) => {
         e.preventDefault()
-        const fileData = fileInput.current.files[0]
-        const fileName = fileInput.current.files[0].name
-        const fileType = fileInput.current.files[0].type
-        if (Constants.IMAGE_FILE_TYPES.lastIndexOf(fileType) === -1) {
+        const selected = fileInput.current.files[0]
+        if (selected && Constants.IMAGE_FILE_TYPES.includes(selected.type)) {
+            setSelectedFile(selected)
+            setError('')
+            rowProps.selectedFile = selected
+        } else {
+            setSelectedFile(null)
+            setError('*Please select an image file (png or jpeg)')
             const toastProperties = {
                 id: Math.floor((Math.random() * 101) + 1),
                 title: 'Error',
-                description: `File ${fileName} is not a valid image.`,
+                description: `File ${selected.name} is not valid. Please select an image file (png or jpeg)`,
                 color: 'red',
+                position: 'top-right'
             }
             setToast(toastProperties)
             return
         }
-        if (fileData === '' || fileName === '') {
-            console.log(`No file selected: ${typeof (fileData)}`)
-            return
-        }
-        setSelectedFile(fileData)
-        rowProps.selectedFile = selectedFile
     }
 
     useEffect(() => {
@@ -79,33 +71,20 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
             setSelectedMarketplaces(allMarketplaces.nodes.map((node) => (
                 { id: node.id, code: node.code, flag: node.flag, name: node.name, checked: rowProps.marketplaces.some(x => x.id === node.code) }
             )))
-            //setSelectedCategories([{ value: '7GxXweFmb1Pt8g5Djkc8', label: 'Cross Marketplace Listing' }])
-            //setSelectedCategories(rowProps.categories.map(category => (
-            //    { value: category.id, label: category.name }
-            //)))
-            //console.log("selectedCategories:", selectedCategories)
-
-            //if (rowProps.categories) {
-            //const selectedCategories = rowProps.categories.map(category => (
-            //    { value: category.id, label: category.name }
-            //))
             const categoriesValue = rowProps.categories.map(category => (
                 { value: category.id, label: category.name }
             ))
             setValue('categories', categoriesValue, true)
-            //setCategoriesValue(selectedCategories)
-            //}
+            setValue('content', rowProps.content)
         }
         fetchData()
 
-        //console.log("rowProps.categories", rowProps.categories)
-        //const selectedCategories = rowProps.categories?.map(category => (
-        //    { value: category.id, label: category.name }
-        //))
-        //setTimeout(() => {
-        //}, 600)
-
-        //console.log("selectedCategories:", selectedCategories)
+        return () => {
+            setSelectedFile(null)
+            setError(null)
+            setContent('')
+            setToast()
+        }
     }, [register, rowProps, allMarketplaces, setValue])
 
     return (
@@ -153,7 +132,7 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
                     type="text"
                     name="website"
                     defaultValue={rowProps.website}
-                    placeholder="Website URL"
+                    placeholder="https://ww.example.com"
                     aria-label="Enter the Website"
                     ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                     className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
@@ -197,12 +176,14 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
                         <input type="file" id="fileInput" aria-label="File Input"
                             className="hidden" ref={fileInput} onChange={handleUploadLogo} onClick={handleSelectFile} />
                     </label>
-                    <div className="text-gray-600 text-xs mt-2">
-                        (File formats: .png, .jpg, .gif, .bmp)
+                    <div className="flex justify-start items-center">
+                        <div className="text-gray-600 text-xs mt-2">(File formats: .png, .jpg, .gif, .bmp)</div>
+                        <div className="text-xs mt-2 ml-2">
+                            {error && <div className="text-red-400">{error}</div>}
+                            {selectedFile && <div className="text-gray-600 font-bold">New File: {selectedFile.name}</div>}
+                        </div>
                     </div>
-                    <div className="flex items-start h-12 md:h-12 lg:h-12">
-                        <img src={rowProps.logoURL} alt={`${rowProps.name} Logo`} className="h-12 w-full object-contain" />
-                    </div>
+                    {rowProps.logoURL && <img src={rowProps.logoURL} alt={`${rowProps.name} Logo`} className="mt-1 h-12 w-full object-contain" />}
                 </div>
             </div>
             <Toast toastProps={toast} />

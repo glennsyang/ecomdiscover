@@ -2,8 +2,8 @@ import React from "react"
 import { Link } from "gatsby"
 import Tag from "./tag"
 import Category from './category'
-import { useCategories } from "../hooks/use-categories"
-import { useCompanies } from "../hooks/use-companies"
+import { useCategories } from "../hooks/useCategories"
+import { useCompanies } from "../hooks/useCompanies"
 
 const SearchDisplay = ({ props }) => {
     const { allCategories } = useCategories()

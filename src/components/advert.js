@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
 import SVGImage from "../components/svgimage"
-import { useSiteMetadata } from "../hooks/use-site-metadata"
+import { useSiteMetadata } from "../hooks/useSiteMetadata"
 
 export default function Advert() {
     const { email } = useSiteMetadata()

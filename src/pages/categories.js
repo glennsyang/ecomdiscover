@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
-import { useCategories } from "../hooks/use-categories"
+import { useCategories } from "../hooks/useCategories"
 
 export default () => {
     const props = { title: "Find Top-Rated Tools By Category", subtitle: "" }

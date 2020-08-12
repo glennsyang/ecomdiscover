@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import firebase from "gatsby-plugin-firebase"
-//import ReactQuill from 'react-quill'
+import ReactQuill from 'react-quill'
 // Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
 // Add state.companyId, to the useEffect dependencies
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
 import Category from "../components/category"
@@ -17,7 +17,7 @@ import Advert from "../components/advert"
 import Toast from "../components/toast"
 import CompanyModal from "../components/companyModal"
 import * as Constants from '../constants'
-import { useCompanies } from "../hooks/use-companies"
+import { useCompanies } from "../hooks/useCompanies"
 import { getUser, isBlocked } from "../utils/auth"
 
 const components = { DropdownIndicator: null, }
@@ -226,7 +226,7 @@ export default function WriteReview({ location }) {
             titleRef.current.focus()
         }
 
-    }, [register, companyList, setValue])
+    }, [register, state.companyId, companyList, setValue])
 
     return (
         <>

@@ -5,7 +5,6 @@ import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
 import CompanyCard from "../components/cards/companycard"
 import { isLoggedIn, isBlocked } from "../utils/auth"
-//import AdVideo from "../images/EcomdiscoverAdvert.mp4"
 
 function IndexPage({ data }) {
   const [isUserBlocked, setIsUserBlocked] = useState(false)
