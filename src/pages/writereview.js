@@ -3,6 +3,7 @@ import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import firebase from "gatsby-plugin-firebase"
 import ReactQuill from 'react-quill'
 // Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
@@ -130,7 +131,6 @@ export default function WriteReview({ location }) {
         setValue('content', newValue)
         setContent(newValue)
     }
-
     // Modal
     const showCompanyModal = () => {
         //e.preventDefault()
@@ -145,13 +145,11 @@ export default function WriteReview({ location }) {
         setCompany(modalData)
         setCompanyList([...companyList, modalData])
     }
-
     // Companies
     const { allCompanies } = useCompanies()
     const defaultCompanies = allCompanies.nodes.map((node) => (
         { value: node.id, label: node.name, created: node.created }
     ))
-
     const [companyList, setCompanyList] = useState(allCompanies.nodes)
     const [companyOptions, setCompanyOptions] = useState(defaultCompanies)
     const [companyValue, setCompanyValue] = useState()
@@ -277,17 +275,19 @@ export default function WriteReview({ location }) {
                                                         : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-16 w-2/5 object-contain" />}
                                                 </a>}
                                         </div>
-                                        {/* Marketplace & Website */}
-                                        <div className="flex">
-                                            <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">
+                                        {/* Website & Marketplace */}
+                                        <div className="flex items-center mt-6">
+                                            {company && <a href={company.website} rel="noopener noreferrer" target="_blank"
+                                                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded inline-flex flex-shrink-0 items-center -m-1">
+                                                <FaExternalLinkAlt size={18} className="mr-3" />
+                                                Visit Website
+                                            </a>}
+                                            <div className="flex flex-wrap text-gray-500 text-xs tracking-tight uppercase ml-4">
                                                 {company &&
                                                     company.marketplaces.map(marketplace => {
-                                                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
-                                                    })
-                                                }
-                                            </h6>
-                                            {company &&
-                                                <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-2">{company.name}</a>}
+                                                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 m-1" />
+                                                    })}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
