@@ -4,7 +4,7 @@ import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
 import CompanyCard from "../components/cards/companycard"
 import Category from "../components/category"
-import { useCompanies } from "../hooks/use-companies"
+import { useCompanies } from "../hooks/useCompanies"
 
 export default ({ location }) => {
     const props = { title: "E-Commerce Tools & Services", subtitle: "" }

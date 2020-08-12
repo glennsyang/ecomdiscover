@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
-import { useSiteMetadata } from "../hooks/use-site-metadata"
+import { useSiteMetadata } from "../hooks/useSiteMetadata"
 import logo_image from "../images/logo_ecomdiscover.svg"
 
 const Footer = () => {

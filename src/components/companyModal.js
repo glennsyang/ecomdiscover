@@ -2,14 +2,15 @@ import React, { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import Select from "react-select"
 import firebase from "gatsby-plugin-firebase"
-//import ReactQuill from 'react-quill'
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+import ReactQuill from 'react-quill'
+//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 import { FaCamera } from 'react-icons/fa'
 import * as Constants from '../constants'
-import { useCategories } from "../hooks/use-categories"
-import { useMarketplaces } from "../hooks/use-marketplaces"
+import { useCategories } from "../hooks/useCategories"
+import { useMarketplaces } from "../hooks/useMarketplaces"
 import Toast from "../components/toast"
 import Loader from "../components/loader"
+import ProgressBar from "../components/progressbar"
 import { getUser } from "../utils/auth"
 
 export default function CompanyModal(props) {
@@ -17,19 +18,23 @@ export default function CompanyModal(props) {
     const { uid } = getUser()
     const [isLoading, setIsLoading] = useState(false)
     const [toast, setToast] = useState()
-    const [selectedFile, setSelectedFile] = useState()
     const { allMarketplaces } = useMarketplaces()
     const { allCategories } = useCategories()
-    const fileInput = useRef()
 
+    const onClose = () => {
+        setSelectedFile(null)
+        setErrorFile(null)
+        setProgress(null)
+        setContent('')
+        setToast()
+        props.onClose && props.onClose()
+    }
+    // Categories Selector
     const defaultCategories = allCategories.nodes.map((node) => (
         { value: node.id, label: node.name }
     ))
     const handleMultiChange = selectedOption => {
         setValue('categories', selectedOption)
-    }
-    const onClose = () => {
-        props.onClose && props.onClose()
     }
     // React-quill Editor
     const [content, setContent] = useState('')
@@ -38,79 +43,58 @@ export default function CompanyModal(props) {
         setContent(newValue)
     }
     // File Upload
+    const fileInput = useRef()
+    const [selectedFile, setSelectedFile] = useState(null)
+    const [errorFile, setErrorFile] = useState(null)
+    const [progress, setProgress] = useState(null)
     const handleSelectFile = (e) => {
         e.target.value = null
     }
     const handleUploadLogo = (e) => {
         e.preventDefault()
-        const fileData = fileInput.current.files[0]
-        const fileName = fileInput.current.files[0].name
-        const fileType = fileInput.current.files[0].type
-        if (Constants.IMAGE_FILE_TYPES.lastIndexOf(fileType) === -1) {
+        const selected = fileInput.current.files[0]
+        if (selected && Constants.IMAGE_FILE_TYPES.includes(selected.type)) {
+            setSelectedFile(selected)
+            setErrorFile('')
+        } else {
+            setSelectedFile(null)
+            setErrorFile('*Please select an image file (png or jpeg)')
             const toastProperties = {
                 id: Math.floor((Math.random() * 101) + 1),
                 title: 'Error',
-                description: `File ${fileName} is not a valid image.`,
+                description: `File ${selected.name} is not valid. Please select an image file (png or jpeg)`,
                 color: 'red',
+                position: 'top-right'
             }
             setToast(toastProperties)
             return
         }
-        if (fileData === '' || fileName === '') {
-            console.log(`No file selected: ${typeof (fileData)}`)
-            return
-        }
-        setSelectedFile(fileData)
     }
     // Submit button
     const onSubmit = modalData => {
-        console.log("modalData:", modalData)
         setIsLoading(true)
-        // Upload the logo to the Storage bucket, if exists
+        // First, upload the logo to the Storage bucket, if exists
         if (selectedFile) {
-            const fileData = selectedFile
-            const fileName = selectedFile.name
-            let reader = new FileReader()
-            reader.readAsDataURL(fileData)
-            reader.onload = () => {
-                const fileContent = reader.result
-                const imageRef = firebase.storage().ref().child(`company-images/${fileName}`)
-                const uploadTask = imageRef.putString(fileContent, 'data_url')
-                // Upload Task
-                uploadTask.on('state_changed', (snapshot) => {
-                    let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    console.log(`Upload is '${progress}'% done`)
-                    switch (snapshot.state) {
-                        case firebase.storage.TaskState.PAUSED:
-                            console.log('Upload is paused')
-                            break
-                        case firebase.storage.TaskState.RUNNING:
-                            console.log('Upload is running')
-                            break
-                        default:
-                            break
-                    }
-                }, (err) => {
-                    // Handle Unsuccessful uploads
-                    setIsLoading(false)
-                    //console.log('File Upload error:', err.code)
-                    const toastProperties = {
-                        id: Math.floor((Math.random() * 101) + 1),
-                        title: 'Error',
-                        description: `There was an error in uploading the file. Reason: ${err.code}.`,
-                        color: 'red',
-                    }
-                    setToast(toastProperties)
-                }, () => {
-                    // Handle successful uploads on complete
-                    // Get URL of new photo
-                    uploadTask.snapshot.ref.getDownloadURL().then(companyLogoURL => {
-                        createCompanyInFirestore(modalData, companyLogoURL)
-                    })
-                })
-            }
+            const storageRef = firebase.storage().ref().child(`company-images/${selectedFile.name}`)
+            storageRef.put(selectedFile).on('state_changed', (snap) => {
+                let percentage = (snap.bytesTransferred / snap.totalBytes) * 100
+                setProgress(percentage)
+            }, (err) => {
+                setIsLoading(false)
+                const toastProperties = {
+                    id: Math.floor((Math.random() * 101) + 1),
+                    title: 'Error',
+                    description: `There was an error in uploading the file. Reason: ${err}.`,
+                    color: 'red',
+                    position: 'top-right'
+                }
+                setToast(toastProperties)
+            }, async () => {
+                const companyLogoURL = await storageRef.getDownloadURL()
+                createCompanyInFirestore(modalData, companyLogoURL)
+            })
         } else {
-            console.log("No Logo uploaded")
+            console.log("No logo attached")
             createCompanyInFirestore(modalData, "")
         }
     }
@@ -156,7 +140,6 @@ export default function CompanyModal(props) {
             })
             .catch(error => {
                 setIsLoading(false)
-                console.log("Error:", error)
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
@@ -170,6 +153,14 @@ export default function CompanyModal(props) {
     useEffect(() => {
         register({ name: "categories" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
         register({ name: "content" }, { required: { value: true, message: Constants.FIELD_REQUIRED } })
+
+        return () => {
+            setSelectedFile(null)
+            setErrorFile(null)
+            setProgress(null)
+            setContent('')
+            setToast()
+        }
     }, [register])
 
 
@@ -235,7 +226,7 @@ export default function CompanyModal(props) {
                                     <input
                                         type="text"
                                         name="website"
-                                        placeholder="Website URL"
+                                        placeholder="https://ww.example.com"
                                         aria-label="Enter the Website"
                                         ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                                         className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
@@ -275,9 +266,14 @@ export default function CompanyModal(props) {
                                             <input type="file" id="fileInput" aria-label="File Input"
                                                 className="hidden" ref={fileInput} onChange={handleUploadLogo} onClick={handleSelectFile} />
                                         </label>
-                                        <div className="text-gray-600 text-xs mt-2">
-                                            (File formats: .png, .jpg, .gif, .bmp)
+                                        <div className="flex justify-start items-center">
+                                            <div className="text-gray-600 text-xs mt-2">(File formats: .png, .jpg, .gif, .bmp)</div>
+                                            <div className="text-xs mt-2 ml-2">
+                                                {errorFile && <div className="text-red-400">{errorFile}</div>}
+                                                {selectedFile && <div className="text-gray-600 font-bold">File: {selectedFile.name}</div>}
+                                            </div>
                                         </div>
+                                        {progress && <ProgressBar progress={progress} />}
                                     </div>
                                 </div>
                                 {/*footer*/}
