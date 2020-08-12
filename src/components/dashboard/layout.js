@@ -5,7 +5,7 @@ import SEO from "../seo"
 import Header from "../dashboard/header"
 import Footer from "../dashboard/footer"
 import Sidebar from "./sidebar"
-import { useSiteMetadata } from "../../hooks/use-site-metadata"
+import { useSiteMetadata } from "../../hooks/useSiteMetadata"
 import { getUser } from "../../utils/auth"
 
 function Layout({ children }) {
