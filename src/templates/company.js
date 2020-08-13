@@ -80,7 +80,7 @@ export default function Company({ data }) {
             <SEO
                 title={`Reviews: ${company.name}`}
                 keywords={[`${company.name}`, company.categories.map(category => { return category.name })]}
-                description={`${company.name}: ${company.blurb}`}
+                description={`${company.blurb}${company.content ? ' - ' + company.content.replace(/(.{225})..+/, '$1...') : ''}`}
             />
             <div className="bg-gray-200">
 
