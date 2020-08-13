@@ -13,7 +13,8 @@ export default () => {
         <Layout>
             <SEO
                 title="Categories"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`${allCategories.nodes.map(category => { return category.name })}`]}
+                description={`${props.title}`}
             />
             <section className="bg-gray-100">
                 <PageHeader props={props} />

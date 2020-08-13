@@ -11,7 +11,8 @@ export default ({ location }) => {
         <Layout>
             <SEO
                 title="Submitted"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`review`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={`${props.subtitle} ${state?.username}`}
             />
             <section className="bg-gray-100">
 

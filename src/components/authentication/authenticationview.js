@@ -6,7 +6,7 @@ const View = ({ title, children }) => (
     <>
         <SEO
             title={title}
-            keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+            description="EcomDiscover Profile page"
         />
         <div className="container mx-auto bg-white">
             <div className="p-4 lg:py-16 md:mx-24 lg:mx-48">
