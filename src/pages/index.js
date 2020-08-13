@@ -21,7 +21,7 @@ function IndexPage({ data }) {
     <Layout>
       <SEO
         title="Home"
-        keywords={[`amazon`, `ecommerce`, `FBA`, `repricing`, `profit monitoring`, `listing optimization`]}
+        keywords={[`aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
       />
 
       <div className="gradient">

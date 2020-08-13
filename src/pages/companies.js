@@ -7,6 +7,7 @@ import Category from "../components/category"
 import { useCompanies } from "../hooks/useCompanies"
 
 export default ({ location }) => {
+    console.log({ location })
     const props = { title: "E-Commerce Tools & Services", subtitle: "" }
     const { state = {} } = location
     const { category } = state
@@ -32,7 +33,8 @@ export default ({ location }) => {
         <Layout>
             <SEO
                 title="Companies"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`${filteredCategory.map(category => { return category.name })}`, companies.map(company => { return company.name })]}
+                description={`${props.title}: ${filteredCategory.map(category => { return category.name })}`}
             />
             <section className="bg-gray-100">
                 <PageHeader props={props} />
