@@ -4,7 +4,7 @@ const path = require(`path`)
 exports.onCreateNode = ({ node, actions }) => {
   const { createNodeField } = actions
   if (node.internal.type === `Companies`) {
-    const slug = `companies/${node.name.toLowerCase().split(' ').join('_')}`
+    const slug = `reviews/${node.name.toLowerCase().split(' ').join('_')}`
     createNodeField({
       node,
       name: `slug`,

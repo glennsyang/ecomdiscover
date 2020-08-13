@@ -32,10 +32,10 @@ function IndexPage({ data }) {
 
             <h1 className="font-serif text-center text-3xl sm:text-4xl font-semibold text-white">
               Find Top-Rated Tools & Services For Your E-commerce Business
-          </h1>
-            <h4 className="text-center sm:text-xl font-light text-white mb-6">
+            </h1>
+            <h2 className="text-center sm:text-xl font-light text-white mb-6">
               Search our curated collection of e-commerce resources
-          </h4>
+            </h2>
 
             {/* Search Box */}
             <SearchBox searchIndex={data.siteSearchIndex.index} />
@@ -114,7 +114,7 @@ function IndexPage({ data }) {
             <div className="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
 
-          <h3 className="mt-4 mb-12 text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h3>
+          <h2 className="mt-4 mb-12 text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h2>
 
           <Link
             to={isLoggedIn() && isUserBlocked ? '/app/writereview' : '/app/login'}

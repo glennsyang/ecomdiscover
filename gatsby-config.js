@@ -6,6 +6,7 @@ module.exports = {
   siteMetadata: {
     title: `EcomDiscover`,
     description: `Find Top-Rated Tools & Services For Your Ecommerce Business.`,
+    subtitle: `Search our curated collection of e-commerce resources`,
     siteUrl: `https://www.ecomdiscover.com`,
     website: `ecomdiscover.com`,
     email: `info@ecomdiscover.com`,

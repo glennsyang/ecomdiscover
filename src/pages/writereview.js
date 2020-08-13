@@ -230,7 +230,6 @@ export default function WriteReview({ location }) {
         <>
             <SEO
                 title={company ? `Write Review: ${company.name}` : `Write Review`}
-                keywords={[`${company?.name}`, company?.categories.map(category => { return category.name })]}
                 description={`${company?.name}: ${company?.blurb}`}
             />
             <div className="bg-gray-200">
