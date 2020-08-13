@@ -75,7 +75,10 @@ export default function CompanyModal(props) {
         setIsLoading(true)
         // First, upload the logo to the Storage bucket, if exists
         if (selectedFile) {
-            const storageRef = firebase.storage().ref().child(`company-images/${selectedFile.name}`)
+            // Append current Date-Time to fileName to prevent duplicates
+            const fileNameArr = selectedFile.name.split('.')
+            const fileName = `company-images/${fileNameArr[0]}_${Date.now()}.${fileNameArr[1]}`
+            const storageRef = firebase.storage().ref().child(fileName)
             storageRef.put(selectedFile).on('state_changed', (snap) => {
                 let percentage = (snap.bytesTransferred / snap.totalBytes) * 100
                 setProgress(percentage)
@@ -84,7 +87,7 @@ export default function CompanyModal(props) {
                 const toastProperties = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in uploading the file. Reason: ${err}.`,
+                    description: `There was an error in uploading the file ${selectedFile.name}. Reason: ${err}.`,
                     color: 'red',
                     position: 'top-right'
                 }
