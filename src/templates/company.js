@@ -79,7 +79,8 @@ export default function Company({ data }) {
         <Layout>
             <SEO
                 title={`Reviews: ${company.name}`}
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`${company.name}`, company.categories.map(category => { return category.name })]}
+                description={`${company.name}: ${company.blurb}`}
             />
             <div className="bg-gray-200">
 

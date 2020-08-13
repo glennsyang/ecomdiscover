@@ -15,7 +15,8 @@ export default () => {
         <Layout>
             <SEO
                 title="Terms Of Service"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`terms of service`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={props.subtitle}
             />
             <section className="bg-gray-100">
 

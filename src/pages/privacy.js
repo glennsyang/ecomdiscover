@@ -14,7 +14,8 @@ export default () => {
         <Layout>
             <SEO
                 title="Privacy Policy"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`privacy policy`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={props.subtitle}
             />
             <section className="bg-gray-100">
 

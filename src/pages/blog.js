@@ -2,15 +2,18 @@ import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
+import { useCategories } from "../hooks/useCategories"
 
 export default () => {
   const props = { title: "Blog", subtitle: "We've got a lot to say about ecommerce tools & services." }
+  const { allCategories } = useCategories()
 
   return (
     <Layout>
       <SEO
         title="Blog"
-        keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+        keywords={[`${allCategories.nodes.map(category => { return category.name })}`]}
+        description={`${props.title}: ${props.subtitle}`}
       />
       <section className="bg-gray-100">
 

@@ -28,7 +28,7 @@ function Layout({ children }) {
         <div className="mx-auto bg-white">
             <SEO
                 title="Dashboard"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                description="EcomDiscover Dashboard"
             />
             <div className="min-h-screen flex flex-row">
                 <Sidebar />
