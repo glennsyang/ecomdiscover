@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "gatsby"
+import { FacebookIcon, TwitterIcon } from 'react-share'
 import { useSiteMetadata } from "../hooks/useSiteMetadata"
 import logo_image from "../images/logo_ecomdiscover.svg"
 
@@ -52,13 +53,28 @@ const Footer = () => {
                         <p className="uppercase text-black font-bold mb-2 md:mb-6">Company</p>
                         <ul className="list-reset mb-6">
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <Link to={`/blog`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Official Blog</Link>
+                                <Link to={`/blog`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Blog</Link>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/about`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">About Us</Link>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/contact`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Contact</Link>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="flex-1">
+                        <p className="uppercase text-black font-bold mb-2 md:mb-6">Social</p>
+                        <ul className="list-reset mb-6">
+                            <li>
+                                <a href={`https://twitter.com/EcomDiscover`} title={`${title} Twitter`} rel="noopener noreferrer" target="_blank">
+                                    <TwitterIcon size={32} round />
+                                </a>
+                            </li>
+                            <li className="mt-2">
+                                <a href={`https://www.facebook.com/ecom.discover.3`} title={`${title} Facebook`} rel="noopener noreferrer" target="_blank">
+                                    <FacebookIcon size={32} round />
+                                </a>
                             </li>
                         </ul>
                     </div>
