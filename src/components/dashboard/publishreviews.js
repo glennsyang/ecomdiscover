@@ -2,21 +2,13 @@ import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
 import { FaCaretRight, FaCaretDown, FaCheck, FaTimes } from "react-icons/fa"
 import moment from "moment"
+import Tags from "../dashboard/tags"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 import NewModal from "./modals/newModal"
 import { hydrate } from "./helper"
-
-const Tags = ({ values }) => {
-    // Loop through the array and create a badge-like component instead of a comma-separated string
-    return (<>
-        {values.map((tag, idx) => {
-            return (<span key={idx} className="inline-block bg-gray-200 rounded-full px-2 text-xs font-semibold text-gray-700 mr-1">{tag}</span>)
-        })}
-    </>)
-}
 
 const PublishReviews = () => {
     const [isLoading, setIsLoading] = useState(true)

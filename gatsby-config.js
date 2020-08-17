@@ -45,6 +45,14 @@ module.exports = {
         icon: `src/images/favicon.png`, // This path is relative to the root of the site.
       },
     },
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        // Exclude specific pages or groups of pages using glob parameters
+        // See: https://github.com/isaacs/minimatch
+        exclude: [`/dashboard/*`, `/app/*`],
+      },
+    },
     `gatsby-plugin-postcss`,
     {
       resolve: "gatsby-plugin-purgecss",

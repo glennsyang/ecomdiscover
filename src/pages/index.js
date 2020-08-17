@@ -109,7 +109,7 @@ function IndexPage({ data }) {
         {/* CTA block */}
         <section className="container mx-auto text-center py-6 pb-16" id="call-to-action">
 
-          <h1 className="w-full my-2 text-5xl font-bold leading-tight text-center text-white">Write a Review</h1>
+          <h3 className="w-full my-2 text-5xl font-bold leading-tight text-center text-white">Write a Review</h3>
           <div className="w-full mb-4">
             <div className="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
