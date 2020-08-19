@@ -24,7 +24,7 @@ const Footer = () => {
                         <p className="uppercase text-black font-bold mb-2 md:mb-6">Links</p>
                         <ul className="list-reset mb-4">
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <Link to={`/FAQ`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">FAQ</Link>
+                                <Link to={`/faq`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">FAQ</Link>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/help`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Help</Link>
@@ -66,12 +66,12 @@ const Footer = () => {
                     <div className="flex-1">
                         <p className="uppercase text-black font-bold mb-2 md:mb-6">Social</p>
                         <ul className="list-reset mb-6">
-                            <li>
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <a href={`https://twitter.com/EcomDiscover`} title={`${title} Twitter`} rel="noopener noreferrer" target="_blank">
                                     <TwitterIcon size={32} round />
                                 </a>
                             </li>
-                            <li className="mt-2">
+                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <a href={`https://www.facebook.com/ecom.discover.3`} title={`${title} Facebook`} rel="noopener noreferrer" target="_blank">
                                     <FacebookIcon size={32} round />
                                 </a>
