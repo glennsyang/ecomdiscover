@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
 import { FaCaretRight, FaCaretDown, FaCheck, FaTimes } from "react-icons/fa"
 import moment from "moment"
-import Tags from "../dashboard/tags"
+import Badge from "../dashboard/badge"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
@@ -145,7 +145,7 @@ const PublishReviews = () => {
             {
                 Header: "Tags",
                 accessor: "tags",
-                Cell: ({ cell: { value } }) => <Tags values={value} />
+                Cell: ({ cell: { value } }) => <Badge values={value} />
             },
             {
                 Header: "Liked",

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
 import { FaCaretRight, FaCaretDown } from "react-icons/fa"
 import moment from "moment"
-import Tags from "../dashboard/tags"
+import Badge from "../dashboard/badge"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
@@ -130,7 +130,7 @@ const Blogs = () => {
             {
                 Header: "Tags",
                 accessor: "frontmatter.tags",
-                Cell: ({ cell: { value } }) => <Tags values={value} />
+                Cell: ({ cell: { value } }) => <Badge values={value} />
             },
             {
                 Header: "Created",

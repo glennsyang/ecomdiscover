@@ -164,6 +164,14 @@ module.exports = {
               answer: doc.answer,
               date: doc.date
             }),
+          },
+          {
+            type: 'Tags',
+            collection: 'tags',
+            map: doc => ({
+              id: doc.id,
+              tag: doc.tag,
+            }),
           }
         ],
       },
