@@ -25,6 +25,6 @@ export const useBlogs = () => {
         }
     }
     `)
-    console.log({ data })
+
     return data
 }

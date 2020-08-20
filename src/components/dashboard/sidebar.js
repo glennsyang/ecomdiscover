@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-import { FaPen, FaThList, FaBuilding, FaUser, FaAngleDoubleLeft, FaAngleDoubleRight, FaGlobeAmericas, FaQuestion, FaBlog } from "react-icons/fa"
+import { FaPen, FaThList, FaBuilding, FaUser, FaAngleDoubleLeft, FaAngleDoubleRight, FaGlobeAmericas, FaQuestion, FaBlog, FaTag } from "react-icons/fa"
 
 const MenuChoice = (props) => {
     const { name, linkTo, icon, fold } = props
@@ -11,6 +11,7 @@ const MenuChoice = (props) => {
     if (icon === "FaUser") { iconDisplay = <FaUser size={16} className="mr-2" /> }
     if (icon === "FaGlobeAmericas") { iconDisplay = <FaGlobeAmericas size={16} className="mr-2" /> }
     if (icon === "FaQuestion") { iconDisplay = <FaQuestion size={16} className="mr-2" /> }
+    if (icon === "FaTag") { iconDisplay = <FaTag size={16} className="mr-2" /> }
     if (icon === "FaBlog") { iconDisplay = <FaBlog size={16} className="mr-2" /> }
 
     return (
@@ -38,6 +39,7 @@ function Sidebar() {
         { name: "Users", linkTo: "/dashboard/users", icon: "FaUser" },
         { name: "Marketplaces", linkTo: "/dashboard/marketplaces", icon: "FaGlobeAmericas" },
         { name: "FAQ", linkTo: "/dashboard/faqs", icon: "FaQuestion" },
+        { name: "Tags", linkTo: "/dashboard/tags", icon: "FaTag" },
         { name: "Blog", linkTo: "/dashboard/blogs", icon: "FaBlog" },
     ]
 

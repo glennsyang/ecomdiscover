@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import NewCategory from './newcategory'
 import NewMarketplace from './newmarketplace'
 import NewFAQ from './newfaq'
+import NewTAG from './newtag'
 import NewCompany from '../../companyModal'
 import EditCompany from './editcompany'
 import EditReview from './editreview'
@@ -49,6 +50,7 @@ export default function NewModal(props) {
                                     {tableName === 'categories' ? <NewCategory register={register} errors={errors} /> : ''}
                                     {tableName === 'marketplaces' ? <NewMarketplace register={register} errors={errors} /> : ''}
                                     {tableName === 'faq' ? <NewFAQ register={register} errors={errors} rowProps={rowProps} /> : ''}
+                                    {tableName === 'tags' ? <NewTAG register={register} errors={errors} rowProps={rowProps} /> : ''}
                                     {tableName === 'review' ? <EditReview register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
                                     {tableName === 'company' ? <EditCompany register={register} errors={errors} setValue={setValue} rowProps={rowProps} /> : ''}
 

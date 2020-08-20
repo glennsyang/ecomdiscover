@@ -102,7 +102,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                         : ''}
                 </div>
                 <div className="flex justify-between items-center">
-                    {tableName === 'faq' || tableName === 'marketplaces' || tableName === 'categories' || tableName === 'companies' ?
+                    {tableName === 'faq' || tableName === 'tags' || tableName === 'marketplaces' || tableName === 'categories' || tableName === 'companies' ?
                         <button
                             type="button"
                             title="Add New"
