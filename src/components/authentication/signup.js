@@ -70,6 +70,7 @@ const SignUp = () => {
                         email: email,
                         helpful: [],
                         photoURL: photoURL !== '' ? photoURL : '',
+                        reviews: [],
                         role: 'user',
                         updated: firebase.firestore.FieldValue.serverTimestamp(),
                     })
