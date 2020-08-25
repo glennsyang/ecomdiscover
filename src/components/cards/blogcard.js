@@ -9,9 +9,9 @@ const BlogCard = ({ blog }) => {
         imgAlt: `${blog.frontmatter.title} Logo`,
         imgClass: "h-48 w-full object-contain"
     }
-    const profile = {
-        imgName: blog.frontmatter.image,
-        imgAlt: `${blog.frontmatter.title} Logo`,
+    const imgBlankProfile = {
+        imgName: "blank_profile_picture.png",
+        imgAlt: `${blog.frontmatter.title} Profile Photo`,
         imgClass: "h-8 w-8 rounded-full overflow-hidden"
     }
 
@@ -34,7 +34,7 @@ const BlogCard = ({ blog }) => {
                     {blog.frontmatter.subtitle}
                 </h2>
                 <div className="flex flex-row items-center mt-4">
-                    <ImageFluid props={profile} />
+                    <ImageFluid props={imgBlankProfile} />
                     <h3 className="text-xs text-gray-500 ml-2">
                         By {blog.frontmatter.author}
                     </h3>

@@ -19,10 +19,82 @@ import Toast from "../components/toast"
 import CompanyModal from "../components/companyModal"
 import * as Constants from '../constants'
 import { useCompanies } from "../hooks/useCompanies"
+import { useTags } from "../hooks/useTags"
 import { getUser, isBlocked } from "../utils/auth"
 
-const components = { DropdownIndicator: null, }
+//const components = { DropdownIndicator: null, }
 const createCompany = (label) => ({ value: label, label: label })
+
+// save the Review in the database
+const updateFirestore = (uid, displayName, dataObject, company, companyId, companyName, setToast) => {
+    dataObject = Object.assign(dataObject, {
+        categories: company.categories.map((category) => (
+            firebase.firestore().doc(`categories/${category.id}`)
+        )),
+        company: firebase.firestore().doc(`companies/${companyId}`),
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        helpful: [],
+        published: true,
+        rating: dataObject.rating ? Number(dataObject.rating) : 0,
+        tags: dataObject.tags ? dataObject.tags.map((tag) => (
+            tag.label
+        )) : [],
+        uid: firebase.firestore().collection('users').doc(uid),
+    })
+    firebase
+        .firestore().collection('reviews')
+        .add(dataObject)
+        .then(ref => {
+            console.log("Created new review:", ref.id)
+            // Update the 'companies' collection with this latest review
+            firebase.firestore().collection('companies').doc(companyId)
+                .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
+                .then(() => {
+                    console.log("Updated Company:", companyId)
+                    // Update the 'users' collection with this latest review
+                    firebase.firestore().collection('users').doc(uid)
+                        .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
+                        .then(() => {
+                            console.log("Updated User:", uid)
+                            navigate(
+                                "/form-submitted",
+                                {
+                                    state: { username: displayName },
+                                    replace: true,
+                                }
+                            )
+                        })
+                        .catch(error => {
+                            const toastProperties = {
+                                id: Math.floor((Math.random() * 101) + 1),
+                                title: 'Error',
+                                description: `There was an error in updating User: ${uid} with your new review. Reason: ${error}.`,
+                                color: 'red',
+                            }
+                            setToast(toastProperties)
+                        })
+                })
+                .catch(error => {
+                    const toastProperties = {
+                        id: Math.floor((Math.random() * 101) + 1),
+                        title: 'Error',
+                        description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}.`,
+                        color: 'red',
+                    }
+                    setToast(toastProperties)
+                })
+        })
+        .catch(error => {
+            const toastProperties = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Error',
+                description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}.`,
+                color: 'red',
+            }
+            setToast(toastProperties)
+        })
+}
 
 export default function WriteReview({ location }) {
     const { uid, displayName } = getUser()
@@ -40,7 +112,7 @@ export default function WriteReview({ location }) {
             firebase.firestore().collection('companies')
                 .add({ name: formData.company.label, logo: '', website: '' })
                 .then(ref => {
-                    updateFirestore(formData, ref.id, formData.company.label)
+                    updateFirestore(uid, displayName, formData, company, ref.id, formData.company.label, setToast)
                 })
                 .catch(error => {
                     const toastProperties = {
@@ -52,78 +124,8 @@ export default function WriteReview({ location }) {
                     setToast(toastProperties)
                 })
         } else {
-            updateFirestore(formData, formData.company.value, formData.company.label)
+            updateFirestore(uid, displayName, formData, company, formData.company.value, formData.company.label, setToast)
         }
-    }
-    // save the Review in the database
-    const updateFirestore = (dataObject, companyId, companyName) => {
-        dataObject = Object.assign(dataObject, {
-            categories: company.categories.map((category) => (
-                firebase.firestore().doc(`categories/${category.id}`)
-            )),
-            company: firebase.firestore().doc(`companies/${companyId}`),
-            created: firebase.firestore.FieldValue.serverTimestamp(),
-            updated: firebase.firestore.FieldValue.serverTimestamp(),
-            helpful: [],
-            published: true,
-            rating: dataObject.rating ? Number(dataObject.rating) : 0,
-            tags: dataObject.tags ? dataObject.tags.map((tag) => (
-                tag.label
-            )) : [],
-            uid: firebase.firestore().collection('users').doc(uid),
-        })
-        firebase
-            .firestore().collection('reviews')
-            .add(dataObject)
-            .then(ref => {
-                console.log("Created new review:", ref.id)
-                // Update the 'companies' collection with this latest review
-                firebase.firestore().collection('companies').doc(companyId)
-                    .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
-                    .then(() => {
-                        console.log("Updated Company:", companyId)
-                        // Update the 'users' collection with this latest review
-                        firebase.firestore().collection('users').doc(uid)
-                            .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
-                            .then(() => {
-                                console.log("Updated User:", uid)
-                                navigate(
-                                    "/form-submitted",
-                                    {
-                                        state: { username: displayName },
-                                        replace: true,
-                                    }
-                                )
-                            })
-                            .catch(error => {
-                                const toastProperties = {
-                                    id: Math.floor((Math.random() * 101) + 1),
-                                    title: 'Error',
-                                    description: `There was an error in updating User: ${uid} with your new review. Reason: ${error}.`,
-                                    color: 'red',
-                                }
-                                setToast(toastProperties)
-                            })
-                    })
-                    .catch(error => {
-                        const toastProperties = {
-                            id: Math.floor((Math.random() * 101) + 1),
-                            title: 'Error',
-                            description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}.`,
-                            color: 'red',
-                        }
-                        setToast(toastProperties)
-                    })
-            })
-            .catch(error => {
-                const toastProperties = {
-                    id: Math.floor((Math.random() * 101) + 1),
-                    title: 'Error',
-                    description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}.`,
-                    color: 'red',
-                }
-                setToast(toastProperties)
-            })
     }
     // React-quill Editor
     const [content, setContent] = useState('')
@@ -173,6 +175,11 @@ export default function WriteReview({ location }) {
     }
 
     // Tags
+    const { allTags } = useTags()
+    const defaultTags = allTags.nodes.map((node) => (
+        { value: node.id, label: node.tag }
+    ))
+    const [tagOptions, setTagOptions] = useState(defaultTags)
     const [tags, setTags] = useState([])
     const [inputValue, setInputValue] = useState('')
     const handleTagChange = (value) => {
@@ -196,6 +203,7 @@ export default function WriteReview({ location }) {
                 const newOption = createCompany(inputValue)
                 setValue('tags', [...tags, newOption])
                 setTags([...tags, newOption])
+                setTagOptions([...tagOptions, newOption])
                 event.preventDefault()
                 break
             default:
@@ -334,17 +342,18 @@ export default function WriteReview({ location }) {
                                         <div className="block text-black lg:text-2xl text-xl font-bold mt-4">Tags</div>
                                         <CreatableSelect
                                             name="tags"
-                                            components={components}
+                                            //components={components}
                                             inputValue={inputValue}
                                             isClearable
                                             isMulti
-                                            menuIsOpen={false}
-                                            styles={Constants.customStyles}
+                                            //menuIsOpen={false}
+                                            styles={Constants.customTagStyles}
                                             onChange={handleTagChange}
                                             onInputChange={handleTagInputChange}
                                             onKeyDown={handleKeyDown}
-                                            placeholder="Type something and press enter..."
+                                            placeholder="Type something and press enter...Or, choose some from the list..."
                                             value={tags}
+                                            options={tagOptions}
                                         />
                                         {isUserActive ?
                                             <div className="text-black mt-8">
