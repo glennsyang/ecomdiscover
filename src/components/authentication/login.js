@@ -117,8 +117,8 @@ const Login = ({ location }) => {
                             className="text-black w-full rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                         />
                         {errors.password && <span className="text-red-500 text-md">{errors?.password?.message}</span>}
-                        <div className="flex justify-between">
-                            <div className="flex justify-start mt-6">
+                        <div className="flex flex-col sm:flex-row sm:justify-between">
+                            <div className="flex sm:justify-start mt-6">
                                 <Link to={`/app/passwordreset`} className="text-blue-500 text-left text-xl hover:underline mt-3 pr-2">Forgot Password?</Link>
                                 <button
                                     type="submit"
@@ -132,7 +132,7 @@ const Login = ({ location }) => {
                                 type="button"
                                 value="SignInWithGoogle"
                                 onClick={handleLogInWithGoogle}
-                                className="mt-8 mb-2 hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
+                                className="w-48 sm:w-auto mt-8 mb-2 hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-2 sm:px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
                             >
                                 <FcGoogle size={18} className="mr-2" />
                                 Log in with Google
