@@ -30,7 +30,7 @@ function IndexPage({ data }) {
 
           <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
-            <h1 className="font-serif text-center text-3xl sm:text-4xl font-semibold text-white">
+            <h1 className="font-serif text-center text-2xl sm:text-4xl font-semibold text-white">
               Find Top-Rated Tools & Services For Your E-commerce Business
             </h1>
             <h2 className="text-center sm:text-xl font-light text-white mb-6">
@@ -40,19 +40,19 @@ function IndexPage({ data }) {
             {/* Search Box */}
             <SearchBox searchIndex={data.siteSearchIndex.index} />
 
-            <div className="text-white text-center font-semibold pt-6 inline-block">
+            <div className="text-white text-center font-semibold pt-2 sm:pt-6 inline-block">
               {data.allCategories.edges.map(({ node }) => (
                 <Link
                   key={node.id}
                   to={`/companies`}
                   state={{ category: node.name }}
-                  className="mr-4 pb-4 inline-block hover:underline">
+                  className="mr-4 pb-1 sm:pb-4 text-sm sm:text-base inline-block hover:underline">
                   {node.name}
                 </Link>
               ))}
             </div>
-            <div className="text-white text-center inline-block">
-              <Link to={`/categories`} className="block mt-2 font-semibold hover:underline">
+            <div className="text-white text-center text-sm sm:text-base inline-block">
+              <Link to={`/categories`} className="block mt-1 sm:mt-2 font-semibold hover:underline">
                 SEE ALL CATEGORIES
               </Link>
             </div>
@@ -61,9 +61,9 @@ function IndexPage({ data }) {
         </section>
 
         {/* Title cards */}
-        <section className="bg-gray-100 pt-8" id="title-cards">
+        <section className="bg-gray-100 sm:pt-8" id="title-cards">
           <div className="container mx-auto flex flex-wrap pt-2 pb-10">
-            <h3 className="antialiased w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+            <h3 className="antialiased w-full my-2 text-xl sm:text-3xl font-bold leading-tight text-center text-gray-800">
               E-Commerce Tools & Services
             </h3>
             <div className="w-full mb-4">
@@ -109,12 +109,12 @@ function IndexPage({ data }) {
         {/* CTA block */}
         <section className="container mx-auto text-center py-6 pb-16" id="call-to-action">
 
-          <h3 className="w-full my-2 text-5xl font-bold leading-tight text-center text-white">Write a Review</h3>
+          <h3 className="w-full my-2 text-3xl sm:text-5xl font-bold leading-tight text-center text-white">Write a Review</h3>
           <div className="w-full mb-4">
             <div className="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
 
-          <h2 className="mt-4 mb-12 text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h2>
+          <h2 className="mt-4 mb-12 text-xl sm:text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h2>
 
           <Link
             to={isLoggedIn() && isUserBlocked ? '/app/writereview' : '/app/login'}
