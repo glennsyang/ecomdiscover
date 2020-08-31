@@ -101,7 +101,7 @@ const PublishReviews = () => {
             setTimeout(() => {
                 setReviews(allReviews)
                 setIsLoading(false)
-            }, 600)
+            }, 1200)
         })
     }, [])
 

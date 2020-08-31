@@ -12,6 +12,7 @@ const ReactQuill = typeof window === 'object' ? require('react-quill') : () => f
 
 import SEO from "../components/seo"
 import Category from "../components/category"
+import Marketplace from "../components/marketplace"
 import ImageFixed from "../components/image-fixed"
 import StarRating from "../components/starrating"
 import Advert from "../components/advert"
@@ -293,7 +294,7 @@ export default function WriteReview({ location }) {
                                             <div className="flex flex-wrap text-gray-500 text-xs tracking-tight uppercase ml-4">
                                                 {company &&
                                                     company.marketplaces.map(marketplace => {
-                                                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 m-1" />
+                                                        return <Marketplace key={marketplace.id} marketplace={marketplace} className={"h-4 m-1"} />
                                                     })}
                                             </div>
                                         </div>
