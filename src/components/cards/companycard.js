@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import ImageFixed from "../image-fixed"
 import AvgRating from "../avgrating"
 import Category from "../category"
+import Marketplace from "../marketplace"
 import { FaChevronRight } from 'react-icons/fa'
 
 const CompanyCard = ({ company }) => {
@@ -48,7 +49,7 @@ const CompanyCard = ({ company }) => {
                 {/* Marketplaces */}
                 <div className="flex text-xs text-gray-500 tracking-tight uppercase pb-2">
                     {company.marketplaces.map(marketplace => {
-                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
+                        return <Marketplace key={marketplace.id} marketplace={marketplace} className={"h-4 mr-2"} />
                     })}
                 </div>
                 <hr className="border-b border-gray-300 opacity-25 py-0" />
