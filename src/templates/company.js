@@ -7,6 +7,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import ImageFixed from "../components/image-fixed"
 import Category from "../components/category"
+import Marketplace from "../components/marketplace"
 import AvgRating from "../components/avgrating"
 import ReviewCard from "../components/cards/reviewcard"
 import Advert from "../components/advert"
@@ -79,7 +80,7 @@ export default function Company({ data }) {
         <Layout>
             <SEO
                 title={`Reviews: ${company.name}`}
-                keywords={[`${company.name}`, company.categories.map(category => { return category.name })]}
+                keywords={[`${company.name}`].concat(company.categories.map(category => { return category.name }))}
                 description={`${company.blurb}${company.content ? ' - ' + company.content.replace(/(.{225})..+/, '$1...') : ''}`}
             />
             <div className="bg-gray-200">
@@ -118,12 +119,12 @@ export default function Company({ data }) {
                                     </div>
                                     {/* Description */}
                                     <div className="flex">
-                                        <div className="text-sm font-sans font-normal tracking-tight leading-relaxed text-gray-900">
+                                        <div className="text-base font-sans font-normal tracking-tight leading-normal text-gray-800">
                                             {renderAst(company.childHtmlRehype.htmlAst)}
                                         </div>
                                     </div>
                                     {/* Website & Marketplace */}
-                                    <div className="flex items-center mt-6">
+                                    <div className="flex items-center mt-4 sm:mt-6">
                                         <a href={company.website} rel="noopener noreferrer" target="_blank"
                                             className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded inline-flex flex-shrink-0 items-center -m-1">
                                             <FaExternalLinkAlt size={18} className="mr-3" />
@@ -131,7 +132,7 @@ export default function Company({ data }) {
                                         </a>
                                         <div className="flex flex-wrap text-gray-500 text-xs tracking-tight uppercase ml-4">
                                             {company.marketplaces.map(marketplace => {
-                                                return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 m-1" />
+                                                return <Marketplace key={marketplace.id} marketplace={marketplace} className={"h-4 m-1"} />
                                             })}
                                         </div>
                                     </div>
@@ -143,8 +144,18 @@ export default function Company({ data }) {
                             {/* Reviews */}
                             <div className="flex flex-col lg:px-10 py-4">
                                 <div className="lg:hidden mb-4">
-                                    <div className="flex">
-                                        <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
+                                    <div className="flex justify-between">
+                                        <div className="flex">
+                                            <AvgRating arrReviews={company.reviews} rating={null} slug={company.fields.slug} showAvgRating={false} showNumReviews={true} starSize="6" className="text-lg text-blue-500 pl-4" />
+                                        </div>
+                                        <Link
+                                            to={'/app/writereview'}
+                                            state={{ companyId: company.id }}
+                                            title={'Share!'}
+                                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-2 sm:px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center sm:mr-6"
+                                        >
+                                            Share Review
+                                    </Link>
                                     </div>
                                 </div>
                                 <div className="mb-3">
@@ -171,11 +182,22 @@ export default function Company({ data }) {
                                 {[...reviews].sort(Constants.SORT_TYPES[currentSort].fn).map(review => (
                                     <ReviewCard key={review.id} review={review} />
                                 ))}
+                                {isLoggedIn() && isUserBlocked ?
+                                    <div className="lg:hidden mt-4 lg:mt-10 text-right mr-8">
+                                        <Link
+                                            to={'/app/writereview'}
+                                            state={{ companyId: company.id }}
+                                            title={'Share!'}
+                                            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
+                                        >
+                                            Share Review
+                                        </Link>
+                                    </div> : ''}
                             </div>
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col-reverse lg:flex-col pt-4 lg:py-4 mb-6 lg:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll lg:pl-4">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col-reverse lg:flex-col lg:py-4 mb-6 lg:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll lg:pl-4">
                             <Advert />
                             <div className="invisible lg:visible mx-auto lg:mt-10">
                                 <div className="flex">
@@ -183,7 +205,7 @@ export default function Company({ data }) {
                                 </div>
                             </div>
                             {isLoggedIn() && isUserBlocked ?
-                                <div className="mx-auto mt-2 lg:mt-10">
+                                <div className="invisible lg:visible mx-auto mt-2 lg:mt-10">
                                     <Link
                                         to={'/app/writereview'}
                                         state={{ companyId: company.id }}

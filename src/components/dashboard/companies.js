@@ -141,21 +141,22 @@ const Companies = () => {
     }
 
     useEffect(() => {
+        let allCompanies = []
         const unsubscribe = firebase.firestore().collection('companies').onSnapshot(querySnapshot => {
-            let allCompanies = []
             querySnapshot.forEach(async doc => {
                 const company = doc.data()
                 company.id = doc.id
+                await hydrate(company, ['uid', 'categories'])
                 company.created = company.created ? company.created.toDate() : new Date()
                 company.updated = company.updated ? company.updated.toDate() : new Date()
                 company.reviews = company.reviews.length
-                await hydrate(company, ['categories'])
+                company.user = company.uid.displayName
                 allCompanies.push(company)
             })
             setTimeout(() => {
                 setCompanies(allCompanies)
                 setIsLoading(false)
-            }, 600)
+            }, 2000)
         })
         return () => unsubscribe()
     }, [])
@@ -211,6 +212,10 @@ const Companies = () => {
             //     Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
             //     sortType: 'datetime'
             // },
+            {
+                Header: "Who?",
+                accessor: "user",
+            },
             {
                 Header: "Updated",
                 accessor: "updated",
