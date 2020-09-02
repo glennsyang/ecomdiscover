@@ -23,11 +23,11 @@ export default () => {
                         <div className="flex-1">
                             <div className="lg:grid grid-cols-3 gap-1">
                                 {allCategories.nodes.map((node) => (
-                                    <div key={node.id} className="lg:col-span-1">
+                                    <div key={node.id} className="lg:col-span-1 transform hover:-translate-y-1 hover:translate-x-1 hover:scale-110 transition ease-in-out duration-200">
                                         <Link
                                             to={`/companies`}
                                             state={{ category: node.name }}
-                                            className="bg-gray-200 border border-gray-300 rounded-md px-2 text-sm font-semibold text-blue-500 tracking-tight text-left lg:mx-6 mb-1 hover:underline">
+                                            className="bg-gray-200 border border-gray-300 rounded-md px-2 text-sm font-semibold text-blue-500 tracking-tight text-left lg:mx-6 mb-1">
                                             {node.name}
                                         </Link>
                                     </div>
