@@ -14,7 +14,8 @@ const CompanyCard = ({ company }) => {
     }
 
     return (
-        <div className="max-w-xs lg:max-w-sm flex-grow rounded-lg overflow-hidden shadow-xl border border-gray-100 bg-white m-4 lg:mx-4">
+        <div className="max-w-xs lg:max-w-sm flex-grow rounded-lg overflow-hidden shadow-xl border border-gray-100 bg-white m-4 lg:mx-4
+        transform hover:-translate-y-1 hover:scale-105 transition ease-in-out duration-300">
             {/* Logo */}
             <div className="flex justify-center items-center h-24 md:h-32 lg:h-32 px-4">
                 <Link to={`/${company.fields.slug}`}>
