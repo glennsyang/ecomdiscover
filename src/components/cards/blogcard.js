@@ -16,7 +16,8 @@ const BlogCard = ({ blog }) => {
     }
 
     return (
-        <div className="max-w-xs lg:max-w-sm flex-grow rounded-lg overflow-hidden shadow-xl bg-white m-4 lg:mx-4">
+        <div className="max-w-xs lg:max-w-sm flex-grow rounded-lg overflow-hidden shadow-xl bg-white m-4 lg:mx-4
+        transform hover:-translate-y-1 hover:scale-105 transition ease-in-out duration-300">
             <Link to={`/${blog.fields.slug}`}>
                 <ImageFluid props={props} />
             </Link>
