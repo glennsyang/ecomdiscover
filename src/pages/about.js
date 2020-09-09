@@ -10,7 +10,8 @@ export default () => {
         <Layout>
             <SEO
                 title="About"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[props.subtitle.split(' ')]}
+                description={`${props.title}: ${props.subtitle}`}
             />
             <section className="bg-gray-100">
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "gatsby"
 import firebase from "gatsby-plugin-firebase"
-import rehypeReact from "rehype-react"
+import rehypeReact from 'rehype-react'
 import { FaThumbsUp } from 'react-icons/fa'
 import Popper from "popper.js"
 import moment from "moment"
@@ -46,13 +46,13 @@ const ReviewCard = ({ review }) => {
                     photo: doc.data().photoURL,
                 })
             }).catch(error => {
-                const toastProperties = {
-                    id: Math.floor((Math.random() * 101) + 1),
-                    title: 'Warning',
-                    description: 'You are not signed in. Please sign-in for more details.',
-                    color: 'yellow',
-                }
-                setToast(toastProperties)
+                // const toastProperties = {
+                //     id: Math.floor((Math.random() * 101) + 1),
+                //     title: 'Warning',
+                //     description: 'You are not signed in. Please sign-in for more details.',
+                //     color: 'yellow',
+                // }
+                //setToast(toastProperties)
             })
             setIsLoading(false)
         })
@@ -161,14 +161,14 @@ const ReviewCard = ({ review }) => {
                         </div>
                     </div>
                     <div className="lg:w-full flex flex-col">
-                        <h1 className="flex text-base font-bold text-black">
+                        <h1 className="flex text-base font-bold text-black mt-2 md:mt-0">
                             {userInfo ? userInfo.name : review.user.username}
                         </h1>
-                        <h4 className="flex pt-2 mb-4">
-                            <span className="text-gray-400 text-sm lg:text-xs">{createdAt}</span>
-                            <span className="text-gray-400 text-sm lg:text-xs pl-2">|</span>
-                            <span className="text-gray-400 text-sm lg:text-xs pl-2">Member Since:</span>
-                            <span className="text-gray-400 text-sm lg:text-xs pl-1">{memberSince}</span>
+                        <h4 className="md:flex pt-2 mb-4">
+                            <span className="block text-gray-400 text-sm lg:text-xs">{createdAt}</span>
+                            <span className="text-gray-400 text-sm lg:text-xs invisible -ml-1 md:visible md:pl-2 md:ml-0">|</span>
+                            <span className="inline-block text-gray-400 text-sm lg:text-xs md:pl-2">Member Since:</span>
+                            <span className="inline-block text-gray-400 text-sm lg:text-xs pl-1">{memberSince}</span>
                         </h4>
                         <div className="flex flex-col lg:flex-row flex-auto mb-4">
                             <div className="flex mb-4 lg:mb-0">

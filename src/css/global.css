@@ -30,6 +30,16 @@
     position: relative;
 }
 
+.review-editor .ql-editor {
+  min-height: 18em;
+}
+.company-editor .ql-editor {
+  min-height: 4em;
+}
+/*.ql-editor {
+  min-height: 18em;
+}*/
+
 /* Accordiion */
 label:after {
     content: '+';
@@ -83,12 +93,29 @@ input[name='panel']:checked ~ .accordion__content {
 	position: fixed;
 	z-index: 999999
 }
-
+.top-right {
+    top: 30px;
+    right: 15px;
+    transition: transform .12s ease-in-out;
+    animation: toast-in-right .15s;
+}
 .bottom-right {
-	bottom: 30px;
-	right: 30px;
-	transition: transform .12s ease-in-out;
-	animation: toast-in-right .15s;
+    bottom: 30px;
+    right: 20px;
+    transition: transform .12s ease-in-out;
+    animation: toast-in-right .15s;
+}
+.top-left {
+    top: 12px;
+    left: 12px;
+    transition: transform .12s ease-in;
+    animation: toast-in-left .15s;
+}
+.bottom-left {
+    bottom: 12px;
+    left: 12px;
+    transition: transform .12s ease-in;
+    animation: toast-in-left .15s;
 }
 
 @keyframes toast-in-right {
@@ -97,5 +124,14 @@ input[name='panel']:checked ~ .accordion__content {
 	}
 	to {
     transform: translateX(0);
+	}
+}
+@keyframes toast-in-left {
+	from {
+		transform: translateX(-100%);
+		
+	}
+	to {
+		transform: translateX(0);
 	}
 }

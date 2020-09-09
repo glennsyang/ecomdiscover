@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
+import { FaCaretRight, FaCaretDown } from "react-icons/fa"
 import moment from "moment"
+import Badge from "../dashboard/badge"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 import NewModal from "./modals/newModal"
+import { useBlogs } from "../../hooks/useBlogs"
 
-const Faqs = () => {
+const Blogs = () => {
+    const { allMarkdownRemark } = useBlogs()
     const [isLoading, setIsLoading] = useState(true)
-    const [faqs, setFaqs] = useState([])
+    const [blogs, setBlogs] = useState(allMarkdownRemark.nodes)
 
     const [showModal, setShowModal] = useState(false)
     const [rowProps, setRowProps] = useState()
@@ -21,18 +25,19 @@ const Faqs = () => {
     const createData = (modalData) => {
         setSkipPageReset(true)
         setIsLoading(true)
-        firebase.firestore().collection('faq')
+        firebase.firestore().collection('blog')
             .add({
-                date: firebase.firestore.FieldValue.serverTimestamp(),
-                question: modalData.question,
-                answer: modalData.answer,
+                created: firebase.firestore.FieldValue.serverTimestamp(),
+                updated: firebase.firestore.FieldValue.serverTimestamp(),
+                title: modalData.title,
+                subtitle: modalData.subtitle,
             })
             .then(ref => {
                 setIsLoading(false)
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Success!',
-                    description: `Successfully added new FAQ: ${modalData.question}.`,
+                    description: `Successfully added new Blog post: ${modalData.title}.`,
                     color: 'green',
                 }
                 setToast(toastProps)
@@ -43,7 +48,7 @@ const Faqs = () => {
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in creating new FAQ: ${modalData.question}. Reason: ${error}.`,
+                    description: `There was an error in creating new Blog post: ${modalData.title}. Reason: ${error}.`,
                     color: 'red',
                 }
                 setToast(toastProps)
@@ -53,7 +58,6 @@ const Faqs = () => {
     const handleToggleModal = useCallback((rowProps) => {
         setRowProps(rowProps)
         setShowModal(s => !s)
-        //setShowModal(!showModal)
     }, [])
     const handleEditModal = (modalData) => {
         // We also turn on the flag to not reset the page
@@ -61,18 +65,18 @@ const Faqs = () => {
         setIsLoading(true)
         setShowModal(!showModal)
         let dataObj = {}
-        dataObj['question'] = modalData.question
-        dataObj['answer'] = modalData.answer
-        dataObj['date'] = firebase.firestore.FieldValue.serverTimestamp()
+        dataObj['title'] = modalData.title
+        dataObj['subtitle'] = modalData.title
+        dataObj['updated'] = firebase.firestore.FieldValue.serverTimestamp()
         // Update FAQ
-        firebase.firestore().collection('faq').doc(modalData.id)
+        firebase.firestore().collection('blog').doc(modalData.id)
             .update(dataObj)
             .then(() => {
                 setIsLoading(false)
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Success!',
-                    description: `FAQ successfully updated.`,
+                    description: `Blog post successfully updated.`,
                     color: 'green',
                 }
                 setToast(toastProps)
@@ -82,52 +86,84 @@ const Faqs = () => {
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in updating the FAQ. Reason: ${error.code}.`,
+                    description: `There was an error in updating the Blog post. Reason: ${error.code}.`,
                     color: 'red',
                 }
                 setToast(toastProps)
             })
     }
 
-    useEffect(() => {
-        const unsubscribe = firebase.firestore().collection('faq').onSnapshot(querySnapshot => {
-            let docs = querySnapshot.docs.map(doc => (
-                { ...doc.data(), id: doc.id, date: doc.data().date ? doc.data().date.toDate() : new Date() }
-            ))
-            setFaqs(docs)
-            setIsLoading(false)
-        })
-        return () => unsubscribe()
-    }, [])
-
     const columns = useMemo(
         () => [
             {
-                Header: "Question",
-                accessor: "question",
-                className: "w-1/4"
+                Header: "Author",
+                accessor: "frontmatter.author",
+                //className: "w-1/4"
             },
             {
-                Header: "Answer",
-                accessor: "answer",
+                Header: () => null, // No header
+                id: 'expander', // It needs an ID
+                className: "max-w-xs",
+                Cell: ({ row }) => (
+                    // Use Cell to render an expander for each row.
+                    // We can use the getToggleRowExpandedProps prop-getter
+                    // to build the expander.
+                    <span {...row.getToggleRowExpandedProps()}>
+                        {row.isExpanded ? <FaCaretDown /> : <FaCaretRight />}
+                    </span>
+                ),
+            },
+            {
+                Header: "Title",
+                accessor: "frontmatter.title",
+                //className: "w-1/4"
+            },
+            {
+                Header: "Content",
+                accessor: "html",
+            },
+            {
+                Header: "SubTitle",
+                accessor: "frontmatter.subtitle",
                 className: "w-1/2"
             },
             {
-                Header: "Date",
-                accessor: "date",
+                Header: "Tags",
+                accessor: "frontmatter.tags",
+                Cell: ({ cell: { value } }) => <Badge values={value} />
+            },
+            {
+                Header: "Created",
+                accessor: "frontmatter.date",
                 Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
-                sortType: 'datetime'
+                //sortType: 'datetime'
             },
             {
                 Header: "Actions",
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'faq'} component={'FAQ'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'blog'} component={'BLOG'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
             },
         ],
         [handleToggleModal]
     )
+
+    // Create a function that will render our row sub components
+    const renderRowSubComponent = React.useCallback(
+        ({ row }) => (
+            <div
+                className="text-gray-600 text-sm font-light antialiased p-2"
+                dangerouslySetInnerHTML={{ __html: row.values.html }}
+            />
+        ),
+        []
+    )
+
+    useEffect(() => {
+        setBlogs(allMarkdownRemark.nodes)
+        setIsLoading(false)
+    }, [allMarkdownRemark.nodes])
 
     if (isLoading) { return <Loader /> }
 
@@ -135,9 +171,10 @@ const Faqs = () => {
         <div className="flex flex-col">
             <Table
                 columns={columns}
-                data={faqs}
-                tableName={'faq'}
-                filterName={'question'}
+                data={blogs}
+                tableName={'blog'}
+                filterName={'subtitle'}
+                renderRowSubComponent={renderRowSubComponent}
                 createData={createData}
                 skipPageReset={skipPageReset}
             />
@@ -149,7 +186,7 @@ const Faqs = () => {
             />
             <NewModal
                 show={showModal}
-                tableName='faq'
+                tableName='blog'
                 rowProps={rowProps}
                 onClose={handleToggleModal}
                 onCreate={handleEditModal}
@@ -158,4 +195,4 @@ const Faqs = () => {
     )
 }
 
-export default Faqs
+export default Blogs

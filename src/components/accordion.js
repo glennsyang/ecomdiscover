@@ -3,7 +3,7 @@ import React from "react"
 const Accordion = ({ question }) => {
     return (
         <div className="flex-1 mt-2">
-            <input type="checkbox" name="panel" id={`panel-${question.id}`} className="hidden" />
+            <input type="checkbox" name="panel" aria-label="Expand accordion" id={`panel-${question.id}`} className="hidden" />
             <label htmlFor={`panel-${question.id}`} className="relative block bg-white text-gray-600 p-4 shadow border-b border-grey">
                 {question.question}
             </label>

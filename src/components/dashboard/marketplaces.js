@@ -92,13 +92,10 @@ const Marketplaces = () => {
 
     useEffect(() => {
         const unsubscribe = firebase.firestore().collection('marketplaces').onSnapshot(querySnapshot => {
-            let allMarketplaces = []
-            querySnapshot.forEach(doc => {
-                const category = doc.data()
-                category.id = doc.id
-                allMarketplaces.push(category)
-            })
-            setMarketplaces(allMarketplaces)
+            let docs = querySnapshot.docs.map(doc => (
+                { ...doc.data(), id: doc.id }
+            ))
+            setMarketplaces(docs)
             setIsLoading(false)
         })
         return () => unsubscribe()
@@ -131,20 +128,19 @@ const Marketplaces = () => {
         []
     )
 
+    if (isLoading) { return <Loader /> }
+
     return (
         <div className="flex flex-col">
-            {isLoading
-                ? <Loader />
-                : <Table
-                    columns={columns}
-                    data={marketplaces}
-                    tableName={'marketplaces'}
-                    filterName={'name'}
-                    updateData={updateData}
-                    createData={createData}
-                    skipPageReset={skipPageReset}
-                />
-            }
+            <Table
+                columns={columns}
+                data={marketplaces}
+                tableName={'marketplaces'}
+                filterName={'name'}
+                updateData={updateData}
+                createData={createData}
+                skipPageReset={skipPageReset}
+            />
             <Toast
                 toastProps={toast}
                 position="bottom-right"

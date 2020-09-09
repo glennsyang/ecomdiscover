@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react"
 import firebase from "gatsby-plugin-firebase"
-import moment from "moment"
+//import moment from "moment"
+import Badge from "../dashboard/badge"
 import Loader from "../loader"
 import Toast from "../toast"
 import Table from "./table"
 import Actions from "./actions"
 import NewModal from "./modals/newModal"
 
-const Faqs = () => {
+const Tags = () => {
     const [isLoading, setIsLoading] = useState(true)
-    const [faqs, setFaqs] = useState([])
+    const [tags, setTags] = useState([])
 
     const [showModal, setShowModal] = useState(false)
     const [rowProps, setRowProps] = useState()
@@ -21,18 +22,16 @@ const Faqs = () => {
     const createData = (modalData) => {
         setSkipPageReset(true)
         setIsLoading(true)
-        firebase.firestore().collection('faq')
+        firebase.firestore().collection('tags')
             .add({
-                date: firebase.firestore.FieldValue.serverTimestamp(),
-                question: modalData.question,
-                answer: modalData.answer,
+                tag: modalData.tag,
             })
             .then(ref => {
                 setIsLoading(false)
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Success!',
-                    description: `Successfully added new FAQ: ${modalData.question}.`,
+                    description: `Successfully added new Tag: ${modalData.tag}.`,
                     color: 'green',
                 }
                 setToast(toastProps)
@@ -43,7 +42,7 @@ const Faqs = () => {
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in creating new FAQ: ${modalData.question}. Reason: ${error}.`,
+                    description: `There was an error in creating new Tag: ${modalData.tag}. Reason: ${error}.`,
                     color: 'red',
                 }
                 setToast(toastProps)
@@ -61,18 +60,16 @@ const Faqs = () => {
         setIsLoading(true)
         setShowModal(!showModal)
         let dataObj = {}
-        dataObj['question'] = modalData.question
-        dataObj['answer'] = modalData.answer
-        dataObj['date'] = firebase.firestore.FieldValue.serverTimestamp()
-        // Update FAQ
-        firebase.firestore().collection('faq').doc(modalData.id)
+        dataObj['tag'] = modalData.tag
+        // Update Tag
+        firebase.firestore().collection('tags').doc(modalData.id)
             .update(dataObj)
             .then(() => {
                 setIsLoading(false)
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Success!',
-                    description: `FAQ successfully updated.`,
+                    description: `Tag successfully updated.`,
                     color: 'green',
                 }
                 setToast(toastProps)
@@ -82,7 +79,7 @@ const Faqs = () => {
                 const toastProps = {
                     id: Math.floor((Math.random() * 101) + 1),
                     title: 'Error',
-                    description: `There was an error in updating the FAQ. Reason: ${error.code}.`,
+                    description: `There was an error in updating the Tag. Reason: ${error.code}.`,
                     color: 'red',
                 }
                 setToast(toastProps)
@@ -90,11 +87,12 @@ const Faqs = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection('faq').onSnapshot(querySnapshot => {
+        const unsubscribe = firebase.firestore().collection('tags').onSnapshot(querySnapshot => {
             let docs = querySnapshot.docs.map(doc => (
-                { ...doc.data(), id: doc.id, date: doc.data().date ? doc.data().date.toDate() : new Date() }
+                { ...doc.data(), id: doc.id }
             ))
-            setFaqs(docs)
+            console.log({ docs })
+            setTags(docs)
             setIsLoading(false)
         })
         return () => unsubscribe()
@@ -103,27 +101,16 @@ const Faqs = () => {
     const columns = useMemo(
         () => [
             {
-                Header: "Question",
-                accessor: "question",
-                className: "w-1/4"
-            },
-            {
-                Header: "Answer",
-                accessor: "answer",
-                className: "w-1/2"
-            },
-            {
-                Header: "Date",
-                accessor: "date",
-                Cell: ({ cell: { value } }) => moment(value).format("DD-MMM-YYYY hh:mm a"),
-                sortType: 'datetime'
+                Header: "Tag",
+                accessor: "tag",
+                Cell: ({ cell: { value } }) => <Badge values={value} />
             },
             {
                 Header: "Actions",
                 disableSortBy: true,
                 id: 'actions',
                 accessor: 'actions',
-                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'faq'} component={'FAQ'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
+                Cell: ({ row }) => (<Actions rowProps={row.original} collection={'tags'} component={'TAG'} onCloseToast={showToast} onEditRow={handleToggleModal} />)
             },
         ],
         [handleToggleModal]
@@ -135,9 +122,9 @@ const Faqs = () => {
         <div className="flex flex-col">
             <Table
                 columns={columns}
-                data={faqs}
-                tableName={'faq'}
-                filterName={'question'}
+                data={tags}
+                tableName={'tags'}
+                filterName={'tag'}
                 createData={createData}
                 skipPageReset={skipPageReset}
             />
@@ -149,7 +136,7 @@ const Faqs = () => {
             />
             <NewModal
                 show={showModal}
-                tableName='faq'
+                tableName='tags'
                 rowProps={rowProps}
                 onClose={handleToggleModal}
                 onCreate={handleEditModal}
@@ -158,4 +145,4 @@ const Faqs = () => {
     )
 }
 
-export default Faqs
+export default Tags

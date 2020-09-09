@@ -12,7 +12,8 @@ export default ({ data }) => {
     <Layout>
       <SEO
         title="FAQ"
-        keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+        keywords={[`frequently asked questions`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+        description={props.subtitle}
       />
       <section className="bg-gray-100">
 

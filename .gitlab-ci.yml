@@ -1,4 +1,4 @@
-image: node:latest
+image: node:12.18.2
 
 stages:
   - build
@@ -11,7 +11,7 @@ cache:
 buildGatsby:
   stage: build
   script:
-    - npm install
+    - yarn install
     - ./node_modules/.bin/gatsby build --prefix-paths
   # specify the artifacts to save
   artifacts:
@@ -19,11 +19,13 @@ buildGatsby:
       - public
   only:
     - release
+    - schedules
 
 deployGatsby:
   stage: deploy
   only:
   - release
+  - schedules
   dependencies:
   - buildGatsby
   script:
@@ -32,17 +34,11 @@ deployGatsby:
   - "which rsync || ( apt-get update -y && apt-get install rsync -y )"
   - eval $(ssh-agent -s)
   # Inject the remote's private key
-  - echo -n "$SSH_PRIVATE_KEY" | tr -d '\r'
-  - echo "========================="
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
-  # echo "$SSH_KNOWN_HOSTS"
   # Append keyscan output into known hosts
   - ssh-keyscan $SERVER_IP >> ~/.ssh/known_hosts
   - chmod 644 ~/.ssh/known_hosts
-  # rsync -avuz --exclude=".*" $CI_PROJECT_DIR/dist/ $SERVER_USER@$SERVER_IP:/var/www/watchcrypto.today
   - rsync -avzh --delete public/* $SERVER_USER@$SERVER_IP:/var/www/ecomdiscover.com/html
-  # Non interactive ssh gracefully reloads server
-  - ssh $SERVER_USER@$SERVER_IP '. /etc/profile; pm2 reload all'
-  # scp -i ~/.ssh/deploy_dev -r public/* deploy@159.203.38.209:/var/www/glennsheppard.dev/html
+  
