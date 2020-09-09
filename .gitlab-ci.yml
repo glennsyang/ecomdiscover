@@ -20,7 +20,7 @@ buildGatsby:
   only:
     - release
     - schedules
-    
+
 deployGatsby:
   stage: deploy
   only:
