@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { FaTimes } from 'react-icons/fa'
 
-const Toast = props => {
-    const { toastProps } = props
-
+const Toast = ({ toastProps }) => {
+    //console.log({ toastProps })
     const [toast, setToast] = useState(toastProps)
-    const position = "bottom-right"
     const autoDelete = true
     const autoDeleteTime = 3000
 
+    const position = toast?.position ? toast.position : "bottom-right"
     let classColor = ''
     if (toast) {
         if (toast.color === 'red') { classColor = "bg-red-100 border-red-400 text-red-700" }

@@ -7,7 +7,7 @@ import * as Constants from '../../constants'
 import AuthenticationView from "./authenticationview"
 import ImageFluid from "../image-fluid"
 import Loader from "../loader"
-import Toast from "../../components/toast"
+import Toast from "../toast"
 import { getUser, setUser } from "../../utils/auth"
 
 function getFileNameFromUrl(urlString) {
@@ -260,23 +260,24 @@ const Profile = () => {
                                     : <ImageFluid props={imgBlankProfile} />
                                 }
                             </div>
-                            <div className="flex ml-4 lg:pt-4 lg:ml-0">
+                            <div className="flex ml-6 md:pt-4 lg:ml-0">
                                 <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                     <FaCamera size={18} className="mr-2" />
                                     <span>Upload</span>
-                                    <input type="file" id="fileInput" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
+                                    <input type="file" id="fileInput" aria-label="File input" className="hidden" ref={fileInput} onChange={handleUploadPhoto} onClick={handleSelectFile} />
                                 </label>
                             </div>
                         </div>
                         {/* User Details */}
                         <div className="lg:w-full flex flex-col mt-4 md:mt-0 lg:mt-0">
                             <div className="flex flex-col lg:flex-row lg:flex-grow pb-4">
-                                <div className="lg:w-3/5">
+                                <div className="lg:w-3/5 mt-2 lg:mt-0">
                                     {isEditing ?
                                         <input
                                             type="text"
                                             placeholder="Name"
                                             name="name"
+                                            aria-label="Name"
                                             value={userInfo.name}
                                             onChange={handleChange}
                                             //defaultValue={displayName}
@@ -301,7 +302,7 @@ const Profile = () => {
                                     </div>
                                 </div>
                                 <div className="lg:w-2/5">
-                                    <div className="float-right">
+                                    <div className="mt-4 lg:mt-0 lg:float-right">
                                         {isEditing ?
                                             <button name="save" onClick={handleSaveProfile} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                                                 Save
@@ -321,7 +322,7 @@ const Profile = () => {
                                 <div className="lg:w-3/5">
                                     <h3 className="text-base font-bold text-black pb-2">
                                         Sign-in Method
-                                </h3>
+                                    </h3>
                                     <p className="text-gray-500 text-sm lg:text-xs">
                                         {signInMethods.map(provider => {
                                             return provider
@@ -329,10 +330,10 @@ const Profile = () => {
                                     </p>
                                 </div>
                                 <div className="lg:w-2/5">
-                                    <div className="float-right">
+                                    <div className="mt-4 lg:mt-0 lg:float-right">
                                         <button name="change" onClick={handleChangeSignIn} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                                             Change
-                                </button>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -349,7 +350,7 @@ const Profile = () => {
                                 </p>
                                 </div>
                                 <div className="lg:w-2/5">
-                                    <div className="float-right">
+                                    <div className="mt-4 lg:mt-0 lg:float-right">
                                         <button name="delete" onClick={handleDeleteAccount} className="bg-transparent hover:bg-red-500 text-red-600 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center">
                                             Deactivate
                                         </button>
@@ -365,7 +366,7 @@ const Profile = () => {
 
                                     </div>
                                     <div className="lg:w-2/5">
-                                        <div className="float-right">
+                                        <div className="lg:mt-0 lg:float-right">
                                             <Link to={`/dashboard/publishreviews`} className="bg-transparent hover:bg-green-500 text-green-600 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded inline-flex items-center">
                                                 Dashboard
                                         </Link>

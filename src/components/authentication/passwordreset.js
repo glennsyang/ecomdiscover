@@ -61,6 +61,7 @@ const PasswordReset = () => {
                             type="text"
                             placeholder="E-mail address"
                             name="email"
+                            aria-label="E-mail address"
                             ref={register({
                                 required: Constants.FIELD_REQUIRED,
                                 pattern: { value: /^\S+@\S+$/i, message: Constants.VALID_EMAIL }

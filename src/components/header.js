@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
-import { useSiteMetadata } from "../hooks/use-site-metadata"
+import { useSiteMetadata } from "../hooks/useSiteMetadata"
 import SVGImage from "../components/svgimage"
 import Status from "./authentication/status"
 
@@ -28,7 +28,7 @@ function Header() {
             </button>
           </div>
         </div>
-        <Status isOpen={isOpen} />
+        <Status isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
     </header>
   )

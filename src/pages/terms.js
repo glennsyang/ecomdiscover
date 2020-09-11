@@ -2,7 +2,7 @@ import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
-import { useSiteMetadata } from "../hooks/use-site-metadata"
+import { useSiteMetadata } from "../hooks/useSiteMetadata"
 
 export default () => {
     const { title, website } = useSiteMetadata()
@@ -15,7 +15,8 @@ export default () => {
         <Layout>
             <SEO
                 title="Terms Of Service"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`terms of service`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={props.subtitle}
             />
             <section className="bg-gray-100">
 

@@ -67,6 +67,7 @@ export const customStyles = {
     option: (provided, state) => ({
         ...provided,
         borderBottom: '1px gray',
+        borderRadius: '9999px',
         backgroundColor: state.isSelected ? 'white' : 'white',
         color: '#2d3748',
         ':hover': {
@@ -78,10 +79,57 @@ export const customStyles = {
     }),
     singleValue: ((provided, state) => {
         const opacity = state.isDisabled ? 0.5 : 1;
+        const transition = 'opacity 300m  s';
+
+        return { ...provided, opacity, transition };
+    }),
+    placeholder: styles => ({ ...styles, color: '#cbd5e0' }),
+}
+export const customTagStyles = {
+    control: styles => ({
+        ...styles,
+        backgroundColor: 'white',
+        boxShadow: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+        padding: '1px',
+        borderColor: '#cbd5e0'
+    }),
+    option: (provided, state) => ({
+        ...provided,
+        borderBottom: '1px gray',
+        backgroundColor: state.isSelected ? 'white' : 'white',
+        color: '#4a5568 rgba(74, 85, 104, 0.5)',
+        ':hover': {
+            backgroundColor: '#f7fafc',
+            color: '#4299e1',
+        },
+        borderRadius: '9999px',
+        padding: '0.20rem 0.3rem 0.20rem 0.3rem',
+        fontSize: '0.8rem',
+        fontWeight: '600',
+    }),
+    singleValue: ((provided, state) => {
+        const opacity = state.isDisabled ? 0.5 : 1;
         const transition = 'opacity 300ms';
 
         return { ...provided, opacity, transition };
     }),
+    multiValue: styles => {
+        return {
+            ...styles,
+            color: '#4a5568 rgba(74, 85, 104, 1)',
+            backgroundColor: '#edf2f7',
+            borderRadius: '9999px',
+            padding: '0.15rem 0.4rem 0.15rem 0.4rem',
+            fontSize: '0.9rem',
+            fontWeight: '600',
+        };
+    },
+    multiValueRemove: styles => {
+        return {
+            ...styles,
+            borderRadius: '9999px',
+        }
+    },
     placeholder: styles => ({ ...styles, color: '#cbd5e0' }),
 }
 

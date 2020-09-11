@@ -1,9 +1,12 @@
-require('dotenv').config({ path: '.env' })
+console.log(`NODE_ENV: '${process.env.NODE_ENV}'`);
+
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`, })
 
 module.exports = {
   siteMetadata: {
-    title: `Ecom Discover`,
-    description: `A collection of e-commerce resources.  Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources.`,
+    title: `EcomDiscover`,
+    description: `Find Top-Rated Tools & Services For Your Ecommerce Business.`,
+    subtitle: `Search our curated collection of e-commerce resources`,
     siteUrl: `https://www.ecomdiscover.com`,
     website: `ecomdiscover.com`,
     email: `info@ecomdiscover.com`,
@@ -33,13 +36,21 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `e-seller-tools`,
-        short_name: `e-seller-tools`,
+        name: `EcomDiscover`,
+        short_name: `ecomdiscover`,
         start_url: `/`,
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
         icon: `src/images/favicon.png`, // This path is relative to the root of the site.
+      },
+    },
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        // Exclude specific pages or groups of pages using glob parameters
+        // See: https://github.com/isaacs/minimatch
+        exclude: [`/dashboard/*`, `/app/*`],
       },
     },
     `gatsby-plugin-postcss`,
@@ -59,7 +70,20 @@ module.exports = {
     {
       resolve: 'gatsby-source-firestore',
       options: {
-        credential: require("./firebase.json"),
+        //credential: require("./firebase.json"),
+        credential: {
+          type: process.env.GATSBY_FIREBASE_TYPE,
+          project_id: process.env.GATSBY_FIREBASE_PROJECT_ID,
+          private_key_id: process.env.GATSBY_FIREBASE_PRIVATE_KEY_ID,
+          //private_key: process.env.GATSBY_FIREBASE_PRIVATE_KEY,
+          private_key: process.env.GATSBY_FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+          client_email: process.env.GATSBY_FIREBASE_CLIENT_EMAIL,
+          client_id: process.env.GATSBY_FIREBASE_CLIENT_ID,
+          auth_uri: process.env.GATSBY_FIREBASE_AUTH_URI,
+          token_uri: process.env.GATSBY_FIREBASE_TOKEN_URI,
+          auth_provider_x509_cert_url: process.env.GATSBY_FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+          client_x509_cert_url: process.env.GATSBY_FIREBASE_CLIENT_X509_CERT_URL,
+        },
         types: [
           {
             type: 'Categories',
@@ -79,8 +103,11 @@ module.exports = {
               logoURL: doc.logoURL,
               website: doc.website,
               blurb: doc.blurb,
+              content: doc.content,
               created: doc.created,
+              updated: doc.updated,
               marketplaces___NODE: doc.marketplaces.map(marketplace => marketplace.id),
+              user___NODE: doc.uid.id,
               categories___NODE: doc.categories.map(category => category.id),
               reviews___NODE: doc.reviews.map(review => review.id),
             }),
@@ -92,9 +119,11 @@ module.exports = {
               id: doc.id,
               content: doc.content,
               created: doc.created,
+              updated: doc.updated,
               rating: doc.rating,
               tags: doc.tags,
               title: doc.title,
+              published: doc.published,
               helpful___NODE: doc.helpful.map(user => user.id),
               user___NODE: doc.uid.id,
               company___NODE: doc.company.id,
@@ -113,6 +142,7 @@ module.exports = {
               created: doc.created,
               updated: doc.updated,
               helpful___NODE: doc.helpful.map(review => review.id),
+              reviews___NODE: doc.reviews.map(review => review.id),
             }),
           },
           {
@@ -134,6 +164,14 @@ module.exports = {
               answer: doc.answer,
               date: doc.date
             }),
+          },
+          {
+            type: 'Tags',
+            collection: 'tags',
+            map: doc => ({
+              id: doc.id,
+              tag: doc.tag,
+            }),
           }
         ],
       },
@@ -145,7 +183,6 @@ module.exports = {
           auth: true,
           firestore: true,
           storage: true,
-          analytics: true,
         },
         credentials: {
           apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -163,7 +200,7 @@ module.exports = {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
         // The property ID; the tracking code won't be generated without it
-        trackingId: "G-HFDEZ8W70R",
+        trackingId: "UA-163163814-1",
         // Defines where to place the tracking script - `true` in the head and `false` in the body
         head: true,
         // Setting this parameter is optional
@@ -193,7 +230,7 @@ module.exports = {
       options: {
         // Condition for selecting an existing GrapghQL node (optional)
         // If not set, the transformer operates on file nodes.
-        filter: node => node.internal.type === `Reviews`,
+        filter: node => node.internal.type === `Reviews` || node.internal.type === `Companies`,
         // Only needed when using filter (optional, default: node.html)
         // Source location of the html to be transformed
         source: node => node.content,
@@ -205,9 +242,9 @@ module.exports = {
         // Space mode (optional, default: `html`)
         space: `html`,
         // EmitParseErrors mode (optional, default: false)
-        emitParseErrors: false,
+        emitParseErrors: true,
         // Verbose mode (optional, default: false)
-        verbose: false,
+        verbose: true,
         // Plugins configs (optional but most likely you need one)
         //plugins: [],
       },

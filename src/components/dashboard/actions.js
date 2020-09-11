@@ -7,6 +7,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'
 const Actions = (props) => {
     const { rowProps, collection, component } = props
     const onCloseToast = (toastProps) => { props.onCloseToast && props.onCloseToast(toastProps) }
+    const onEditRow = (rowProps) => { props.onEditRow && props.onEditRow(rowProps) }
 
     const handleDelete = (row) => {
         confirmAlert({
@@ -46,16 +47,6 @@ const Actions = (props) => {
             }
         })
     }
-    const handleEdit = (row) => {
-        //console.log("Edit Row:", row)
-        const toastProps = {
-            id: Math.floor((Math.random() * 101) + 1),
-            title: 'Warning',
-            description: `Please click the cell for this column to edit.`,
-            color: 'yellow',
-        }
-        onCloseToast(toastProps)
-    }
     const handleTogglePublish = (row) => {
         console.log("TogglePublish Review:", row)
         const newValue = row.published === 'Yes' ? false : true
@@ -65,13 +56,33 @@ const Actions = (props) => {
                 updated: firebase.firestore.FieldValue.serverTimestamp(),
             })
             .then(() => {
-                const toastProps = {
-                    id: Math.floor((Math.random() * 101) + 1),
-                    title: 'Success!',
-                    description: `${component} will be ${newValue ? 'published' : 'removed'}.`,
-                    color: 'green',
-                }
-                onCloseToast(toastProps)
+                console.log("Row:", row.companyId, row.id)
+                // Add/Remove from 'reviews' array in company doc
+                firebase.firestore().collection('companies').doc(row.companyId)
+                    .update({
+                        reviews: newValue
+                            ? firebase.firestore.FieldValue.arrayUnion(firebase.firestore().collection('reviews').doc(row.id))
+                            : firebase.firestore.FieldValue.arrayRemove(firebase.firestore().collection('reviews').doc(row.id)),
+                        updated: firebase.firestore.FieldValue.serverTimestamp(),
+                    })
+                    .then(() => {
+                        const toastProps = {
+                            id: Math.floor((Math.random() * 101) + 1),
+                            title: 'Success!',
+                            description: `${component} will be ${newValue ? 'published' : 'removed'}.`,
+                            color: 'green',
+                        }
+                        onCloseToast(toastProps)
+                    })
+                    .catch(error => {
+                        const toastProps = {
+                            id: Math.floor((Math.random() * 101) + 1),
+                            title: 'Error',
+                            description: `There was an error in updating the 'company' ${row.company}. Reason: ${error.code}.`,
+                            color: 'red',
+                        }
+                        onCloseToast(toastProps)
+                    })
             })
             .catch(error => {
                 const toastProps = {
@@ -139,8 +150,10 @@ const Actions = (props) => {
                     {rowProps.active ? <FaBan size={16} /> : <FaPlay size={16} />}
                 </button>
                 : ''}
-        <button type="button" onClick={() => handleEdit(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>
-        <button type="button" onClick={() => handleDelete(rowProps)} className="text-red-500"><FaTimesCircle size={16} /></button>
+        {component === 'Category' || component === 'Marketplace' ?
+            ''
+            : <button type="button" aria-label="Edit" onClick={() => onEditRow(rowProps)} className="text-green-500 mr-2"><FaPen size={16} /></button>}
+        <button type="button" aria-label="Delete" onClick={() => handleDelete(rowProps)} className="text-red-500"><FaTimesCircle size={16} /></button>
     </>)
 }
 
