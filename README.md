@@ -27,8 +27,8 @@ Search our curated collection of e-commerce resources and review your favorite t
 [React-Select](https://react-select.com/home)
 
 ## Status
-[![pipeline status](https://gitlab.com/gsheppard.yang/eseller-tools-app/badges/release/pipeline.svg)](https://gitlab.com/gsheppard.yang/eseller-tools-app/-/commits/release)
-[![coverage report](https://gitlab.com/gsheppard.yang/eseller-tools-app/badges/release/coverage.svg)](https://gitlab.com/gsheppard.yang/eseller-tools-app/-/commits/release)
+
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/glennsyang/ecomdiscover/Build%20&%20Deploy%20Site/release) ![David](https://img.shields.io/david/dev/glennsyang/ecomdiscover) [![HitCount](http://hits.dwyl.com/glennsyang/ecomdiscover.svg)](http://hits.dwyl.com/glennsyang/ecomdiscover)
 
 ## Author
 
