@@ -1,17 +1,17 @@
 import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
 
 export default () => {
-
     const props = { title: "Support", subtitle: "" }
 
     return (
         <Layout>
             <SEO
                 title="Support"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`support`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={props.subtitle}
             />
             <section className="bg-gray-100">
 

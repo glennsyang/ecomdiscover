@@ -1,14 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import { StaticQuery, graphql } from "gatsby";
 
 function SEO({ description, lang, meta, keywords, title }) {
+  //console.log({ description }, { keywords })
   return (
     <StaticQuery
       query={detailsQuery}
       render={data => {
-        const metaDescription = description || data.site.siteMetadata.description;
+        const metaDescription = description || `${data.site.siteMetadata.description} ${data.site.siteMetadata.subtitle}`;
 
         return (
           <Helmet
@@ -90,6 +91,7 @@ const detailsQuery = graphql`
       siteMetadata {
         title
         description
+        subtitle
         author
       }
     }

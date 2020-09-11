@@ -23,7 +23,7 @@ const ImageFluid = ({ props }) => (
         edge => edge.node.fluid.originalName === props.imgName
       )
       if (!image) {
-        console.log("return null");
+        console.log("ImageFluid return null");
         return null
       }
       return <Img fluid={image.node.fluid} alt={props.imgAlt} className={props.imgClass} />

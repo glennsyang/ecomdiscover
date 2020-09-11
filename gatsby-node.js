@@ -1,10 +1,10 @@
 const path = require(`path`)
-const { createFilePath } = require(`gatsby-source-filesystem`)
+//const { createFilePath } = require(`gatsby-source-filesystem`)
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
+exports.onCreateNode = ({ node, actions }) => {
   const { createNodeField } = actions
-  if (node.internal.type === `Reviews`) {
-    const slug = `reviews/${node.title.toLowerCase().split(' ').join('_')}`
+  if (node.internal.type === `Companies`) {
+    const slug = `reviews/${node.name.toLowerCase().split(' ').join('-')}`
     createNodeField({
       node,
       name: `slug`,
@@ -12,7 +12,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     })
   }
   if (node.internal.type === `MarkdownRemark`) {
-    const slug = createFilePath({ node, getNode, basePath: `posts` })
+    const slug = `blog/${node.frontmatter.title.toLowerCase().split(' ').join('-')}`
     createNodeField({
       node,
       name: `slug`,
@@ -25,7 +25,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const result = await graphql(`
     query {
-      allReviews {
+      allCompanies {
         edges {
           node {
             fields {
@@ -45,10 +45,10 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
-  result.data.allReviews.edges.forEach(({ node }) => {
+  result.data.allCompanies.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
-      component: path.resolve(`./src/templates/review.js`),
+      component: path.resolve(`./src/templates/company.js`),
       context: {
         // Data passed to context is available
         // in page queries as GraphQL variables.
@@ -59,7 +59,7 @@ exports.createPages = async ({ graphql, actions }) => {
   result.data.allMarkdownRemark.edges.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
-      component: path.resolve(`./src/templates/blog-post.js`),
+      component: path.resolve(`./src/templates/blogpost.js`),
       context: {
         // Data passed to context is available
         // in page queries as GraphQL variables.

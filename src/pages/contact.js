@@ -1,18 +1,19 @@
 import React from "react"
-import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
+import { useSiteMetadata } from "../hooks/useSiteMetadata"
 
-export default ({ data }) => {
-
-    const props = { title: "Contact Us", subtitle: "We welcome any feedback. Feel free to drop us a line" };
+export default () => {
+    const props = { title: "Contact Us", subtitle: "We welcome any feedback. Feel free to drop us a line" }
+    const { title, email } = useSiteMetadata()
 
     return (
         <Layout>
             <SEO
                 title="Contact Us"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`contact us`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={props.subtitle}
             />
             <section className="bg-gray-100">
 
@@ -21,11 +22,8 @@ export default ({ data }) => {
                 <div className="container mx-auto px-8 pb-10">
 
                     <h3 className="text-black text-lg sm:text-xl font-semibold mb-2 mt-10">
-                        {data.site.siteMetadata.title} Offices
+                        {title}
                     </h3>
-                    <p className="text-black text-md mt-2">
-                        {data.site.siteMetadata.address}
-                    </p>
 
                     <h3 className="text-black text-lg sm:text-xl font-semibold mb-2 mt-8">
                         For general inquiries, please contact us at:
@@ -34,16 +32,8 @@ export default ({ data }) => {
                         Email
                     </h4>
                     <p className="text-black text-md mt-2">
-                        <a href="mailto:info@esellertools.com" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">
-                            {data.site.siteMetadata.email}
-                        </a>
-                    </p>
-                    <h4 className="text-black text-md underline mt-4">
-                        Phone
-                    </h4>
-                    <p className="text-black text-md mt-2">
-                        <a href="tel:604-555-1234" className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">
-                            {data.site.siteMetadata.phone}
+                        <a href={`mailto:${email}`} className="text-blue-500 hover:underline" rel="noopener noreferrer" target="_blank">
+                            {email}
                         </a>
                     </p>
 
@@ -52,16 +42,3 @@ export default ({ data }) => {
         </Layout>
     )
 }
-
-export const query = graphql`
-query {
-    site {
-    siteMetadata {
-      title
-      email
-      phone
-      address
-    }
-  }
-}
-`

@@ -1,20 +1,21 @@
 import React from "react"
-import { graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import PageHeader from "../components/page-header"
+import PageHeader from "../components/pageheader"
+import { useSiteMetadata } from "../hooks/useSiteMetadata"
 
-export default ({ data }) => {
-
+export default () => {
+    const { website } = useSiteMetadata()
     const props = {
-        title: "Privacy Policy", subtitle: `This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from ${data.site.siteMetadata.website} (the “Site”).`
-    };
+        title: "Privacy Policy", subtitle: `This Privacy Policy describes how your personal information is collected, used, and shared when you visit or make a purchase from ${website} (the “Site”).`
+    }
 
     return (
         <Layout>
             <SEO
                 title="Privacy Policy"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`privacy policy`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={props.subtitle}
             />
             <section className="bg-gray-100">
 
@@ -127,16 +128,3 @@ export default ({ data }) => {
         </Layout>
     )
 }
-
-export const query = graphql`
-query {
-    site {
-    siteMetadata {
-      author
-      description
-      title
-      website
-    }
-  }
-}
-`
