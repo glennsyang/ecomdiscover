@@ -9,6 +9,7 @@ export default function NewCategory({ register, errors }) {
                 type="text"
                 name="name"
                 placeholder="Name of the category..."
+                aria-label="New Category"
                 ref={register({ required: { value: true, message: Constants.FIELD_REQUIRED } })}
                 className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
             />

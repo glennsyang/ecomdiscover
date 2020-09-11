@@ -2,7 +2,7 @@ import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
-import { useSiteMetadata } from "../hooks/use-site-metadata"
+import { useSiteMetadata } from "../hooks/useSiteMetadata"
 
 export default () => {
     const props = { title: "Contact Us", subtitle: "We welcome any feedback. Feel free to drop us a line" }
@@ -12,7 +12,8 @@ export default () => {
         <Layout>
             <SEO
                 title="Contact Us"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                keywords={[`contact us`, `aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
+                description={props.subtitle}
             />
             <section className="bg-gray-100">
 

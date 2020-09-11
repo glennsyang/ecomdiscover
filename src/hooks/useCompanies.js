@@ -11,7 +11,9 @@ export const useCompanies = () => {
                 logoURL
                 website
                 blurb
+                content
                 created
+                updated
                 marketplaces {
                     id
                     flag
@@ -30,6 +32,8 @@ export const useCompanies = () => {
                     title
                     content
                     created
+                    updated
+                    published
                     rating
                     tags
                     helpful {

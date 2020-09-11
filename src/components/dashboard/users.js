@@ -18,12 +18,15 @@ const Users = () => {
     const updateData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
-        const uid = users[rowIndex].id
-        const old = users[rowIndex].displayName
-        if (value !== old) {
-            // Update displayName
-            firebase.firestore().collection('users').doc(uid)
-                .update({ displayName: value })
+        const id = users[rowIndex].id
+        const oldValue = users[rowIndex][columnId]
+        if (value !== oldValue) {
+            // Update db
+            let dataObj = {}
+            dataObj[columnId] = value
+            dataObj['updated'] = firebase.firestore.FieldValue.serverTimestamp()
+            firebase.firestore().collection('users').doc(id)
+                .update(dataObj)
                 .then(() => {
                     const toastProps = {
                         id: Math.floor((Math.random() * 101) + 1),
@@ -46,21 +49,25 @@ const Users = () => {
     }
 
     useEffect(() => {
-        const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
-            let allUsers = []
-            querySnapshot.forEach(doc => {
-                const user = doc.data()
-                user.id = doc.id
-                user.created = user.created.toDate()
-                user.updated = user.updated ? user.updated.toDate() : new Date()
-                user.helpful = user.helpful.length
-                allUsers.push(user)
+        async function fetchData() {
+            const unsubscribe = firebase.firestore().collection('users').onSnapshot(querySnapshot => {
+                let docs = querySnapshot.docs.map(doc => (
+                    {
+                        ...doc.data(),
+                        id: doc.id,
+                        created: doc.data().created.toDate(),
+                        updated: doc.data().updated ? doc.data().updated.toDate() : new Date(),
+                        helpful: doc.data().helpful.length,
+                        numReviews: doc.data().reviews.length
+                    }
+                ))
+                setUsers(docs)
+                setIsLoading(false)
+                setSkipPageReset(false)
             })
-            setUsers(allUsers)
-            setIsLoading(false)
-        })
-        setSkipPageReset(false)
-        return () => unsubscribe()
+            return () => unsubscribe()
+        }
+        fetchData()
     }, [])
 
     const columns = useMemo(
@@ -82,13 +89,18 @@ const Users = () => {
                 accessor: "email"
             },
             {
-                Header: "Liked",
+                Header: "Reviews",
+                accessor: "numReviews",
+            },
+            {
+                Header: "Helpful",
                 accessor: "helpful",
                 sortType: 'basic'
             },
             {
                 Header: "Role",
-                accessor: "role"
+                accessor: "role",
+                Cell: EditableCell,
             },
             {
                 Header: "Active",
@@ -127,19 +139,18 @@ const Users = () => {
         []
     )
 
+    if (isLoading) { return <Loader /> }
+
     return (
         <div className="flex flex-col">
-            {isLoading
-                ? <Loader />
-                : <Table
-                    columns={columns}
-                    data={users}
-                    tableName={'users'}
-                    filterName={'displayName'}
-                    updateData={updateData}
-                    skipPageReset={skipPageReset}
-                />
-            }
+            <Table
+                columns={columns}
+                data={users}
+                tableName={'users'}
+                filterName={'displayName'}
+                updateData={updateData}
+                skipPageReset={skipPageReset}
+            />
             <Toast
                 toastProps={toast}
                 position="bottom-right"

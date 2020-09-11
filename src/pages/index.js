@@ -4,30 +4,24 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
 import CompanyCard from "../components/cards/companycard"
-import { useCompanies } from "../hooks/use-companies"
 import { isLoggedIn, isBlocked } from "../utils/auth"
 
 function IndexPage({ data }) {
-  const { allCompanies } = useCompanies()
-  const [companies, setCompanies] = useState(allCompanies.nodes)
   const [isUserBlocked, setIsUserBlocked] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
-      setCompanies(companies.sort((a, b) => {
-        var dateA = new Date(a.created), dateB = new Date(b.created)
-        return dateB - dateA
-      }))
       setIsUserBlocked(await isBlocked())
     }
+
     fetchData()
-  }, [companies])
+  }, [])
 
   return (
     <Layout>
       <SEO
         title="Home"
-        keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+        keywords={[`aura repricer`, `ecommerce`, `FBA`, `amazon repricer`, `profit monitoring`, `listing optimization`]}
       />
 
       <div className="gradient">
@@ -36,29 +30,29 @@ function IndexPage({ data }) {
 
           <div className="flex flex-col w-full max-w-3xl xl:mwx-w-5xl m-auto px-8">
 
-            <h1 className="font-serif text-center text-3xl sm:text-4xl font-semibold text-white">
+            <h1 className="font-serif text-center text-2xl sm:text-4xl font-semibold text-white">
               Find Top-Rated Tools & Services For Your E-commerce Business
-          </h1>
-            <h4 className="text-center sm:text-xl font-light text-white mb-6">
+            </h1>
+            <h2 className="text-center sm:text-xl font-light text-white mb-6">
               Search our curated collection of e-commerce resources
-          </h4>
+            </h2>
 
             {/* Search Box */}
             <SearchBox searchIndex={data.siteSearchIndex.index} />
 
-            <div className="text-white text-center font-semibold pt-6 inline-block">
+            <div className="text-white text-center font-semibold pt-2 sm:pt-6 inline-block">
               {data.allCategories.edges.map(({ node }) => (
                 <Link
                   key={node.id}
                   to={`/companies`}
                   state={{ category: node.name }}
-                  className="mr-4 pb-4 inline-block hover:underline">
+                  className="mr-4 pb-1 sm:pb-4 text-sm sm:text-base inline-block hover:underline">
                   {node.name}
                 </Link>
               ))}
             </div>
-            <div className="text-white text-center inline-block">
-              <Link to={`/categories`} className="block mt-2 font-semibold hover:underline">
+            <div className="text-white text-center text-sm sm:text-base inline-block">
+              <Link to={`/categories`} className="block mt-1 sm:mt-2 font-semibold hover:underline">
                 SEE ALL CATEGORIES
               </Link>
             </div>
@@ -67,16 +61,16 @@ function IndexPage({ data }) {
         </section>
 
         {/* Title cards */}
-        <section className="bg-gray-100 py-8" id="title-cards">
+        <section className="bg-gray-100 sm:pt-8" id="title-cards">
           <div className="container mx-auto flex flex-wrap pt-2 pb-10">
-            <h3 className="antialiased w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+            <h3 className="antialiased w-full my-2 text-xl sm:text-3xl font-bold leading-tight text-center text-gray-800">
               E-Commerce Tools & Services
             </h3>
             <div className="w-full mb-4">
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
             </div>
             <div className="w-full justify-center flex flex-wrap">
-              {companies.slice(0, 3).map(node => (
+              {data.allCompanies.edges.map(({ node }) => (
                 <CompanyCard key={node.id} company={node} />
               ))}
             </div>
@@ -85,6 +79,12 @@ function IndexPage({ data }) {
                 VIEW ALL
             </Link>
             </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-100 pb-12" id="video-ad">
+          <div className="flex justify-center mx-4">
+            <iframe title="EcomDiscover Ad" width="560" height="315" src="https://www.youtube.com/embed/tRpyBKx2_QU" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           </div>
         </section>
 
@@ -109,12 +109,12 @@ function IndexPage({ data }) {
         {/* CTA block */}
         <section className="container mx-auto text-center py-6 pb-16" id="call-to-action">
 
-          <h1 className="w-full my-2 text-5xl font-bold leading-tight text-center text-white">Write a Review</h1>
+          <h3 className="w-full my-2 text-3xl sm:text-5xl font-bold leading-tight text-center text-white">Write a Review</h3>
           <div className="w-full mb-4">
             <div className="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
 
-          <h3 className="mt-4 mb-12 text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h3>
+          <h2 className="mt-4 mb-12 text-xl sm:text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h2>
 
           <Link
             to={isLoggedIn() && isUserBlocked ? '/app/writereview' : '/app/login'}
@@ -132,19 +132,73 @@ function IndexPage({ data }) {
   )
 }
 
-export const query = graphql`
-  query {
-    allCategories(limit: 5, sort: {fields: name, order: ASC}, skip: 15) {
+export const pageQuery = graphql`
+  query SearchIndexQuery {
+    allCategories(limit: 5) {
       edges {
         node {
           id
-          name
+          name 
         }
       }
+    }
+    siteSearchIndex {
+      index
+    }
+    allCompanies(limit: 3, sort: { fields: updated, order: DESC }) {
+      edges {
+            node {
+                id
+                name
+                logo
+                logoURL
+                website
+                blurb
+                content
+                created
+                updated
+                marketplaces {
+                    id
+                    flag
+                    code
+                    name
+                }
+                fields {
+                    slug
+                }
+                categories {
+                    id
+                    name
+                }
+                reviews {
+                    id
+                    title
+                    content
+                    created
+                    updated
+                    published
+                    rating
+                    tags
+                    helpful {
+                        username
+                        email
+                        photoURL
+                        created
+                        updated
+                    }
+                    user {
+                        username
+                        email
+                        photoURL
+                        role
+                        created
+                        updated
+                    }
+                }
+            }
+        }
+    }
   }
-  siteSearchIndex {
-    index
-  }
-}
 `
+
 export default IndexPage

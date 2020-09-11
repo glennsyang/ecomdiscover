@@ -5,7 +5,7 @@ import SEO from "../seo"
 import Header from "../dashboard/header"
 import Footer from "../dashboard/footer"
 import Sidebar from "./sidebar"
-import { useSiteMetadata } from "../../hooks/use-site-metadata"
+import { useSiteMetadata } from "../../hooks/useSiteMetadata"
 import { getUser } from "../../utils/auth"
 
 function Layout({ children }) {
@@ -28,7 +28,7 @@ function Layout({ children }) {
         <div className="mx-auto bg-white">
             <SEO
                 title="Dashboard"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                description="EcomDiscover Dashboard"
             />
             <div className="min-h-screen flex flex-row">
                 <Sidebar />

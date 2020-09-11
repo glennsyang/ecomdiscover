@@ -30,7 +30,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
     } = useTable({
         columns,
         data,
-        initialState: { pageIndex: 0, hiddenColumns: ['content'] },
+        initialState: { pageIndex: 0, hiddenColumns: ['content', 'content', 'html'] },
         createData,
         updateData,
         autoResetPage: !skipPageReset,
@@ -66,8 +66,9 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                     <div className="text-sm antialiased font-semibold">
                         Display
                     <select
-                            className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-100"
+                            className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-200"
                             value={pageSize}
+                            aria-label="Select Page Size"
                             onChange={e => {
                                 setPageSize(Number(e.target.value))
                             }}
@@ -83,8 +84,9 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                         <div className="text-sm antialiased font-semibold ml-3">
                             Published
                             <select
-                                className="outline-none appearance-none mx-2 py-2 px-4"
+                                className="outline-none appearance-none mx-2 py-2 px-4 bg-gray-200"
                                 value={filterPublish}
+                                aria-label="Select Published or not"
                                 onChange={e => {
                                     handleFilterPublish(e)
                                 }}
@@ -93,14 +95,14 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                                 {['Yes', 'No'].map((option, i) => (
                                     <option key={i} value={option}>
                                         {option}
-                                    </option>
+                                    </ option>
                                 ))}
                             </select>
                         </div>
                         : ''}
                 </div>
                 <div className="flex justify-between items-center">
-                    {tableName === 'faq' || tableName === 'marketplaces' || tableName === 'categories' || tableName === 'companies' ?
+                    {tableName === 'faq' || tableName === 'tags' || tableName === 'marketplaces' || tableName === 'categories' || tableName === 'companies' ?
                         <button
                             type="button"
                             title="Add New"
@@ -115,6 +117,7 @@ export default function Table({ columns, data, renderRowSubComponent, tableName,
                             value={filterInput}
                             onChange={handleFilterChange}
                             placeholder={"Search..."}
+                            aria-label="Search a column"
                             type='text'
                             className="px-4 outline-none text-sm antialiased font-light"
                         />

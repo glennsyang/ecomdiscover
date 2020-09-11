@@ -3,24 +3,99 @@ import { navigate } from "gatsby"
 import { useForm } from "react-hook-form"
 import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import firebase from "gatsby-plugin-firebase"
 //import ReactQuill from 'react-quill'
 // Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
+// Add state.companyId, to the useEffect dependencies
 const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 
 import SEO from "../components/seo"
 import Category from "../components/category"
+import Marketplace from "../components/marketplace"
 import ImageFixed from "../components/image-fixed"
 import StarRating from "../components/starrating"
 import Advert from "../components/advert"
 import Toast from "../components/toast"
 import CompanyModal from "../components/companyModal"
 import * as Constants from '../constants'
-import { useCompanies } from "../hooks/use-companies"
+import { useCompanies } from "../hooks/useCompanies"
+import { useTags } from "../hooks/useTags"
 import { getUser, isBlocked } from "../utils/auth"
 
-const components = { DropdownIndicator: null, }
+//const components = { DropdownIndicator: null, }
 const createCompany = (label) => ({ value: label, label: label })
+
+// save the Review in the database
+const updateFirestore = (uid, displayName, dataObject, company, companyId, companyName, setToast) => {
+    dataObject = Object.assign(dataObject, {
+        categories: company.categories.map((category) => (
+            firebase.firestore().doc(`categories/${category.id}`)
+        )),
+        company: firebase.firestore().doc(`companies/${companyId}`),
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        updated: firebase.firestore.FieldValue.serverTimestamp(),
+        helpful: [],
+        published: true,
+        rating: dataObject.rating ? Number(dataObject.rating) : 0,
+        tags: dataObject.tags ? dataObject.tags.map((tag) => (
+            tag.label
+        )) : [],
+        uid: firebase.firestore().collection('users').doc(uid),
+    })
+    firebase
+        .firestore().collection('reviews')
+        .add(dataObject)
+        .then(ref => {
+            console.log("Created new review:", ref.id)
+            // Update the 'companies' collection with this latest review
+            firebase.firestore().collection('companies').doc(companyId)
+                .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
+                .then(() => {
+                    console.log("Updated Company:", companyId)
+                    // Update the 'users' collection with this latest review
+                    firebase.firestore().collection('users').doc(uid)
+                        .update({ reviews: firebase.firestore.FieldValue.arrayUnion(ref) })
+                        .then(() => {
+                            console.log("Updated User:", uid)
+                            navigate(
+                                "/form-submitted",
+                                {
+                                    state: { username: displayName },
+                                    replace: true,
+                                }
+                            )
+                        })
+                        .catch(error => {
+                            const toastProperties = {
+                                id: Math.floor((Math.random() * 101) + 1),
+                                title: 'Error',
+                                description: `There was an error in updating User: ${uid} with your new review. Reason: ${error}.`,
+                                color: 'red',
+                            }
+                            setToast(toastProperties)
+                        })
+                })
+                .catch(error => {
+                    const toastProperties = {
+                        id: Math.floor((Math.random() * 101) + 1),
+                        title: 'Error',
+                        description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}.`,
+                        color: 'red',
+                    }
+                    setToast(toastProperties)
+                })
+        })
+        .catch(error => {
+            const toastProperties = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Error',
+                description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}.`,
+                color: 'red',
+            }
+            setToast(toastProperties)
+        })
+}
 
 export default function WriteReview({ location }) {
     const { uid, displayName } = getUser()
@@ -38,7 +113,7 @@ export default function WriteReview({ location }) {
             firebase.firestore().collection('companies')
                 .add({ name: formData.company.label, logo: '', website: '' })
                 .then(ref => {
-                    updateFirestore(formData, ref.id, formData.company.label)
+                    updateFirestore(uid, displayName, formData, company, ref.id, formData.company.label, setToast)
                 })
                 .catch(error => {
                     const toastProperties = {
@@ -50,64 +125,8 @@ export default function WriteReview({ location }) {
                     setToast(toastProperties)
                 })
         } else {
-            updateFirestore(formData, formData.company.value, formData.company.label)
+            updateFirestore(uid, displayName, formData, company, formData.company.value, formData.company.label, setToast)
         }
-    }
-    // save the Review in the database
-    const updateFirestore = (dataObject, companyId, companyName) => {
-        dataObject = Object.assign(dataObject, {
-            categories: company.categories.map((category) => (
-                firebase.firestore().doc(`categories/${category.id}`)
-            )),
-            company: firebase.firestore().doc(`companies/${companyId}`),
-            created: firebase.firestore.FieldValue.serverTimestamp(),
-            helpful: [],
-            published: true,
-            rating: dataObject.rating ? Number(dataObject.rating) : 0,
-            tags: dataObject.tags ? dataObject.tags.map((tag) => (
-                tag.label
-            )) : [],
-            uid: firebase.firestore().collection('users').doc(uid),
-        })
-        firebase
-            .firestore().collection('reviews')
-            .add(dataObject)
-            .then(ref => {
-                console.log("created new review:", ref.id)
-                // Update the 'companies' collection with this latest review
-                firebase.firestore().collection('companies').doc(companyId)
-                    .update({
-                        reviews: firebase.firestore.FieldValue.arrayUnion(ref),
-                    })
-                    .then(() => {
-                        console.log("Updated Company:", companyId)
-                        navigate(
-                            "/form-submitted",
-                            {
-                                state: { username: displayName },
-                                replace: true,
-                            }
-                        )
-                    })
-                    .catch(error => {
-                        const toastProperties = {
-                            id: Math.floor((Math.random() * 101) + 1),
-                            title: 'Error',
-                            description: `There was an error in updating Company: ${companyName} with your new review. Reason: ${error}.`,
-                            color: 'red',
-                        }
-                        setToast(toastProperties)
-                    })
-            })
-            .catch(error => {
-                const toastProperties = {
-                    id: Math.floor((Math.random() * 101) + 1),
-                    title: 'Error',
-                    description: `There was an error in creating your new review for Company: ${companyName}. Reason: ${error}.`,
-                    color: 'red',
-                }
-                setToast(toastProperties)
-            })
     }
     // React-quill Editor
     const [content, setContent] = useState('')
@@ -115,7 +134,6 @@ export default function WriteReview({ location }) {
         setValue('content', newValue)
         setContent(newValue)
     }
-
     // Modal
     const showCompanyModal = () => {
         //e.preventDefault()
@@ -130,13 +148,11 @@ export default function WriteReview({ location }) {
         setCompany(modalData)
         setCompanyList([...companyList, modalData])
     }
-
     // Companies
     const { allCompanies } = useCompanies()
     const defaultCompanies = allCompanies.nodes.map((node) => (
         { value: node.id, label: node.name, created: node.created }
     ))
-
     const [companyList, setCompanyList] = useState(allCompanies.nodes)
     const [companyOptions, setCompanyOptions] = useState(defaultCompanies)
     const [companyValue, setCompanyValue] = useState()
@@ -160,6 +176,11 @@ export default function WriteReview({ location }) {
     }
 
     // Tags
+    const { allTags } = useTags()
+    const defaultTags = allTags.nodes.map((node) => (
+        { value: node.id, label: node.tag }
+    ))
+    const [tagOptions, setTagOptions] = useState(defaultTags)
     const [tags, setTags] = useState([])
     const [inputValue, setInputValue] = useState('')
     const handleTagChange = (value) => {
@@ -183,6 +204,7 @@ export default function WriteReview({ location }) {
                 const newOption = createCompany(inputValue)
                 setValue('tags', [...tags, newOption])
                 setTags([...tags, newOption])
+                setTagOptions([...tagOptions, newOption])
                 event.preventDefault()
                 break
             default:
@@ -211,13 +233,13 @@ export default function WriteReview({ location }) {
             titleRef.current.focus()
         }
 
-    }, [register, state.companyId, companyList, setValue])
+    }, [register, companyList, setValue])
 
     return (
         <>
             <SEO
-                title="Write Review"
-                keywords={[`amazon`, `seller`, `tools`, `FBA`]}
+                title={company ? `Write Review: ${company.name}` : `Write Review`}
+                description={`${company?.name}: ${company?.blurb}`}
             />
             <div className="bg-gray-200">
 
@@ -262,17 +284,19 @@ export default function WriteReview({ location }) {
                                                         : <img src={company.logoURL} alt={`${company.name} Logo`} className="h-16 w-2/5 object-contain" />}
                                                 </a>}
                                         </div>
-                                        {/* Marketplace & Website */}
-                                        <div className="flex">
-                                            <h6 className="flex text-gray-500 text-xs tracking-tight uppercase">
+                                        {/* Website & Marketplace */}
+                                        <div className="flex items-center mt-6">
+                                            {company && <a href={company.website} rel="noopener noreferrer" target="_blank"
+                                                className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded inline-flex flex-shrink-0 items-center -m-1">
+                                                <FaExternalLinkAlt size={18} className="mr-3" />
+                                                Visit Website
+                                            </a>}
+                                            <div className="flex flex-wrap text-gray-500 text-xs tracking-tight uppercase ml-4">
                                                 {company &&
                                                     company.marketplaces.map(marketplace => {
-                                                        return <img key={marketplace.id} src={marketplace.flag} alt={marketplace.code} className="h-4 mr-2" />
-                                                    })
-                                                }
-                                            </h6>
-                                            {company &&
-                                                <a href={company.website} rel="noopener noreferrer" target="_blank" className="text-xs text-blue-500 tracking-tight font-extrabold pl-2">{company.name}</a>}
+                                                        return <Marketplace key={marketplace.id} marketplace={marketplace} className={"h-4 m-1"} />
+                                                    })}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -281,7 +305,7 @@ export default function WriteReview({ location }) {
 
                                 {/* Review */}
                                 <div className="flex flex-col lg:px-10 py-4">
-                                    <div className="flex flex-col">
+                                    <div className="flex flex-col review-editor">
                                         <StarRating
                                             totalStars={5}
                                             name="rating"
@@ -295,6 +319,7 @@ export default function WriteReview({ location }) {
                                             type="text"
                                             name="title"
                                             placeholder="Summarize your review or highlight an interesting detail"
+                                            aria-label="Title of Review"
                                             className="text-black w-full block rounded-md border border-gray-400 shadow-inner py-2 px-2 placeholder-gray-400"
                                             ref={(e) => {
                                                 register(e, { required: { value: true, message: Constants.FIELD_REQUIRED } })
@@ -318,17 +343,18 @@ export default function WriteReview({ location }) {
                                         <div className="block text-black lg:text-2xl text-xl font-bold mt-4">Tags</div>
                                         <CreatableSelect
                                             name="tags"
-                                            components={components}
+                                            //components={components}
                                             inputValue={inputValue}
                                             isClearable
                                             isMulti
-                                            menuIsOpen={false}
-                                            styles={Constants.customStyles}
+                                            //menuIsOpen={false}
+                                            styles={Constants.customTagStyles}
                                             onChange={handleTagChange}
                                             onInputChange={handleTagInputChange}
                                             onKeyDown={handleKeyDown}
-                                            placeholder="Type something and press enter..."
+                                            placeholder="Type something and press enter...Or, choose some from the list..."
                                             value={tags}
+                                            options={tagOptions}
                                         />
                                         {isUserActive ?
                                             <div className="text-black mt-8">
@@ -346,7 +372,7 @@ export default function WriteReview({ location }) {
                         </main>
 
                         {/* Ads */}
-                        <aside id="sidebar" className="lg:w-1/4 flex flex-col pt-20 pb-4 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll">
+                        <aside id="sidebar" className="lg:w-1/4 flex flex-col pt-4 lg:py-4 mb-6 lg:pt-20 bg-gray-200 h-full sticky top-0 right-0 overflow-y-scroll lg:pl-4">
                             <Advert />
                         </aside>
                     </div>
