@@ -2,8 +2,6 @@ console.log(`NODE_ENV: '${process.env.NODE_ENV}'`);
 
 require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`, })
 
-console.log(`PRIVATE_KEY: ${process.env.GATSBY_FIREBASE_TYPE}`);
-
 module.exports = {
   siteMetadata: {
     title: `EcomDiscover`,
