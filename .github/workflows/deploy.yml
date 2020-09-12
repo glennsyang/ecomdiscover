@@ -25,6 +25,8 @@ jobs:
       # Build the Gatsby site
       - name: Gatsby Build
         run: yarn run build
+        env:
+          GATSBY_FIREBASE_PRIVATE_KEY: ${{ secrets.GATSBY_FIREBASE_PRIVATE_KEY }}
       # Sync the built files to the remote server
       - name: Rsync deployment
         uses: burnett01/rsync-deployments@4.1
