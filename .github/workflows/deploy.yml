@@ -52,7 +52,7 @@ jobs:
         with:
           switches: -avzh --delete
           path: public/
-          remote_path: /var/www/ecomdiscover.com/html
+          remote_path: ${{ secrets.SERVER_PATH }}
           remote_host: ${{ secrets.SERVER_IP }}
           remote_user: ${{ secrets.SERVER_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
