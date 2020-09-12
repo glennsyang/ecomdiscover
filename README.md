@@ -6,7 +6,7 @@ Find Top-Rated Tools & Services For Your E-commerce Business!
 
 ## About
 
-A collection of e-commerce resources. Primarily related to FBA, but also touching on many other aspects of e-commerce software and resources. 
+A collection of e-commerce resources, primarily related to FBA, but also touching on many other aspects of e-commerce software and resources. 
 Search our curated collection of e-commerce resources and review your favorite tools and share your experiences with our community!
 
 
