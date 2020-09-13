@@ -33,7 +33,7 @@ function Header(props) {
                                     headers: { 'Content-Type': 'multipart/form-data' },
                                     body: `token=${process.env.GATSBY_GITLAB_CI_TRIGGER_TOKEN}&ref=release`
                                 }
-                                fetch('https://gitlab.com/api/v4/projects/16950764/trigger/pipeline', reqOptions)
+                                fetch('https://api.github.com/repos/glennsyang/ecomdiscover/actions/workflows/deploy.yml/dispatches', reqOptions)
                                     .then(async response => {
                                         const data = await response.json()
                                         // check for error response
