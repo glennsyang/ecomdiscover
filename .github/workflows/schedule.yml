@@ -1,11 +1,10 @@
-name: Build & Deploy Site
+name: Scheduled Build & Deploy
 
 on:
   # 1. Trigger the workflow
-  push:
-    branches:
-      - release
-      
+  schedule:
+    - cron:  '*/5 * * * *'
+
 jobs:
   build:
     # 2. Using the latest Ubuntu image
