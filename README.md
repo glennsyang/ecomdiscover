@@ -28,6 +28,7 @@ Search our curated collection of e-commerce resources and review your favorite t
 
 ## Status
 
+![Build & Deploy Site](https://github.com/glennsyang/ecomdiscover/workflows/Build%20&%20Deploy%20Site/badge.svg?branch=release)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/glennsyang/ecomdiscover/Build%20&%20Deploy%20Site/release) ![David](https://img.shields.io/david/dev/glennsyang/ecomdiscover) [![HitCount](http://hits.dwyl.com/glennsyang/ecomdiscover.svg)](http://hits.dwyl.com/glennsyang/ecomdiscover)
 
 ## Author
