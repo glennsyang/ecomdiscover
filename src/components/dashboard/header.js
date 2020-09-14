@@ -32,7 +32,7 @@ function Header(props) {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/vnd.github.v3+json',
-                                        'Authorization': 'token 9a286cc622fbd74740d7fcfe47b6a4824931ac68'
+                                        'Authorization': `token ${process.env.GATSBY_GITHUB_CI_TRIGGER_TOKEN}`
                                     },
                                     body: `{"event_type":"backend_automation"}`
                                 }
