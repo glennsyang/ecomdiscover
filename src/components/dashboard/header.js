@@ -36,7 +36,7 @@ function Header(props) {
                                     },
                                     body: '{"event_type":"backend_automation"}'
                                 }
-                                fetch('https://api.github.com/repos/glennsyang/ecomdiscover/dispatches', reqOptions)
+                                fetch(process.env.GATSBY_GITHUB_TRIGGER_URL, reqOptions)
                                     .then(async response => {
                                         // check for error response (http_status < 200 || http_status > 299)
                                         if (response.status < 200 || response.status > 299) {
