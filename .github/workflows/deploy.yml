@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - release
+  repository_dispatch:
+    types: [backend_automation]
       
 jobs:
   build:
