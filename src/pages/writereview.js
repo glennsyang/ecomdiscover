@@ -5,7 +5,7 @@ import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import firebase from "gatsby-plugin-firebase"
-//import ReactQuill from 'react-quill'
+import ReactQuill from 'react-quill'
 // Don't forget to add: .ql-editor { min-height: 18em; to quill.snow.css
 // Add state.companyId, to the useEffect dependencies
 const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
