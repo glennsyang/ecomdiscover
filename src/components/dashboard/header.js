@@ -32,18 +32,15 @@ function Header(props) {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/vnd.github.v3+json',
-                                        'Authorization': `token ${process.env.GATSBY_GITHUB_CI_TRIGGER_TOKEN}`
+                                        'Authorization': `token ${process.env.GATSBY_GITHUB_TOKEN}`
                                     },
-                                    body: `{"event_type":"backend_automation"}`
+                                    body: '{"event_type":"backend_automation"}'
                                 }
-                                // https://api.github.com/repos/glennsyang/ecomdiscover/actions/workflows/deploy.yml/dispatches
                                 fetch('https://api.github.com/repos/glennsyang/ecomdiscover/dispatches', reqOptions)
                                     .then(async response => {
-                                        // 9a286cc622fbd74740d7fcfe47b6a4824931ac68
-                                        console.log({ response })
-                                        const data = await response.json()
-                                        // check for error response
-                                        if (data.error || !response.ok) {
+                                        // check for error response (http_status < 200 || http_status > 299)
+                                        if (response.status < 200 || response.status > 299) {
+                                            const data = await response.json()
                                             const toastProps = {
                                                 id: Math.floor((Math.random() * 101) + 1),
                                                 title: 'Error!',
