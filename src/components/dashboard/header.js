@@ -30,11 +30,17 @@ function Header(props) {
                                 // Make API call to trigger Pipeline
                                 const reqOptions = {
                                     method: 'POST',
-                                    headers: { 'Content-Type': 'multipart/form-data' },
-                                    body: `token=${process.env.GATSBY_GITLAB_CI_TRIGGER_TOKEN}&ref=release`
+                                    headers: {
+                                        'Content-Type': 'application/vnd.github.v3+json',
+                                        'Authorization': 'token 9a286cc622fbd74740d7fcfe47b6a4824931ac68'
+                                    },
+                                    body: `{"event_type":"backend_automation"}`
                                 }
-                                fetch('https://api.github.com/repos/glennsyang/ecomdiscover/actions/workflows/deploy.yml/dispatches', reqOptions)
+                                // https://api.github.com/repos/glennsyang/ecomdiscover/actions/workflows/deploy.yml/dispatches
+                                fetch('https://api.github.com/repos/glennsyang/ecomdiscover/dispatches', reqOptions)
                                     .then(async response => {
+                                        // 9a286cc622fbd74740d7fcfe47b6a4824931ac68
+                                        console.log({ response })
                                         const data = await response.json()
                                         // check for error response
                                         if (data.error || !response.ok) {
