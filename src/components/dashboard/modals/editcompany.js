@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import Select from "react-select"
-//import ReactQuill from 'react-quill'
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+import ReactQuill from 'react-quill'
+//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 import { FaCamera } from 'react-icons/fa'
 import { useCategories } from '../../../hooks/useCategories'
 import { useMarketplaces } from '../../../hooks/useMarketplaces'
