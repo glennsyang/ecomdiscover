@@ -59,7 +59,7 @@ export default function BlogPost({ data }) {
                             </div>
 
                             <div className="text-black mt-10 px-6 sm:px-10">
-                                <SocialShare title={blog.frontmatter.title} shareUrl={`${siteUrl}/${blog.fields.slug}`} body={blog.excerpt} />
+                                <SocialShare title={blog.frontmatter.title} shareUrl={`${siteUrl}/${blog.fields.slug}`} body={blog.excerpt} hashtags={blog.frontmatter.tags} type={`article`} />
                             </div>
                         </main>
 
