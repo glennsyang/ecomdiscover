@@ -180,7 +180,7 @@ export default function Company({ data }) {
                                     </div>
                                 </div>
                                 {[...reviews].sort(Constants.SORT_TYPES[currentSort].fn).map(review => (
-                                    <ReviewCard key={review.id} review={review} />
+                                    <ReviewCard key={review.id} review={review} company={company} />
                                 ))}
                                 {isLoggedIn() && isUserBlocked ?
                                     <div className="lg:hidden mt-4 lg:mt-10 text-right mr-8">
