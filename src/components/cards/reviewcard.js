@@ -10,6 +10,8 @@ import Tag from "../tag"
 import Toast from "../toast"
 import AvgRating from "../avgrating"
 import Loader from "../loader"
+import { useSiteMetadata } from '../../hooks/useSiteMetadata'
+import SocialShare from '../socialshare'
 import { getUser, isLoggedIn, isBlocked } from "../../utils/auth"
 import { Paragraph, ExternalLink, List } from "../rehype/elements"
 
@@ -18,7 +20,7 @@ const renderAst = new rehypeReact({
     components: { p: Paragraph, a: ExternalLink, ul: List }
 }).Compiler
 
-const ReviewCard = ({ review }) => {
+const ReviewCard = ({ review, company }) => {
     const memberSince = review.user.created
     const createdAt = moment.utc(review.created, "YYYY-MM-DDTHH:mm:ss.SSSZ").local().format("DD MMMM, YYYY, h:mm a")
     const imgBlankProfile = {
@@ -26,6 +28,7 @@ const ReviewCard = ({ review }) => {
         imgAlt: `${review.user.username} Profile Photo`,
         imgClass: "h-full w-full object-cover"
     }
+    const { siteUrl } = useSiteMetadata()
     // Get Live 'displayName', 'photoURL' and 'helpful' from firestore
     const [isLoading, setIsLoading] = useState(true)
     const [userInfo, setUserInfo] = useState(null)
@@ -34,6 +37,8 @@ const ReviewCard = ({ review }) => {
     const [tooltipShow, setTooltipShow] = useState(false)
     const btnRef = React.createRef()
     const tooltipRef = React.createRef()
+
+    console.log({ company })
 
     useEffect(() => {
         // Get Helpful count for each review
@@ -188,8 +193,16 @@ const ReviewCard = ({ review }) => {
                             {renderAst(review.childHtmlRehype.htmlAst)}
                         </div>
 
-                        <div className="bg-white">
-                            <div className="float-right mt-12 lg:mr-6">
+                        <div className="bg-white flex justify-between mt-8">
+                            <div className="">
+                                <SocialShare
+                                    title={`Check out this review of ${company.name} on EcomDiscover!\r\n\r\n${review.title}...\r\n${review.rating} stars - by ${userInfo ? userInfo.name : review.user.username}`}
+                                    shareUrl={`${siteUrl}/${company.fields.slug}`}
+                                    body={review.content}
+                                    hashtags={review.tags}
+                                    type={`review`} />
+                            </div>
+                            <div className="mt-10 lg:mr-6">
                                 <button
                                     name="helpful"
                                     type="button"

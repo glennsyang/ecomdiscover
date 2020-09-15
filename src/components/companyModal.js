@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import Select from "react-select"
 import firebase from "gatsby-plugin-firebase"
-//import ReactQuill from 'react-quill'
-const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
+import ReactQuill from 'react-quill'
+//const ReactQuill = typeof window === 'object' ? require('react-quill') : () => false;
 import { FaCamera } from 'react-icons/fa'
 import * as Constants from '../constants'
 import { useCategories } from "../hooks/useCategories"

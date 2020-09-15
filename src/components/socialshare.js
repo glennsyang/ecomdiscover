@@ -1,14 +1,15 @@
 import React from 'react'
 import { EmailShareButton, FacebookShareButton, LinkedinShareButton, EmailIcon, LinkedinIcon, FacebookIcon, TwitterIcon, TwitterShareButton } from "react-share"
 
-export default function SocialShare({ title, shareUrl, body }) {
+export default function SocialShare({ title, shareUrl, body, hashtags, type }) {
     return (
         <>
-            <p className="text-2xl font-bold">Share this article</p>
+            <p className="text-2xl font-bold">Share this {type}</p>
             <div className="flex justify-start py-2">
                 <TwitterShareButton
                     url={shareUrl}
                     title={title}
+                    hashtags={hashtags}
                     className="mx-1">
                     <TwitterIcon size={32} round />
                 </TwitterShareButton>
