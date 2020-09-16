@@ -145,7 +145,7 @@ export const pageQuery = graphql`
     siteSearchIndex {
       index
     }
-    allCompanies(limit: 3, sort: { fields: updated, order: DESC }) {
+    allCompanies(limit: 3, sort: { fields: created, order: DESC }) {
       edges {
             node {
                 id
