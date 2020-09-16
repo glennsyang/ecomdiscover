@@ -4,13 +4,13 @@ import { EmailShareButton, FacebookShareButton, LinkedinShareButton, EmailIcon, 
 export default function SocialShare({ title, shareUrl, body, hashtags, type }) {
     return (
         <>
-            <p className="text-2xl font-bold">Share this {type}</p>
-            <div className="flex justify-start py-2">
+            <p className="text-base lg:text-2xl font-bold">Share this {type}</p>
+            <div className="flex justify-end sm:justify-start py-2">
                 <TwitterShareButton
                     url={shareUrl}
                     title={title}
                     hashtags={hashtags}
-                    className="mx-1">
+                    className="mr-1">
                     <TwitterIcon size={32} round />
                 </TwitterShareButton>
                 <FacebookShareButton
@@ -26,7 +26,7 @@ export default function SocialShare({ title, shareUrl, body, hashtags, type }) {
                     url={shareUrl}
                     subject={title}
                     body={body}
-                    className="mx-1">
+                    className="ml-1">
                     <EmailIcon size={32} round />
                 </EmailShareButton>
             </div>
