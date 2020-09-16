@@ -38,8 +38,6 @@ const ReviewCard = ({ review, company }) => {
     const btnRef = React.createRef()
     const tooltipRef = React.createRef()
 
-    console.log({ company })
-
     useEffect(() => {
         // Get Helpful count for each review
         const unsubscribe = firebase.firestore().collection('reviews').doc(review.id).onSnapshot(snapshot => {
@@ -193,16 +191,16 @@ const ReviewCard = ({ review, company }) => {
                             {renderAst(review.childHtmlRehype.htmlAst)}
                         </div>
 
-                        <div className="bg-white flex justify-between mt-8">
-                            <div className="">
+                        <div className="bg-white flex flex-col-reverse sm:flex-row text-right sm:text-left sm:justify-between mt-8">
+                            <div className="mt-6 sm:mt-0">
                                 <SocialShare
                                     title={`Check out this review of ${company.name} on EcomDiscover!\r\n\r\n${review.title}...\r\n${review.rating} stars - by ${userInfo ? userInfo.name : review.user.username}`}
                                     shareUrl={`${siteUrl}/${company.fields.slug}`}
-                                    body={review.content}
+                                    //body={review.content}
                                     hashtags={review.tags}
                                     type={`review`} />
                             </div>
-                            <div className="mt-10 lg:mr-6">
+                            <div className="mt-0 sm:mt-10 lg:mr-6">
                                 <button
                                     name="helpful"
                                     type="button"
