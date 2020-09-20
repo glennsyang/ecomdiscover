@@ -54,7 +54,10 @@ typings/
 # dotenv environment variable files
 .env*
 firebase.json
+<<<<<<< HEAD
 .vscode/
+=======
+>>>>>>> parent of 1a47401... add .json file
 
 # gatsby files
 .cache/
