@@ -128,7 +128,7 @@ function IndexPage({ data }) {
         </section>
 
       </div>
-    </Layout >
+    </Layout>
   )
 }
 
