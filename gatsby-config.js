@@ -13,6 +13,8 @@ module.exports = {
     phone: `604-555-1234`,
     address: `123 Main Street, Sometown, QC`,
     author: `@gsheppard.yang`,
+    twitter: `https://twitter.com/EcomDiscover`,
+    facebook: `https://www.facebook.com/ecomdiscovernow`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,

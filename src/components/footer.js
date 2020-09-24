@@ -5,7 +5,7 @@ import { useSiteMetadata } from "../hooks/useSiteMetadata"
 import logo_image from "../images/logo_ecomdiscover.svg"
 
 const Footer = () => {
-    const { title } = useSiteMetadata()
+    const { title, twitter, facebook } = useSiteMetadata()
 
     return (
         <footer className="bg-white">
@@ -67,12 +67,12 @@ const Footer = () => {
                         <p className="uppercase text-black font-bold mb-2 md:mb-6">Social</p>
                         <ul className="list-reset mb-6">
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <a href={`https://twitter.com/EcomDiscover`} title={`${title} Twitter`} rel="noopener noreferrer" target="_blank">
+                                <a href={twitter} title={`${title} Twitter`} rel="noopener noreferrer" target="_blank">
                                     <TwitterIcon size={32} round />
                                 </a>
                             </li>
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <a href={`https://www.facebook.com/ecom.discover.3`} title={`${title} Facebook`} rel="noopener noreferrer" target="_blank">
+                                <a href={facebook} title={`${title} Facebook`} rel="noopener noreferrer" target="_blank">
                                     <FacebookIcon size={32} round />
                                 </a>
                             </li>
