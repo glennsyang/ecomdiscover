@@ -60,6 +60,9 @@ firebase.json
 .cache/
 public
 
+# Merge conflicts
+.orig
+
 # Mac files
 .DS_Store
 
