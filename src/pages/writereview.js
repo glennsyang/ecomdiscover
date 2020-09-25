@@ -233,7 +233,7 @@ export default function WriteReview({ location }) {
             titleRef.current.focus()
         }
 
-    }, [register, state.companyId, companyList, setValue])
+    }, [register, companyList, setValue])
 
     return (
         <>
