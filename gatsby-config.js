@@ -15,6 +15,7 @@ module.exports = {
     author: `@gsheppard.yang`,
     twitter: `https://twitter.com/EcomDiscover`,
     facebook: `https://www.facebook.com/ecomdiscovernow`,
+    affiliateDisclaimer: `Some of the links contained on this side are affiliate links. If you use these links to try out a service we may earn a commission which supports the function of the site. Thank you very much.`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
