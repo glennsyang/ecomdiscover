@@ -5,7 +5,7 @@ import { useSiteMetadata } from "../hooks/useSiteMetadata"
 import logo_image from "../images/logo_ecomdiscover.svg"
 
 const Footer = () => {
-    const { title, twitter, facebook } = useSiteMetadata()
+    const { title, twitter, facebook, affiliateDisclaimer } = useSiteMetadata()
 
     return (
         <footer className="bg-white">
@@ -29,8 +29,13 @@ const Footer = () => {
                             <li className="mt-2 inline-block mr-2 md:block md:mr-0">
                                 <Link to={`/help`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Help</Link>
                             </li>
-                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <Link to={`/support`} className="no-underline hover:underline text-gray-600 hover:text-blue-500">Support</Link>
+                            <li className="mt-2 -ml-1 flex">
+                                <a href={twitter} title={`${title} Twitter`} rel="noopener noreferrer" target="_blank">
+                                    <TwitterIcon size={32} round />
+                                </a>
+                                <a href={facebook} title={`${title} Facebook`} className="ml-1 md:ml-2" rel="noopener noreferrer" target="_blank">
+                                    <FacebookIcon size={32} round />
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -64,19 +69,8 @@ const Footer = () => {
                         </ul>
                     </div>
                     <div className="flex-1">
-                        <p className="uppercase text-black font-bold mb-2 md:mb-6">Social</p>
-                        <ul className="list-reset mb-6">
-                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <a href={twitter} title={`${title} Twitter`} rel="noopener noreferrer" target="_blank">
-                                    <TwitterIcon size={32} round />
-                                </a>
-                            </li>
-                            <li className="mt-2 inline-block mr-2 md:block md:mr-0">
-                                <a href={facebook} title={`${title} Facebook`} rel="noopener noreferrer" target="_blank">
-                                    <FacebookIcon size={32} round />
-                                </a>
-                            </li>
-                        </ul>
+                        <p className="uppercase text-black font-bold mb-2 md:mb-6"></p>
+                        <p className="text-gray-600 font-thin text-sm">{affiliateDisclaimer}</p>
                     </div>
                 </div>
             </div>
