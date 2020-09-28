@@ -6,6 +6,7 @@ import logo_image from "../images/logo_ecomdiscover.svg"
 
 const Footer = () => {
     const { title, twitter, facebook, affiliateDisclaimer } = useSiteMetadata()
+    console.log(affiliateDisclaimer)
 
     return (
         <footer className="bg-white">
