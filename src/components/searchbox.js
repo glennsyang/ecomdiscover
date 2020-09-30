@@ -40,7 +40,7 @@ export default class SearchBox extends Component {
                 </div>
 
                 {this.state.isActive ?
-                    <div className="absolute w-full bg-white shadow-md rounded border border-gray-300 mt-1">
+                    <div className="absolute z-50 w-full bg-white shadow-md rounded border border-gray-300 mt-1">
                         {this.state.results.map(page => (
                             <SearchDisplay key={page.id} props={page} />
                         ))}
@@ -68,7 +68,9 @@ export default class SearchBox extends Component {
                     //console.log("result:", result)
                     if (result.type === 'reviews') {
                         const company = this.index.documentStore.getDoc(result.company)
-                        //console.log("company:", company)
+                        //if (!company) {
+                        //    console.log("empty:", result)
+                        //}
                         result = {
                             ...result,
                             slug: company.slug
