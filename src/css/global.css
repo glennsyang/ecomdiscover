@@ -135,3 +135,11 @@ input[name='panel']:checked ~ .accordion__content {
 		transform: translateX(0);
 	}
 }
+
+@media (min-width: 640px) {
+.csscolumn {
+  -webkit-column-count: 3;  /* Chrome, Safari, Opera */
+  -moz-column-count: 3;     /* Firefox */
+  column-count: 3;
+}
+}

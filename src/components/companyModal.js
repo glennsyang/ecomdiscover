@@ -53,10 +53,8 @@ export default function CompanyModal(props) {
     const handleUploadLogo = (e) => {
         e.preventDefault()
         const selected = fileInput.current.files[0]
-        if (selected && Constants.IMAGE_FILE_TYPES.includes(selected.type)) {
-            setSelectedFile(selected)
-            setErrorFile('')
-        } else {
+        const fileSize = selected.size;
+        if (selected && !Constants.IMAGE_FILE_TYPES.includes(selected.type)) {
             setSelectedFile(null)
             setErrorFile('*Please select an image file (png or jpeg)')
             const toastProperties = {
@@ -68,6 +66,21 @@ export default function CompanyModal(props) {
             }
             setToast(toastProperties)
             return
+        } else if (selected && fileSize > 1024 * 1024) {
+            setSelectedFile(null)
+            setErrorFile('*The allowed file size is 1MB.')
+            const toastProperties = {
+                id: Math.floor((Math.random() * 101) + 1),
+                title: 'Error',
+                description: `File size is not valid. Please select an image file less than 1MB.`,
+                color: 'red',
+                position: 'top-right'
+            }
+            setToast(toastProperties)
+            return
+        } else {
+            setSelectedFile(selected)
+            setErrorFile('')
         }
     }
     // Submit button
@@ -266,7 +279,7 @@ export default function CompanyModal(props) {
                                         <label htmlFor="fileInput" className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center cursor-pointer">
                                             <FaCamera size={18} className="mr-2" />
                                             <span>Upload Logo</span>
-                                            <input type="file" id="fileInput" aria-label="File Input"
+                                            <input type="file" id="fileInput" accept=".jpg, .png, .gif, .bmp" aria-label="File Input"
                                                 className="hidden" ref={fileInput} onChange={handleUploadLogo} onClick={handleSelectFile} />
                                         </label>
                                         <div className="flex justify-start items-center">
