@@ -21,11 +21,11 @@ function Blog({ data }) {
 
         <PageHeader props={props} />
 
-        <div className="container mx-auto px-10 pb-10">
+        <div className="container mx-auto px-10 pt-6 pb-10">
 
           <div className="w-full justify-center flex flex-wrap">
             {data.allMarkdownRemark.edges.map(({ node }) => (
-              <BlogCard key={node.id} blog={node} />
+              <BlogCard key={node.id} post={node} />
             ))}
           </div>
 
@@ -47,11 +47,17 @@ export const blogQuery = graphql`
           frontmatter {
             title
             subtitle
-            date
+            date(formatString: "MMMM DD, YYYY")
             category
             author
             tags
-            image
+            featuredImage {
+              childImageSharp {
+                fluid(maxWidth: 800) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
           }
           html
           htmlAst

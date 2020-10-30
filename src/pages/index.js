@@ -64,7 +64,7 @@ function IndexPage({ data }) {
         <section className="bg-gray-100 sm:pt-8" id="title-cards">
           <div className="container mx-auto flex flex-wrap pt-2 pb-10">
             <h3 className="antialiased w-full my-2 text-xl sm:text-3xl font-bold leading-tight text-center text-gray-800">
-              E-Commerce Tools & Services
+              REVIEWS
             </h3>
             <div className="w-full mb-4">
               <div className="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
@@ -145,7 +145,7 @@ export const pageQuery = graphql`
     siteSearchIndex {
       index
     }
-    allCompanies(limit: 3, sort: { fields: created, order: DESC }) {
+    allCompanies(limit: 6, sort: { fields: created, order: DESC }) {
       edges {
             node {
                 id
