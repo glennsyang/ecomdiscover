@@ -1,3 +1,7 @@
+.gatsby-resp-image-figcaption {
+  text-align: center;
+}
+
 .gradient {
     background: linear-gradient(90deg,  #6190E8 0%, #A7BFE8 100%);
 }  

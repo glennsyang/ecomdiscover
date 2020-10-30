@@ -12,11 +12,17 @@ export const useBlogs = () => {
                 frontmatter {
                     title
                     subtitle
-                    date
+                    date(formatString: "MMMM DD, YYYY")
                     category
                     author
                     tags
-                    image
+                    featuredImage {
+                        childImageSharp {
+                            fluid(maxWidth: 800) {
+                            ...GatsbyImageSharpFluid
+                            }
+                        }
+                    }
                 }
                 html
                 htmlAst
