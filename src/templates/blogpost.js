@@ -1,35 +1,24 @@
 import React from 'react'
 import { graphql } from "gatsby"
-import rehypeReact from 'rehype-react'
+import Img from "gatsby-image"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
+import Tag from "../components/tag"
 import Advert from "../components/advert"
 import SocialShare from '../components/socialshare'
-import ImageFluid from "../components/image-fluid"
 import { useSiteMetadata } from '../hooks/useSiteMetadata'
-import { Paragraph, ExternalLink, List } from '../components/rehype/elements'
-
-const renderAst = new rehypeReact({
-    createElement: React.createElement,
-    components: { p: Paragraph, a: ExternalLink, ul: List }
-}).Compiler
 
 export default function BlogPost({ data }) {
-    console.log({ data })
-    const blog = data.markdownRemark
-    const props = {
-        imgName: blog.frontmatter.image,
-        imgAlt: `${blog.frontmatter.title} Logo`,
-        imgClass: "h-auto w-auto rounded mt-8"
-    }
+    const post = data.markdownRemark
+    const featuredImgFluid = post.frontmatter.featuredImage.childImageSharp.fluid
     const { siteUrl } = useSiteMetadata()
 
     return (
         <Layout>
             <SEO
-                title={`${blog.frontmatter.title}`}
-                keywords={[`${blog.frontmatter.tags}`]}
-                description={`${blog.frontmatter.title} - ${blog.frontmatter.subtitle}`}
+                title={`${post.frontmatter.title}`}
+                keywords={[`${post.frontmatter.tags}`]}
+                description={`${post.frontmatter.title} - ${post.frontmatter.subtitle}`}
             />
             <div className="bg-gray-200">
 
@@ -39,27 +28,25 @@ export default function BlogPost({ data }) {
 
                         <main id="main" className="lg:w-3/4 flex flex-col pt-6 pb-8 bg-white">
                             <div className="lg:w-auto flex flex-col px-6 sm:px-10">
-                                {/* Category */}
-                                <div className="text-xs text-gray-500 uppercase tracking-wide">
-                                    {blog.frontmatter.category.join(', ')}
+                                {/* Tags */}
+                                <div className="flex mb-2">
+                                    <Tag tags={post.frontmatter.tags} />
                                 </div>
                                 <h1 className="text-xl md:text-5xl font-bold">
-                                    {blog.frontmatter.title}
+                                    {post.frontmatter.title}
                                 </h1>
-                                <h2 className="text-xs md:text-sm font-light text-gray-500 mt-2">
-                                    {blog.frontmatter.author}, {blog.frontmatter.date}
+                                <h2 className="text-xs md:text-sm font-light text-gray-500 mt-2 mb-6">
+                                    {post.frontmatter.author}, {post.frontmatter.date}
                                 </h2>
-                                <ImageFluid props={props} />
-                                <div className="flex-row border-l-4 border-blue-500 mt-6 ml-2">
-                                    <p className="text-2xl font-medium text-gray-900 ml-2">{blog.frontmatter.subtitle}</p>
+                                <Img fluid={featuredImgFluid} className="rounded" />
+                                <div className="flex-row border-l-4 border-blue-500 my-6 ml-2">
+                                    <p className="text-2xl font-medium text-gray-900 ml-2">{post.frontmatter.subtitle}</p>
                                 </div>
-                                <div className="text-lg font-light text-gray-800 mt-8">
-                                    {renderAst(blog.htmlAst)}
-                                </div>
+                                <div className="markdown" dangerouslySetInnerHTML={{ __html: post.html }} />
                             </div>
 
                             <div className="text-black mt-10 px-6 sm:px-10 text-right sm:text-left">
-                                <SocialShare title={blog.frontmatter.title} shareUrl={`${siteUrl}/${blog.fields.slug}`} body={blog.excerpt} hashtags={blog.frontmatter.tags} type={`article`} />
+                                <SocialShare title={post.frontmatter.title} shareUrl={`${siteUrl}/${post.fields.slug}`} body={post.excerpt} hashtags={post.frontmatter.tags} type={`article`} />
                             </div>
                         </main>
 
@@ -76,24 +63,30 @@ export default function BlogPost({ data }) {
 }
 
 export const query = graphql`
-    query($slug: String!) {
-        markdownRemark(fields: {slug: {eq: $slug } }) {
+    query PostQuery($slug: String!) {
+        markdownRemark(fields: { slug: { eq: $slug } }) {
             id
             fields {
                 slug
             }
+            html
+            excerpt
             frontmatter {
                 title
                 subtitle
-                date
+                date(formatString: "MMMM DD, YYYY")
                 category
                 author
                 tags
-                image
+                featuredImage {
+                    childImageSharp {
+                        fluid(maxWidth: 800) {
+                        ...GatsbyImageSharpFluid
+                        }
+                    }
+                }
             }
-            html
             htmlAst
-            excerpt
         }
     }
 `

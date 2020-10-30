@@ -19,9 +19,32 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
-    `gatsby-transformer-sharp`,
-    `gatsby-transformer-remark`,
     `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        plugins: [
+          {
+            resolve: 'gatsby-remark-images',
+            options: {
+              maxWidth: 590,
+              quality: 100,
+              //showCaptions: true,
+              backgroundColor: 'none',
+              disableBgImage: true
+            }
+          },
+          {
+            resolve: `gatsby-remark-image-attributes`,
+            options: {
+              styleAttributes: true,
+              dataAttributes: true
+            }
+          }
+        ],
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
