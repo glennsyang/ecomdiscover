@@ -2,7 +2,7 @@
 title: Seniors Online - No Laughing Matter
 subtitle: Let's not be too quick to categorize the older generation!
 date: 2020-10-31
-author: Daniel Sheppard
+author: D.J. Sheppard
 category:
   - Marketing
   - Product Research
