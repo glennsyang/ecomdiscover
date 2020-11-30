@@ -4,6 +4,7 @@ import Img from "gatsby-image"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Tag from "../components/tag"
+import ImageFluid from "../components/image-fluid"
 import Advert from "../components/advert"
 import SocialShare from '../components/socialshare'
 import { useSiteMetadata } from '../hooks/useSiteMetadata'
@@ -12,6 +13,11 @@ export default function BlogPost({ data }) {
     const post = data.markdownRemark
     const featuredImgFluid = post.frontmatter.featuredImage.childImageSharp.fluid
     const { siteUrl } = useSiteMetadata()
+    const imgLogo = {
+        imgName: post.frontmatter.featuredImage.relativePath,
+        imgAlt: `${post.frontmatter.featuredImage} file`,
+        imgClass: "rounded w-full h-full"
+    }
 
     return (
         <Layout>
@@ -38,7 +44,11 @@ export default function BlogPost({ data }) {
                                 <h2 className="text-xs md:text-sm font-light text-gray-500 mt-2 mb-6">
                                     {post.frontmatter.author}, {post.frontmatter.date}
                                 </h2>
-                                <Img fluid={featuredImgFluid} className="rounded" />
+                                {post.frontmatter.author === "E. Akai" ?
+                                    <ImageFluid props={imgLogo} />
+                                    :
+                                    <Img fluid={featuredImgFluid} className="rounded" />
+                                }
                                 <div className="flex-row border-l-4 border-blue-500 my-6 ml-2">
                                     <p className="text-2xl font-medium text-gray-900 ml-2">{post.frontmatter.subtitle}</p>
                                 </div>
@@ -79,6 +89,7 @@ export const query = graphql`
                 author
                 tags
                 featuredImage {
+                    relativePath
                     childImageSharp {
                         fluid(maxWidth: 800) {
                         ...GatsbyImageSharpFluid
