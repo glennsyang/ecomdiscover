@@ -1,5 +1,5 @@
 ---
-title: How hard is it to buy pants
+title: How hard is it to buy pants?
 subtitle: A Gen-Xer's ecommerce experience
 date: 2020-11-30
 author: E. Akai
