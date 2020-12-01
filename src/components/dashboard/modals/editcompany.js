@@ -28,7 +28,7 @@ export default function EditCompany({ register, setValue, errors, rowProps }) {
     const handleMultiChange = selectedOption => {
         setValue('categories', selectedOption)
     }
-    // React-quill Editor
+    // React-quill Editor 
     const [content, setContent] = useState(rowProps.content)
     const handleChangeContent = newValue => {
         setValue('content', newValue)
