@@ -13,7 +13,10 @@ const Category = (props) => {
         <div>
             {useLink ?
                 categories.map(category =>
-                    <Link key={category.id} to={`/companies`} state={{ category: category.name }}>
+                    <Link
+                        key={category.id}
+                        to={`/companies?category=${category.name}`}
+                    >
                         <CategoryDisplay category={category} className={className} />
                     </Link>
                 )

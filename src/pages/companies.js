@@ -4,15 +4,23 @@ import SEO from "../components/seo"
 import PageHeader from "../components/pageheader"
 import CompanyCard from "../components/cards/companycard"
 import Category from "../components/category"
+import Loader from "../components/loader"
 import { useCompanies } from "../hooks/useCompanies"
 
-export default ({ location }) => {
-    const props = { title: "E-Commerce Tools & Services", subtitle: "" }
-    const { state = {} } = location
-    const { category } = state
-    const filteredCategory = [{ id: 0, name: category }]
-    const { allCompanies } = useCompanies()
+import { useLocation } from '@reach/router'
+import queryString from 'query-string'
 
+const Companies = () => {
+    const props = { title: "E-Commerce Tools & Services", subtitle: "" }
+
+    const [isLoading, setIsLoading] = useState(true)
+    const location = useLocation()
+    const queried = queryString.parse(location.search)
+    const { category } = queried
+    console.log("theme:", category)
+    const filteredCategory = [{ id: 0, name: category }]
+
+    const { allCompanies } = useCompanies()
     const [companies, setCompanies] = useState(allCompanies.nodes)
 
     useEffect(() => {
@@ -21,11 +29,9 @@ export default ({ location }) => {
             filteredCompanies = allCompanies.nodes
                 .filter((company) =>
                     company.categories.some((cat) => cat.name === category))
-            //.map(company => {
-            //    return Object.assign({}, company, { categories: company.categories.filter(cat => cat.name === category) })
-            //})
         } else { filteredCompanies = allCompanies.nodes }
         setCompanies(filteredCompanies)
+        setIsLoading(false)
     }, [category, allCompanies.nodes])
 
     return (
@@ -42,13 +48,17 @@ export default ({ location }) => {
                         {category && <span className="text-xs tracking-tight text-gray-600">Applied Category Filter:</span>}
                         {category && <Category categories={filteredCategory} useLink={false} className="bg-gray-200 border border-gray-300 rounded-md px-2 text-xs font-semibold text-blue-500 tracking-tight ml-2" />}
                     </div>
-                    <div className="w-full flex flex-wrap justify-center xl:justify-start">
-                        {companies.map(node => (
-                            <CompanyCard key={node.id} company={node} />
-                        ))}
-                    </div>
+                    {isLoading
+                        ? <Loader />
+                        : <div className="w-full flex flex-wrap justify-center xl:justify-start">
+                            {companies.map(node => (
+                                <CompanyCard key={node.id} company={node} />
+                            ))}
+                        </div>}
                 </div>
             </section>
         </Layout >
     )
 }
+
+export default Companies

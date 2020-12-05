@@ -1,9 +1,8 @@
 import React from "react"
-import { Link } from "gatsby"
 import { navigate } from '@reach/router'
 
 const AvgRating = (props) => {
-    const { arrReviews, rating, slug, showAvgRating, showNumReviews, starSize, className } = props
+    const { arrReviews, rating, showAvgRating, showNumReviews, starSize, className } = props
 
     let avgRating = arrReviews && arrReviews.length !== 0
         ? arrReviews.reduce((a, b) => {
@@ -29,9 +28,9 @@ const AvgRating = (props) => {
             {showNumReviews
                 ? <span className={className}>
                     {showAvgRating
-                        ? <Link to={`/${slug}`} className="hover:underline">
+                        ? <div className="hover:underline">
                             {arrReviews.length === 1 ? `${arrReviews.length} Review` : `${arrReviews.length} Reviews`}
-                        </Link>
+                        </div>
                         : <button
                             className="hover:underline outline-none focus:outline-none"
                             onClick={event => {
