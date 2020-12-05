@@ -6,6 +6,7 @@
   "author": "Glenn Sheppard <glenn@glennsheppard.dev>",
   "dependencies": {
     "@gatsby-contrib/gatsby-plugin-elasticlunr-search": "^2.4.2",
+    "@reach/router": "^1.3.4",
     "dotenv": "^8.2.0",
     "firebase": "^7.16.0",
     "gatsby": "^2.24.4",
@@ -31,6 +32,7 @@
     "moment": "^2.25.3",
     "popper.js": "1.15.0",
     "prop-types": "^15.7.2",
+    "query-string": "^6.13.7",
     "react": "^16.13.1",
     "react-confirm-alert": "^2.6.1",
     "react-dom": "^16.13.1",
