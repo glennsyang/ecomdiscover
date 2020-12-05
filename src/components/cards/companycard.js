@@ -33,9 +33,7 @@ const CompanyCard = ({ company }) => {
                     </div>
                     <hr className="border-b border-gray-300 opacity-25 py-0" />
                     <div className="font-semibold py-4">
-                        <Link to={`/${company.fields.slug}`}>
-                            {company.name}
-                        </Link>
+                        {company.name}
                     </div>
                     {/* Rating */}
                     <div className="flex pt-4 pb-4">
@@ -52,10 +50,10 @@ const CompanyCard = ({ company }) => {
                         })}
                     </div>
                     <hr className="border-b border-gray-300 opacity-25 py-0" />
-                    <Link to={`/${company.fields.slug}`} className="inline-block text-blue-500 text-xs hover:underline pt-4">
+                    <div className="inline-block text-blue-500 text-xs hover:underline pt-4">
                         See Reviews
                     <FaChevronRight className="inline-block text-sm pl-2" />
-                    </Link>
+                    </div>
                 </div>
             </Link>
         </div>

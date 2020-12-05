@@ -23,8 +23,7 @@ export default () => {
                         {allCategories.nodes.map((node) => (
                             <div key={node.id} className="transform hover:-translate-y-1 hover:translate-x-1 hover:scale-110 transition ease-in-out duration-200 pb-2">
                                 <Link
-                                    to={`/companies`}
-                                    state={{ category: node.name }}
+                                    to={`/companies?category=${node.name}`}
                                     className="bg-gray-200 border border-gray-300 rounded-md px-2 text-sm font-semibold text-blue-500 tracking-tight text-left">
                                     {node.name}
                                 </Link>

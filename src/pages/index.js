@@ -44,8 +44,7 @@ function IndexPage({ data }) {
               {data.allCategories.edges.map(({ node }) => (
                 <Link
                   key={node.id}
-                  to={`/companies`}
-                  state={{ category: node.name }}
+                  to={`/companies?category=${node.name}`}
                   className="mr-4 pb-1 sm:pb-4 text-sm sm:text-base inline-block hover:underline">
                   {node.name}
                 </Link>
