@@ -7,7 +7,7 @@ import { useCategories } from "../hooks/useCategories"
 import BlogCard from '../components/cards/blogcard'
 
 function Blog({ data }) {
-  const props = { title: "EcomDiscover Blog", subtitle: "We've got a lot to say about ecommerce tools & services." }
+  const props = { title: "EcomDiscover Blog", subtitle: "We've got a lot to say about ecommerce tools & services!" }
   const { allCategories } = useCategories()
 
   return (
@@ -18,17 +18,13 @@ function Blog({ data }) {
         description={`${props.title}: ${props.subtitle}`}
       />
       <section className="bg-gray-100">
-
         <PageHeader props={props} />
-
-        <div className="container mx-auto px-10 pt-6 pb-10">
-
-          <div className="w-full justify-center flex flex-wrap">
+        <div className="container mx-auto pt-6 pb-12">
+          <div className="w-full flex flex-wrap justify-center xl:justify-start">
             {data.allMarkdownRemark.edges.map(({ node }) => (
               <BlogCard key={node.id} post={node} />
             ))}
           </div>
-
         </div>
       </section>
     </Layout>

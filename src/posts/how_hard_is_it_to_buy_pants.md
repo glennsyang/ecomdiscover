@@ -1,6 +1,7 @@
 ---
 title: How hard is it to buy pants?
 subtitle: A Gen-Xer's ecommerce experience
+filename: how_hard_is_it_to_buy_pants
 date: 2020-11-30
 author: E. Akai
 category:
@@ -10,6 +11,7 @@ tags:
   - ecommerce
   - onlineshopping
   - marketing
+  - listingoptimization
 featuredImage: ../images/woman_capri4.jpg
 ---
 
@@ -19,9 +21,9 @@ This may seem so uneventful as to be not worth mentioning. However, growing up a
 
 Why is buying online a challenge? Here are some subjective factors: 
 
-1. **Category**: If it's something that has been seen somewhere else, already purchased once, a familiar brand, etc. it's fine. If it's not one of those things, it might not be fine. Especially if it's clothing.
-2. **Quality/Appearance**: The number of times the purchased object has actually been the expected color can be counted on one hand. The number of times it has had the expected durability is slightly higher. 
-3. **Returns**: Returning things is an ordeal, and the chances of returning things become higher when bought online. 
+1. **Category:** If it's something that has been seen somewhere else, already purchased once, a familiar brand, etc. it's fine. If it's not one of those things, it might not be fine. Especially if it's clothing.
+2. **Quality/Appearance:** The number of times the purchased object has actually been the expected color can be counted on one hand. The number of times it has had the expected durability is slightly higher. 
+3. **Returns:** Returning things is an ordeal, and the chances of returning things become higher when bought online. 
 
 How did the pants work out?  
 1. I had bought things from that website before and been satisfied. None of those things had been clothing. 
@@ -32,10 +34,10 @@ A friend once went about a year only buying clothes online, and he never had to 
 
 What, then, makes buying online attractive? 
 
-* **Choice**: There are many more pants online than in any given store, but this can become a deterrent. Too many choices can make it harder to decide at all.
-* **Price comparison**: Hey, the same pants are cheaper over here! 
-* **Convenience**: Especially because global pandemic. 
-* **Ease of return**: While I had to return the pants, the store had a very easy system wherein I did not have to speak to anyone at all or defend my return of the pants. This was huge! I might even buy clothes from them again. 
+* **Choice:** There are many more pants online than in any given store, but this can become a deterrent. Too many choices can make it harder to decide at all.
+* **Price comparison:** Hey, the same pants are cheaper over here! 
+* **Convenience:** Especially because global pandemic. 
+* **Ease of return:** While I had to return the pants, the store had a very easy system wherein I did not have to speak to anyone at all or defend my return of the pants. This was huge! I might even buy clothes from them again. 
 
 #### What sellers should know
 There are probably a lot more people out there who have the technical ability to shop online but are reluctant to do so. This is what I, personally, want sellers to know.
