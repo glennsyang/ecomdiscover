@@ -12,7 +12,7 @@ exports.onCreateNode = ({ node, actions }) => {
     })
   }
   if (node.internal.type === `MarkdownRemark`) {
-    const slug = `blog/${node.frontmatter.title.replace(/\?/g, "").toLowerCase().split(' ').join('-')}`
+    const slug = `blog/${node.frontmatter.filename.replace(/\?/g, "").toLowerCase()}`
     createNodeField({
       node,
       name: `slug`,

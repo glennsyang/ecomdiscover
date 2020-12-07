@@ -1,6 +1,7 @@
 ---
 title: My Quest for the Ultimate Amazon FBA Management System
 subtitle: "#1 - Background and 'The Problem'"
+filename: quest_for_ultimate_amazon_fba_management_system_background_and_problem
 date: 2020-10-30
 author: Doug Short
 category:
@@ -24,7 +25,7 @@ As any FBA seller will tell you, the tools accumulate quickly.  They promise ama
 
 ![So many choices!](../images/child_in_front_of_vending_machine.jpg#display=table;width=385px;height=100%;margin-bottom=30px;margin-top=20px;margin-left=auto;margin-right=auto;foo=bar)
 
-#### Possible Solution?
+#### Possible Solutions
 Of course the solution to all of this is custom software.  For a price you can have anything built that you want.  The perfect system that supports your business functions exactly the way you want.  This is a huge endeavor - not only very expensive but very susceptible to end poorly without the correct project definition, understanding of your processes, and project management skills.
 
 I am not a huge company - just a guy working from home with a few VA’s and a lot of data to manage.  Always in the back of my mind has been the idea of being able to access my Amazon data directly and be able to use it to support some key functions.
@@ -33,9 +34,9 @@ The search continued for services that would be more flexible.  Found a few that
 
 There are many amazing tools available to support FBA sellers.  I will always use some of them - they have teams of very talented people working hard and can accomplish great things.  That is part of the reason that we started [EcomDiscover](https://ecomdiscover.com/) - to catalog and sort through the increasingly overwhelming catalog of services available.  However what I am looking for is a way to support my core business functions in a way that is not currently possible with any tool that I am aware of.
 
-#### The Future?
+#### The Future
 Recently I came in contact with an experienced development company interested in the ecommerce space and able to provide the framework I am looking for.  Basically they are looking for people to work with to develop their portfolio and better understand the needs of potential customers.  The company is [Hulft](https://ecomdiscover.com/reviews/hulft-online-services), and I do get a commission if people sign up with them for their services.
 
 However my main purpose is to see what I can build with their services for my own use.  This blog series has a few different purposes - perhaps part of it is therapeutic as a way to vent my frustration at how things currently work.  Also I think this is a really interesting option for a lot of Amazon / ecommerce sellers and if I document what I am doing well it will save me from having to explain it over and over again.  Lastly (and probably most importantly) this will give some structure to what I want to create and will provide me with some extra motivation to continue making progress.
 
-The next post will have more detail about my specific goals for the project.  If you have any comments or questions please let us know.
+The [next post](../blog/quest_for_ultimate_amazon_fba_management_system_project_goals) will have more detail about my specific goals for the project.  If you have any comments or questions please let us know.
