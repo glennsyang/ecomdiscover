@@ -1,6 +1,7 @@
 ---
 title: Seniors Online - No Laughing Matter
 subtitle: Let's not be too quick to categorize the older generation!
+filename: seniors_online_no_laughing_matter
 date: 2020-10-31
 author: D.J. Sheppard
 category:
