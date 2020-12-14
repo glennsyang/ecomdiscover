@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import SearchBox from '../components/searchbox'
 import CompanyCard from "../components/cards/companycard"
+import SubscriptionForm from "../components/subscription"
 import { isLoggedIn, isBlocked } from "../utils/auth"
 
 function IndexPage({ data }) {
@@ -107,14 +108,15 @@ function IndexPage({ data }) {
 
         {/* CTA block */}
         <section className="container mx-auto text-center py-6 pb-16" id="call-to-action">
-
-          <h3 className="w-full my-2 text-3xl sm:text-5xl font-bold leading-tight text-center text-white">Write a Review</h3>
+          <h3 className="w-full my-2 text-3xl sm:text-5xl font-bold leading-tight text-center text-white">
+            Write a Review
+          </h3>
           <div className="w-full mb-4">
             <div className="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
           </div>
-
-          <h2 className="mt-4 mb-12 text-xl sm:text-3xl leading-tight text-center text-white px-2">Review your favorite tools and share your experiences with our community</h2>
-
+          <h2 className="mt-4 mb-12 text-xl sm:text-3xl leading-tight text-center text-white px-2">
+            Review your favorite tools and share your experiences with our community
+          </h2>
           <Link
             to={isLoggedIn() && isUserBlocked ? '/app/writereview' : '/app/login'}
             state={{ fromShare: true }}
@@ -123,9 +125,10 @@ function IndexPage({ data }) {
           >
             Share
           </Link>
-
         </section>
 
+        {/* Newsletter signup */}
+        <SubscriptionForm />
       </div>
     </Layout>
   )
