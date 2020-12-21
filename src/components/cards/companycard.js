@@ -52,7 +52,7 @@ const CompanyCard = ({ company }) => {
                     <hr className="border-b border-gray-300 opacity-25 py-0" />
                     <div className="inline-block text-blue-500 text-xs hover:underline pt-4">
                         See Reviews
-                    <FaChevronRight className="inline-block text-sm pl-2" />
+                        <FaChevronRight className="inline-block text-sm pl-2" />
                     </div>
                 </div>
             </Link>

@@ -23,7 +23,6 @@ import { useCompanies } from "../hooks/useCompanies"
 import { useTags } from "../hooks/useTags"
 import { getUser, isBlocked } from "../utils/auth"
 
-//const components = { DropdownIndicator: null, }
 const createCompany = (label) => ({ value: label, label: label })
 
 // save the Review in the database

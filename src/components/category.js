@@ -15,7 +15,7 @@ const Category = (props) => {
                 categories.map(category =>
                     <Link
                         key={category.id}
-                        to={`/companies?category=${category.name}`}
+                        to={`/company?category=${category.name}`}
                     >
                         <CategoryDisplay category={category} className={className} />
                     </Link>
