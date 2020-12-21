@@ -45,7 +45,7 @@ function IndexPage({ data }) {
               {data.allCategories.edges.map(({ node }) => (
                 <Link
                   key={node.id}
-                  to={`/companies?category=${node.name}`}
+                  to={`/company?category=${node.name}`}
                   className="mr-4 pb-1 sm:pb-4 text-sm sm:text-base inline-block hover:underline">
                   {node.name}
                 </Link>
@@ -149,56 +149,56 @@ export const pageQuery = graphql`
     }
     allCompanies(limit: 6, sort: { fields: created, order: DESC }) {
       edges {
-            node {
-                id
-                name
-                logo
-                logoURL
-                website
-                blurb
-                content
-                created
-                updated
-                marketplaces {
-                    id
-                    flag
-                    code
-                    name
-                }
-                fields {
-                    slug
-                }
-                categories {
-                    id
-                    name
-                }
-                reviews {
-                    id
-                    title
-                    content
-                    created
-                    updated
-                    published
-                    rating
-                    tags
-                    helpful {
-                        username
-                        email
-                        photoURL
-                        created
-                        updated
-                    }
-                    user {
-                        username
-                        email
-                        photoURL
-                        role
-                        created
-                        updated
-                    }
-                }
+        node {
+          id
+          name
+          logo
+          logoURL
+          website
+          blurb
+          content
+          created
+          updated
+          marketplaces {
+            id
+            flag
+            code
+            name
+          }
+          fields {
+            slug
+          }
+          categories {
+            id
+            name
+          }
+          reviews {
+            id
+            title
+            content
+            created
+            updated
+            published
+            rating
+            tags
+            helpful {
+              username
+              email
+              photoURL
+              created
+              updated
             }
+            user {
+              username
+              email
+              photoURL
+              role
+              created
+              updated
+            }
+          }
         }
+      }
     }
   }
 `

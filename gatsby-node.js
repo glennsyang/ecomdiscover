@@ -45,7 +45,23 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
-  result.data.allCompanies.edges.forEach(({ node }) => {
+  // Create company-list pages
+  const companies = result.data.allCompanies.edges
+  const companiesPerPage = 39
+  const numPages = Math.ceil(companies.length / companiesPerPage)
+  Array.from({ length: numPages }).forEach((_, i) => {
+    createPage({
+      path: i === 0 ? `/companies` : `/companies/${i + 1}`,
+      component: path.resolve("./src/templates/company-list.js"),
+      context: {
+        limit: companiesPerPage,
+        skip: i * companiesPerPage,
+        numPages,
+        currentPage: i + 1,
+      },
+    })
+  })
+  companies.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
       component: path.resolve(`./src/templates/company.js`),

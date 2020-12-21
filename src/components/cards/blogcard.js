@@ -30,11 +30,16 @@ const BlogCard = ({ post }) => {
                     <h2 className="text-base font-light mt-2">
                         {post.frontmatter.subtitle}
                     </h2>
-                    <div className="flex flex-row items-center mt-4">
-                        <ImageFluid props={imgBlankProfile} />
-                        <h3 className="text-xs text-gray-500 ml-2">
-                            By {post.frontmatter.author}
-                        </h3>
+                    <div className="flex flex-row justify-between items-center mt-6">
+                        <div className="flex flex-row items-center">
+                            <ImageFluid props={imgBlankProfile} />
+                            <h3 className="text-xs text-gray-500 ml-2">
+                                By {post.frontmatter.author}
+                            </h3>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                            {post.frontmatter.date}
+                        </p>
                     </div>
                 </div>
             </Link>
