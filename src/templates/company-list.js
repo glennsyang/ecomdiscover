@@ -8,7 +8,8 @@ import { FaChevronLeft } from 'react-icons/fa'
 import { FaChevronRight } from 'react-icons/fa'
 
 const CompanyList = ({ data, pageContext }) => {
-  const props = { title: "E-Commerce Tools & Services", subtitle: "" }
+  const title = "E-Commerce Tools & Services"
+  const subtitle = ""
   const companies = data.allCompanies.edges
   const { currentPage, numPages } = pageContext
   const isFirst = currentPage === 1
@@ -21,15 +22,13 @@ const CompanyList = ({ data, pageContext }) => {
       <SEO
         title="Companies"
         keywords={companies.map(({ node }) => { return node.name })}
-        description={`${props.title}: ${companies.map(({ node }) => { return node.name }).join(', ')}`}
+        description={`${title}: ${companies.map(({ node }) => { return node.name }).join(', ')}`}
       />
       <section className="bg-gray-100">
-        <PageHeader props={props} />
+        <PageHeader title={title} subtitle={subtitle} />
         <div className="container mx-auto pb-12">
           <div className="w-full flex flex-wrap justify-evenly pt-6">
             {companies.map(({ node }) => {
-              console.log("nodeId:", node.id)
-              console.log(node.name)
               return <CompanyCard key={node.id} company={node} />
             })}
           </div>
