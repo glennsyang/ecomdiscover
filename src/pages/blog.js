@@ -7,7 +7,8 @@ import { useCategories } from "../hooks/useCategories"
 import BlogCard from '../components/cards/blogcard'
 
 function Blog({ data }) {
-  const props = { title: "EcomDiscover Blog", subtitle: "We've got a lot to say about ecommerce tools & services!" }
+  const title = "EcomDiscover Blog"
+  const subtitle = "We've got a lot to say about ecommerce tools & services!"
   const { allCategories } = useCategories()
 
   return (
@@ -15,10 +16,10 @@ function Blog({ data }) {
       <SEO
         title="Blog"
         keywords={[`${allCategories.nodes.map(category => { return category.name })}`]}
-        description={`${props.title}: ${props.subtitle}`}
+        description={`${title}: ${subtitle}`}
       />
       <section className="bg-gray-100">
-        <PageHeader props={props} />
+        <PageHeader title={title} subtitle={subtitle} />
         <div className="container mx-auto pt-6 pb-12">
           <div className="w-full flex flex-wrap justify-center xl:justify-start">
             {data.allMarkdownRemark.edges.map(({ node }) => (
