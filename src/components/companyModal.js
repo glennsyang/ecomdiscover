@@ -15,7 +15,7 @@ import { getUser } from "../utils/auth"
 
 export default function CompanyModal(props) {
     const { setValue, register, errors, handleSubmit } = useForm()
-    const { uid } = getUser()
+    const { uid } = getUser();
     const [isLoading, setIsLoading] = useState(false)
     const [toast, setToast] = useState()
     const { allMarketplaces } = useMarketplaces()
