@@ -22,7 +22,7 @@ export default function CompanyModal(props) {
     const { allCategories } = useCategories()
 
     const onClose = () => {
-        setSelectedFile(null)
+        setSelectedFile(null);
         setErrorFile(null)
         setProgress(null)
         setContent('')
