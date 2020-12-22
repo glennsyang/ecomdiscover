@@ -11,7 +11,8 @@ import { useLocation } from '@reach/router'
 import queryString from 'query-string'
 
 const Company = ({ data }) => {
-  const props = { title: "E-Commerce Tools & Services", subtitle: "" }
+  const title = "E-Commerce Tools & Services"
+  const subtitle = ""
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -38,10 +39,10 @@ const Company = ({ data }) => {
       <SEO
         title="Companies"
         keywords={filteredCategory[0].name === undefined ? companies.map(company => { return company.name }) : [filteredCategory[0].name].concat(companies.map(company => { return company.name }))}
-        description={`${props.title}: ${filteredCategory[0].name === undefined ? "" : filteredCategory[0].name + " - "}${companies.map(comp => comp.name).join(', ')}`}
+        description={`${title}: ${filteredCategory[0].name === undefined ? "" : filteredCategory[0].name + " - "}${companies.map(comp => comp.name).join(', ')}`}
       />
       <section className="bg-gray-100">
-        <PageHeader props={props} />
+        <PageHeader title={title} subtitle={subtitle} />
         <div className="container mx-auto pb-12">
           <div className="flex flex-wrap text-black text-2xl sm:text-2xl font-semibold mt-6 mx-6">
             {category && <span className="text-xs tracking-tight text-gray-600">Applied Category Filter:</span>}
