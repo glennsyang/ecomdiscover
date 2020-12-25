@@ -3,7 +3,7 @@ import { useStaticQuery, graphql } from "gatsby"
 export const useCompanies = () => {
     const data = useStaticQuery(graphql`
     query {
-        allCompanies(sort: { fields: name, order: ASC }) {
+        allCompanies(sort: { fields: fields___slug, order: ASC }) {
             nodes {
                 id
                 name
