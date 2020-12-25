@@ -74,8 +74,8 @@ function IndexPage({ data }) {
                 <CompanyCard key={node.id} company={node} />
               ))}
             </div>
-            <div className="w-full text-center mt-4">
-              <Link to={`/companies`} className="antialised py-2 px-4 border-white border-b-2 font-bold text-blue hover:border-b-2 hover:border-blue-500">
+            <div className="w-full text-center mt-4 mb-2">
+              <Link to={`/companies`} className="antialised bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                 VIEW ALL
             </Link>
             </div>
