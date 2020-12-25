@@ -33,18 +33,24 @@ const CompanyList = ({ data, pageContext }) => {
             })}
           </div>
           <div className="flex flex-wrap justify-between mt-4 mx-4 xl:mx-0">
-            {!isFirst && (
+            {isFirst ? <div className="px-4" /> : (
               <Link to={`/companies/${prevPage}`} rel="prev" className="antialised bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                 <FaChevronLeft size={15} className="inline-block text-sm pr-2" />
                 Prev
               </Link>
             )}
-            {/*{Array.from({ length: numPages }, (_, i) => (
-              <Link key={`pagination-number${i + 1}`} to={`/companies/${i === 0 ? "" : i + 1}`}>
-                {i + 1}
-              </Link>
-            ))}*/}
-            {!isLast && (
+            <div className="inline-flex items-center mt-2">
+              {Array.from({ length: numPages }, (_, i) => (
+                <Link
+                  key={`pagination-number${i + 1}`}
+                  to={`/companies/${i === 0 ? "" : i + 1}`}
+                  className="antialised text-blue-700 font-semibold inline-flex items-center underline px-4"
+                >
+                  {i + 1}
+                </Link>
+              ))}
+            </div>
+            {isLast ? <div className="px-4" /> : (
               <Link to={`/companies/${nextPage}`} rel="next" className="antialised bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center">
                 Next
                 <FaChevronRight size={15} className="inline-block text-sm pl-2" />
