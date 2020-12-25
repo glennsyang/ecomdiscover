@@ -63,7 +63,7 @@ const Company = ({ data }) => {
 
 export const pageQuery = graphql`
   query CompaniesQuery {
-    allCompanies(sort: { fields: name, order: ASC }) {
+    allCompanies(sort: { fields: fields___slug, order: ASC }) {
       nodes {
         id
         name
