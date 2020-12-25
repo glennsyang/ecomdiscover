@@ -66,7 +66,7 @@ const CompanyList = ({ data, pageContext }) => {
 export const pageQuery = graphql`
   query companyListQuery($skip: Int!, $limit: Int!) {
     allCompanies(
-      sort: { fields: name, order: ASC }
+      sort: { fields: fields___slug, order: ASC }
       limit: $limit
       skip: $skip
     ) {
