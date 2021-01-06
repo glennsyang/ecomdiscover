@@ -26,4 +26,4 @@ These two types of information cover most of the essential data needed for runni
 
 ![Technically](../images/comic_technically.png#display=table;width=385px;height=100%;margin-bottom=30px;margin-top=20px;margin-left=auto;margin-right=auto;foo=bar)
 
-In the next post I will go into more detail about what I want the Inventory Management function to cover.
+In the [next post](../blog/quest_for_ultimate_amazon_fba_management_system_inventory_management_part_1) I will go into more detail about what I want the Inventory Management function to cover.
