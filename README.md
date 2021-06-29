@@ -24,8 +24,6 @@ Search our curated collection of e-commerce resources and review your favorite t
 
 [React-Table](https://github.com/tannerlinsley/react-table)
 
-[React-Select](https://react-select.com/home)
-
 ## Status
 
 ![Build & Deploy Site](https://github.com/glennsyang/ecomdiscover/workflows/Build%20&%20Deploy%20Site/badge.svg?branch=release)
