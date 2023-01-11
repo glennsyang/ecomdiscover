@@ -27,7 +27,7 @@
     "gatsby-source-filesystem": "^2.3.24",
     "gatsby-source-firestore": "^1.0.3",
     "gatsby-transformer-rehype": "^1.8.1",
-    "gatsby-transformer-remark": "^2.8.28",
+    "gatsby-transformer-remark": "^5.25.1",
     "gatsby-transformer-sharp": "^2.5.13",
     "moment": "^2.25.3",
     "popper.js": "1.15.0",
